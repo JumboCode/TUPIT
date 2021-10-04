@@ -1,0 +1,39 @@
+{
+  "name": "tupit-frontend",
+  "version": "0.0.0",
+  "description": "Website for TUPIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "prepare": "cd .. && husky install frontend/.husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jumbocode/tupit.git"
+  },
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "next": "^11.1.2",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.15.7",
+    "@next/bundle-analyzer": "^11.1.2",
+    "babel-plugin-inline-react-svg": "^2.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-next": "^11.1.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.2",
+    "pretty-quick": "^3.1.1",
+    "sass": "^1.42.1",
+    "sitemap": "^7.0.0"
+  }
+}
