@@ -1,0 +1,37 @@
+/* Styles for the homepage (named “index.jsx”) */
+.base {
+  // Bouncing Jackson
+  &::after {
+    content: '';
+    width: calc(100px + 5vmin);
+    height: calc(100px + 5vmin);
+    background-image: url(https://media-exp1.licdn.com/dms/image/C4D03AQF-W_pDXlYDpw/profile-displayphoto-shrink_400_400/0/1603476079605?e=1639008000&v=beta&t=argCbG-zTRSqeEsuXt384DQcWs8K6GIumZlR7qnB95w);
+    background-size: cover;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    animation: fly-around 5s linear infinite;
+
+    @keyframes fly-around {
+      0% {
+        transform: translate(-30vw, -30vh) rotate(0deg);
+      }
+      20% {
+        transform: translate(10vw, -40vh) rotate(-360deg);
+      }
+      40% {
+        transform: translate(-20vw, 35vh) rotate(360deg);
+      }
+      60% {
+        transform: translate(30vw, -20vh) rotate(180deg);
+      }
+      80% {
+        transform: translate(40vw, 40vh) rotate(-360deg);
+      }
+      100% {
+        transform: translate(-30vw, -30vh) rotate(0deg);
+      }
+    }
+  }
+}
