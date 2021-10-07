@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Python
+__pycache__/
+
 # Python virtual env
 .env
 .venv
@@ -112,4 +115,5 @@ env.bak/
 venv.bak/
 
 # Django
+migrations/
 db.sqlite3
