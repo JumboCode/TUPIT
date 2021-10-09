@@ -15,11 +15,11 @@ Get your dev environment set up quickly and _hopefully_ painlessly.
 
 Set up a Postgre dev server on your machine to act as your database.
 
-Linux/Mac:
+Linux:
 
 1. Install PostgreSQL and other dependencies: `sudo apt install postgresql postgresql-contrib libpq-dev`
 2. Activate Python virtual env: `source env/bin/activate`
-3. Install Python dependencie: `pip install psycopg2`
+3. Install Python dependencies: `pip install psycopg2`
 4. Start PostgreSQL service: `sudo service postgresql start`
 5. Use postgres user: `sudo su - postgres`
 6. Launch Postgres shell: `psql`
@@ -28,6 +28,21 @@ Linux/Mac:
 9. Give admin all privelages: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
 10. Exit shell: `\q`
 11. Exit postgres user: `exit`
+12. Finally make Django migrations!
+
+Mac:
+
+1. Install Homebrew `https://brew.sh/`
+2. Install PostgreSQL: `brew install postgresql postgis libpq`
+3. Install Python dependencies: `pip install -r requirements.txt`
+4. Start PostgreSQL service: `brew services start postgresql`
+5. Enter PostgreSQL shell: `psql -d postgres`
+6. Create TUPIT database: `CREATE DATABASE tupit;`
+7. Exit shell: `\q`
+8. Enter tupit database: `psql -d tupit`
+9. Create admin user: `CREATE USER admin WITH PASSWORD 'jctupit';`
+10. Give admin all privelages: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
+11. Exit shell: `\q`
 12. Finally make Django migrations!
 
 ## Make Django Migrations
