@@ -23,6 +23,7 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register(r'students', views.StudentViewSet)
+router.register(r'team_leaders', views.TeamLeaderViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
