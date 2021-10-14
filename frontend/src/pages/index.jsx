@@ -9,6 +9,9 @@ export default function Home({ data }) {
   return (
     <div className={cx('base')}>
       <h1>Hello, TUPIT!</h1>
+      <h1>
+        My name is {data.data[0].attributes.name} and I am {data.data[0].attributes.age} years old
+      </h1>
     </div>
   );
 }
