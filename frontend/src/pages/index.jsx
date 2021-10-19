@@ -3,6 +3,7 @@ import React from 'react';
 // Import styles
 import styles from './index.module.scss';
 import classNames from 'classnames/bind';
+import NameForm from './nameform';
 const cx = classNames.bind(styles);
 
 export default function Home({ data }) {
@@ -16,12 +17,15 @@ export default function Home({ data }) {
       <h1>
         {data.data.map((data, i) => (
           <div key={i}>
-            My name is {data.attributes.first_name} {data.attributes.last_name} and I am a{' '}
-            {data.attributes.age} year old {getYear(data.attributes.year)}. Here are some fun facts:
+            [{data.id}] My name is {data.attributes.first_name} {data.attributes.last_name} and I am
+            a {data.attributes.age} year old {getYear(data.attributes.year)}.
+            <NameForm leader={data} />
+            Here are some fun facts:
             <br />
             {data.attributes.fun_facts.map((fun_fact, j) => (
               <div key={j}> - {fun_fact}</div>
             ))}
+            <br />
           </div>
         ))}
       </h1>
@@ -32,7 +36,7 @@ export default function Home({ data }) {
 export async function getServerSideProps(context) {
   context.params; // silence unused var warning
 
-  const res = await fetch(`http://localhost:8000/api/team_leaders/`);
+  const res = await fetch('http://localhost:8000/api/team_leaders/?sort=first_name');
   const data = await res.json();
 
   return {
