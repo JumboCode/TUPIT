@@ -117,3 +117,12 @@ venv.bak/
 # Django
 migrations/
 db.sqlite3
+
+# Vim
+**/*.swp
+**/*.swo
+
+# Pictures
+**/*.png
+**/*.jpg
+**/*.jpeg
