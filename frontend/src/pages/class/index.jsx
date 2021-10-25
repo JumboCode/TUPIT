@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-
-// TODO: Implement Search and Requirement component. 
-// I think we will implement a box and click component as util to pass in text.
+import styles from './class.module.scss';
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
 
 // Semester: [2021, 2022]
 // Class: [Comp15, Latin 2]
@@ -18,7 +18,7 @@ class Requirement extends Component {
             }
         };
     }
-   
+
     /**
      * Map course requirement as a list.
      */
@@ -46,10 +46,10 @@ class Requirement extends Component {
 } 
 
 class Search extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+	constructor(props) {
+		super(props);
+	}
+  
     /** 
      * The value of the selected course is passed to Class to render the
      * requirements.
@@ -61,18 +61,19 @@ class Search extends Component {
         event.preventDefault();
     }
 
-    render() {
-        return (
+	render() {
+		return (
             <section>
-                <label htmlFor="courses">Courses: </label>
-                <select name="courses" id="courses" defaultValue="" onChange={this.searchCourse}>
-                    <option value="" disabled></option>
-                    <option value="COMP15">Data Structures</option>
-                    <option value="LATIN3">Latin 3</option>
-                </select>
-            </section>
-        );
-    }
+                <h1>Search</h1>
+			    <div className={styles.dropdown}>
+			        <button className={styles.dropbtn}> Dropdown </button>
+			        <div className={styles.dropdown_content}>
+				        <a href="#">Link 1</a>
+			        </div>
+			    </div>
+		  </section>
+    );
+  }
 }
 
 export default class Class extends Component {
@@ -82,6 +83,7 @@ export default class Class extends Component {
             course: null
         };
     }
+
 
     /** 
      * @param {string} course Course is passed up from Search component.
