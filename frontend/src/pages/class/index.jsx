@@ -57,7 +57,7 @@ class Search extends Component {
      * @param {object} event Event handler when a course is selected.
      */
     searchCourse = (event) => {
-        this.props.searchCourse(event.target.value);
+        this.props.searchCourse(event.target.innerHTML);
         event.preventDefault();
     }
 
@@ -65,10 +65,11 @@ class Search extends Component {
 		return (
             <section>
                 <h1>Search</h1>
-			    <div className={styles.dropdown}>
+			    <div className={styles.dropdown}>         
 			        <button className={styles.dropbtn}> Dropdown </button>
 			        <div className={styles.dropdown_content}>
-				        <a href="#">Link 1</a>
+				        <a onClick={this.searchCourse}>COMP15</a>
+                        <a onClick={this.searchCourse}>LATIN3</a>
 			        </div>
 			    </div>
 		  </section>
