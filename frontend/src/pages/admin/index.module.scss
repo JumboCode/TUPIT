@@ -1,0 +1,56 @@
+.admin-content {
+  display: flex;
+  flex-direction: row;
+
+  margin: 10px;
+  height: auto;
+  background-color: lightyellow;
+}
+
+.admin-control {
+  background-color: lightblue;
+  width: 100%;
+}
+
+.admin-control-buttons {
+  background-color: lightseagreen;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.admin-control-buttons-item {
+  background-color: lightcoral;
+  width: 100%;
+  border: 2px solid gray;
+}
+
+.admin-display {
+  position: relative;
+  background-color: lightgreen;
+  width: 100%;
+  height: 500px;
+}
+
+.admin-display-add-button {
+  position: absolute;
+  z-index: 1;
+  bottom: 10px;
+  background-color: lightpink;
+  width: 100%;
+}
+
+// Mobile layout
+@media screen and (max-width: 768px) {
+  .admin-content {
+    flex-direction: column;
+  }
+
+  .admin-control {
+    flex-direction: column;
+  }
+
+  .admin-control-buttons {
+    flex-direction: row;
+  }
+}
