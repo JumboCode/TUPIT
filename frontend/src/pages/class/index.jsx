@@ -3,11 +3,6 @@ import styles from './class.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
-// Semester: [2021, 2022]
-// Class: [Comp15, Latin 2]
-// Output: Comp11 -> Comp15
-// Latin 1 -> Latin 2
-
 class Requirement extends Component {
     constructor(props) {
         super(props);
@@ -22,13 +17,13 @@ class Requirement extends Component {
     /**
      * Map course requirement as a list.
      */
-    renderRequirement() {
+	renderRequirement() {
 		const lookup = Object.hasOwnProperty;
 		if (!lookup.call(this.state.requirement, this.props.course)) {
             throw 'Course is not defined. Please check Search component dropdown.';
 		}
+    
         const requirement = this.state.requirement[this.props.course]
-
         return requirement.map(
             (course) => (
                 <li key={course}>{ course }</li>
@@ -36,75 +31,74 @@ class Requirement extends Component {
         );
     }
 
-    render() {
-        return (
-            <div>
-                <ul>
-                    { this.renderRequirement() }
-                </ul>
-            </div>
-        );
-    }
-} 
+	render() {
+		return (
+		    <div>
+			    <ul>{this.renderRequirement()}</ul>
+		    </div>
+		);
+	}
+}
 
 class Search extends Component {
-	constructor(props) {
-		super(props);
-	}
-  
-    /** 
+    constructor(props) {
+        super(props);
+    }
+
+    /**
      * The value of the selected course is passed to Class to render the
      * requirements.
      *
      * @param {object} event Event handler when a course is selected.
-     */
+    */   
     searchCourse = (event) => {
-        this.props.searchCourse(event.target.innerHTML);
+        this.props.searchCourse(event.target.value);
         event.preventDefault();
-    }
+    };
 
-	render() {
-		return (
+    render() {
+        return (
             <section>
-                <h1>Search</h1>
-			    <div className={styles.dropdown}>         
-			        <button className={styles.dropbtn}> Dropdown </button>
-			        <div className={styles.dropdown_content}>
-				        <a onClick={this.searchCourse}>COMP15</a>
-                        <a onClick={this.searchCourse}>LATIN3</a>
-			        </div>
-			    </div>
-		    </section>
-    );
-  }
+                <h1>Search:</h1>
+                <div className={styles.container}>
+                    <div className={styles.select_box}>
+                        <select onChange={this.searchCourse}>
+                            <option defaultValue="Classes" selected disabled>Classes</option>
+                            <option value="COMP15">Data Structure</option>
+                            <option value="LATIN3">Latin 3</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 }
 
 export default class Class extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            course: null
+            course: null,
         };
     }
 
-
-    /** 
+    /**
      * @param {string} course Course is passed up from Search component.
-     */
+    */
     searchCourse = (course) => {
-        this.setState({course: course})
-    }
-    
+        this.setState({ course: course });
+    };
+
     render() {
         let requirement;
         if (this.state.course) {
-            requirement = < Requirement course={this.state.course} />;
-        } 
+            requirement = <Requirement course={this.state.course} />;
+        }
 
         return (
             <main>
-                < Search searchCourse={this.searchCourse} />
-                { requirement }
+                <Search searchCourse={this.searchCourse} />
+                {requirement}
             </main>
         );
     }
