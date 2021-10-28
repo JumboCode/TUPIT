@@ -126,3 +126,6 @@ db.sqlite3
 **/*.png
 **/*.jpg
 **/*.jpeg
+
+# DS_STORE
+**/.DS_STORE
