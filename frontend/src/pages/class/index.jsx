@@ -13,8 +13,8 @@ class Requirement extends Component {
         super(props);
         this.state = {
             requirement: {
-                "COMP15": ["COMP11", "COMP160"],
-                "LATIN3": ["LATIN1", "LATIN2"]
+                'COMP15': ['COMP11', 'COMP160'],
+                'LATIN3': ['LATIN1', 'LATIN2']
             }
         };
     }
@@ -23,15 +23,17 @@ class Requirement extends Component {
      * Map course requirement as a list.
      */
     renderRequirement() {
-        if (!this.state.requirement.hasOwnProperty(this.props.course)) {
-            throw "Course is not defined. Please check Search component dropdown.";
-        }
-        const requirement = this.state.requirement[this.props.course].map(
+		const lookup = Object.hasOwnProperty;
+		if (!lookup.call(this.state.requirement, this.props.course)) {
+            throw 'Course is not defined. Please check Search component dropdown.';
+		}
+        const requirement = this.state.requirement[this.props.course]
+
+        return requirement.map(
             (course) => (
                 <li key={course}>{ course }</li>
             ) 
         );
-        return requirement;
     }
 
     render() {
@@ -72,7 +74,7 @@ class Search extends Component {
                         <a onClick={this.searchCourse}>LATIN3</a>
 			        </div>
 			    </div>
-		  </section>
+		    </section>
     );
   }
 }
