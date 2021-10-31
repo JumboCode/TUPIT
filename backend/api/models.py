@@ -15,19 +15,29 @@ class Student(models.Model):
                 params={'value': value},
             )
 
-    firstname = models.CharField(max_length=32)
-    lastname = models.CharField(max_length=32)
+    def doc_default():
+        return "W1"
+
+    def tufts_default():
+        return "0000000"
+
+    firstname = models.CharField(max_length=32, blank=True)
+    lastname = models.CharField(max_length=32, blank=True)
     birthday = models.DateField(null=True, blank=True)
-    doc_num = models.CharField(max_length=32, validators=[validate_doc_num])
+    doc_num = models.CharField(max_length=32, validators=[
+                               validate_doc_num], default=doc_default)
     tufts_num = models.CharField(max_length=7, validators=[
-                                 MinLengthValidator(7)])
-    bhcc_num = models.CharField(max_length=32)
-    parole_status = models.TextField(max_length=256)
-    student_status = models.TextField(max_length=256)
+                                 MinLengthValidator(7)], default=tufts_default)
+    bhcc_num = models.CharField(
+        max_length=32, blank=True)  # validate this number
+    parole_status = models.TextField(max_length=256, blank=True)
+    student_status = models.TextField(max_length=256, blank=True)
 
     validate_nonnegative = MinValueValidator(0)
-    cohort = models.IntegerField(validators=[validate_nonnegative])
-    years_given = models.IntegerField(validators=[validate_nonnegative])
-    years_left = models.IntegerField(validators=[validate_nonnegative])
+    cohort = models.IntegerField(validators=[validate_nonnegative], null=True)
+    years_given = models.IntegerField(
+        validators=[validate_nonnegative], null=True)
+    years_left = models.IntegerField(
+        validators=[validate_nonnegative], null=True)
     # classes = models.ManyToManyField()
-    # grades = modesl.ManyToManyField()
+    # grades = models.ManyToManyField()
