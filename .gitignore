@@ -117,3 +117,5 @@ venv.bak/
 # Django
 migrations/
 db.sqlite3
+
+.DS_Store
