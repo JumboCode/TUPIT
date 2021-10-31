@@ -3,41 +3,87 @@
   flex-direction: row;
 
   margin: 10px;
-  height: auto;
+  height: 97vh;
   background-color: lightyellow;
 }
 
 .admin-control {
   background-color: lightblue;
   width: 100%;
+  height: 100%;
+}
+
+.admin-control-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+}
+
+.admin-control-profile {
+  background-color: whitesmoke;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .admin-control-buttons {
-  background-color: lightseagreen;
-  display: flex;
   width: 100%;
+  display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .admin-control-buttons-item {
-  background-color: lightcoral;
+  background-color: whitesmoke;
   width: 100%;
-  border: 2px solid gray;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .admin-display {
-  position: relative;
-  background-color: lightgreen;
+  background-color: burlywood;
+  display: flex;
   width: 100%;
-  height: 500px;
+  height: 100%;
+}
+
+.admin-display-container {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+}
+
+.admin-display-list {
+  background-color: whitesmoke;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.admin-display-list-item {
+  background-color: burlywood;
+  width: 100%;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .admin-display-add-button {
-  position: absolute;
+  background-color: pink;
   z-index: 1;
-  bottom: 10px;
-  background-color: lightpink;
+  position: sticky;
+  bottom: 0%;
   width: 100%;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 // Mobile layout
