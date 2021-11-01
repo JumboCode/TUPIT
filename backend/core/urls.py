@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
@@ -22,10 +23,12 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register(r'students', views.StudentViewSet)
+router.register(r'course', views.CourseViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+	path('', RedirectView.as_view(url='api/'))
 ]
 
 if settings.DEBUG:

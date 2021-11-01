@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
-class Student(models.Model):
+class Student(Model):
     name = CharField(max_length=32)
     age = IntegerField()
     courses = ArrayField(
@@ -14,9 +14,6 @@ class Student(models.Model):
 class Course(Model):
     # validators and cleaning
     validate_nonnegative = MinValueValidator(0)
-    def validate_nonzero_length(value):
-        if len(value) == 0:
-            raise ValidationError('Must have at least one instructor')
 
     def clean(self):
         super(Course, self).clean()
@@ -55,5 +52,4 @@ class Course(Model):
 
     instructors = ArrayField(
         CharField(max_length=32, blank=False),
-        validators = [validate_nonzero_length]
     )
