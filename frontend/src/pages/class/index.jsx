@@ -74,6 +74,13 @@ class Search extends Component {
     }
 }
 
+/* 
+Class creates multiple Search components - semester, class, major, keywords 
+* Search componenets allow users to specify the option
+* Searched option is passed to Class component
+* Class component stored the state of the search -> query 
+* On submit, print the course requirements? 
+*/
 export default class Class extends Component {
     constructor(props) {
         super(props);
