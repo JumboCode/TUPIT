@@ -22,11 +22,11 @@ class Course(Model):
 
     course_title = CharField(max_length=32, blank=False)
 
-    course_number_tufts = CharField(max_length=32)
-    course_number_bhcc = CharField(max_length=32)
+    course_number_tufts = CharField(max_length=32, blank=True, null=True)
+    course_number_bhcc = CharField(max_length=32, blank=True, null=True)
 
-    credits_tufts = IntegerField(validators=[validate_nonnegative])
-    credits_bhcc = IntegerField(validators=[validate_nonnegative])
+    credits_tufts = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    credits_bhcc = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
 
     # department field of many
     COMPUTER_SCIENCE = 'COMP'
@@ -42,14 +42,20 @@ class Course(Model):
     department = CharField(
         max_length=4,
         choices=DEPARTMENTS,
-        default=None
+        blank=True,
+        null=True,
     )
 
     prereqs = ManyToManyField(
         "self",
         related_name='+',
+        symmetrical=False,
+        blank=True,
+        default=None,
     )
 
     instructors = ArrayField(
         CharField(max_length=32, blank=False),
+        blank=True,
+        null=True,
     )
