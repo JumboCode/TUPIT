@@ -6,7 +6,7 @@ The back-end for TUPIT!
 
 Get your dev environment set up quickly and _hopefully_ painlessly. We will install PostgreSQL and Python dependencies.
 
-### Mac:
+# Mac
 
 1. Requirements:
    - [Python >=3.6](https://www.python.org/downloads/macos/)
@@ -22,11 +22,11 @@ Get your dev environment set up quickly and _hopefully_ painlessly. We will inst
 10. Exit shell: `\q`
 11. Enter tupit database: `psql -d tupit`
 12. Create admin user: `CREATE USER admin WITH PASSWORD 'jctupit';`
-13. Give admin all privelages: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
+13. Give admin all privileges: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
 14. Exit shell: `\q`
 15. Finally make Django migrations!
 
-### Linux:
+# Linux
 
 1. Requirements:
    - Python >=3.6
@@ -41,15 +41,22 @@ Get your dev environment set up quickly and _hopefully_ painlessly. We will inst
 8. Enter Postgres shell: `psql`
 9. Create TUPIT database: `CREATE DATABASE tupit;`
 10. Create admin user: `CREATE USER admin WITH PASSWORD 'jctupit';`
-11. Give admin all privelages: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
+11. Give admin all privileges: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
 12. Exit shell: `\q`
 13. Exit postgres user: `exit`
 14. Finally make Django migrations!
 
 ## Make Django Migrations
 
+If making migrations for the first time:
+
 1. `python manage.py makemigrations`
 2. `python manage.py migrate`
+
+If just changing models:
+
+1. `python manage.py makemigrations api`
+2. `python manage.py migrate api`
 
 ## Start Django Server
 
@@ -60,7 +67,7 @@ Get your dev environment set up quickly and _hopefully_ painlessly. We will inst
 
 Some common issues with simple solutions.
 
-```
+```shell
 django.db.utils.OperationalError: could not connect to server: Connection refused
 ```
 
@@ -70,7 +77,7 @@ django.db.utils.OperationalError: could not connect to server: Connection refuse
   - Linux:
     - `sudo service postgresql start`
 
-```
+```shell
 File "manage.py", line 17
     ) from exc
          ^
@@ -81,3 +88,35 @@ SyntaxError: invalid syntax
   - `source env/bin/activate`
 - Or a Python dependency is missing
   - `pip install -r requirements.txt`
+
+## Nuke Database
+
+If Django migrations have gone off the rails, dropping the PostgreSQL database almost always fixes things.
+
+### Mac
+
+1. Enter PostgreSQL shell: `psql -d postgres`
+2. Drop database: `DROP DATABASE tupit;`
+3. Create database: `CREATE DATABASE tupit;`
+4. Give admin all privileges: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
+5. Exit shell: `\q`
+6. Make migrations as described below.
+
+### Linux
+
+1. Use postgres user: `sudo su - postgres`
+2. Enter Postgres shell: `psql`
+3. Drop database: `DROP DATABASE tupit;`
+4. Create database: `CREATE DATABASE tupit;`
+5. Give admin all privileges: `GRANT ALL PRIVILEGES ON DATABASE tupit TO admin;`
+6. Exit shell: `\q`
+7. Make migrations as described below.
+
+```shell
+cd backend
+source env/bin/activate
+python manage.py makemigrations
+python manage.py migrate
+python manage.py makemigrations api
+python manage.py migrate api
+```
