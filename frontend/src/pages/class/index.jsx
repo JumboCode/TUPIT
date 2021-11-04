@@ -43,6 +43,9 @@ class Requirement extends Component {
 class Search extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            options: this.props.options
+        };
     }
 
     /**
@@ -56,20 +59,32 @@ class Search extends Component {
         event.preventDefault();
     };
 
+    renderSearch() {
+        const options = this.state.options;
+        const y = options.map((x) => {
+            // console.log(x);
+            // const display = x.slice(1, x.size());
+            // console.log(display);
+        });
+    }
+
     render() {
         return (
-            <section>
-                <h1>Search:</h1>
-                <div className={styles.container}>
-                    <div className={styles.select_box}>
-                        <select onChange={this.searchCourse}>
-                            <option defaultValue="Classes" selected disabled>Classes</option>
-                            <option value="COMP15">Data Structure</option>
-                            <option value="LATIN3">Latin 3</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
+            <div>
+                {this.renderSearch()}
+            </div>
+            // <section>
+            //     <h1>Search:</h1>
+            //     <div className={styles.container}>
+            //         <div className={styles.select_box}>
+            //             <select onChange={this.searchCourse}>
+            //                 <option defaultValue="Classes" selected disabled>{this.props.name}</option>
+            //                 {/* {/* <option value="COMP15">Data Structure</option> */}
+            //                 {/* <option value="LATIN3">Latin 3</option> */} */}
+            //             </select>
+            //         </div>
+            //     </div>
+            // </section>
         );
     }
 }
@@ -85,6 +100,10 @@ export default class Class extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            search_bar: [
+                ["Semester", "2021", "2022", "2023", "2024"],
+                ["Major", "Computer Science", "Cognitive Studies", "Math", "Psychology"]
+            ],
             course: null,
         };
     }
@@ -96,6 +115,15 @@ export default class Class extends Component {
         this.setState({ course: course });
     };
 
+    renderSearch() {
+       const search_bar = this.state.search_bar; 
+       return search_bar.map(
+            (options) => (
+                <Search searchCourse={this.searchCourse} options={options} />
+            )
+       );
+    }
+
     render() {
         let requirement;
         if (this.state.course) {
@@ -104,8 +132,8 @@ export default class Class extends Component {
 
         return (
             <main>
-                <Search searchCourse={this.searchCourse} />
-                {requirement}
+                {this.renderSearch()}
+                {/* {requirement} */}
             </main>
         );
     }
