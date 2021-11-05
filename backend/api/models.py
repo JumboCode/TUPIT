@@ -1,4 +1,4 @@
-from django.db.models import Model, CharField, IntegerField, ManyToManyField
+from django.db.models import Model, CharField, IntegerField, ManyToManyField, BooleanField, ForeignKey, SET_NULL, FloatField
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -59,3 +59,11 @@ class Course(Model):
         blank=True,
         null=True,
     )
+
+class CourseProgress(Model):
+	validate_nonnegative = MinValueValidator(0)
+
+	course = ForeignKey(Course, null=True, on_delete=SET_NULL)
+	grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+	year_taken = FloatField(blank=True, null=True)
+	in_progress = BooleanField(blank=True, null=True)
