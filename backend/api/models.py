@@ -59,3 +59,15 @@ class Course(Model):
         blank=True,
         null=True,
     )
+
+class Degree(Model):
+    degree_name = CharField(max_length=32, blank=False, null=False)
+    reqs = ManyToManyField(
+        Course,
+        blank=True,
+        default=None,
+        null=True,
+        symmetrical=False,
+    )
+    active = BooleanField(default=False, blank=False, null=False)
+
