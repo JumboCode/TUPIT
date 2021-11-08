@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 
-import 'styles/global/base.scss';
+import '../styles/global/base.scss';
 
 export default function App({ Component, pageProps }) {
   return (
