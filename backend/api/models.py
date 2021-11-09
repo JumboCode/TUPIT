@@ -65,5 +65,5 @@ class CourseProgress(Model):
 
 	course = ForeignKey(Course, null=True, on_delete=SET_NULL)
 	grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
-	year_taken = FloatField(blank=True, null=True)
+	year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
 	in_progress = BooleanField(blank=True, null=True)
