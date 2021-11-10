@@ -4,7 +4,7 @@ from api.models import Student, Course, CourseProgress
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
-        fields = ('name', 'age', 'courses')
+        fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'cohort', 'years_given', 'years_left')
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
