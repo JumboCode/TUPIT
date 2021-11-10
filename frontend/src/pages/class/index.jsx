@@ -115,6 +115,10 @@ class SearchBox extends Component {
   render() {
     return this.renderSearch();
   }
+
+  render() {
+    return this.renderSearch();
+  }
 }
 
 export default class Class extends Component {
