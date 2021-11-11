@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 
-import 'styles/global/base.scss';
+import '../styles/global/base.scss';
 
+// _app.jsx should not be converted to typescript
 export default function App({ Component, pageProps }) {
   return (
     <>
