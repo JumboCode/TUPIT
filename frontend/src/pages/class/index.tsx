@@ -5,7 +5,7 @@
  * @todo Format API endpoint. This entails finishing up renderRequest function in Class component.
  * @todo Format and refactor CSS.
  * @todo Refactor code.
- * @todo "Warning: Each child in a list should have a unique 'key' prop". 
+ * @todo "Warning: Each child in a list should have a unique 'key' prop".
  */
 
 import React, { useState } from 'react';
@@ -16,20 +16,41 @@ const cx = className.bind(styles);
 
 interface SearchOptionInterface {
   major: string | string[] | null;
-  semester: number | number[] | null; 
-};
+  semester: number | number[] | null;
+}
 
 interface SearchBoxInterface {
-  readOption: (e: React.ChangeEvent<HTMLSelectElement>) => void; 
-};
+  readOption: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
 
 const search_option: SearchOptionInterface = {
-  major: ['Computer Science', 'Cognitive Studies', 'Math', 'Psychology'], 
-  semester: [2020, 2021, 2022, 2024]
+  major: ['Computer Science', 'Cognitive Studies', 'Math', 'Psychology'],
+  semester: [2020, 2021, 2022, 2024],
 };
 
+const headers: JSX.Element = (
+  <div className={styles.container}>
+    <div className={styles.leftcolumn}>
+      <h1>Search</h1>
+    </div>
+    <div className={styles.rightcolumn}>
+      <h1>Requirements</h1>
+    </div>
+  </div>
+);
+
+const button: JSX.Element = (
+  <div className={styles.container}>
+    <div className={styles.leftcolumn}>
+      <div className={styles.button}>
+        <h1>Search</h1>
+      </div>
+    </div>
+  </div>
+);
+
 /**
- * 
+ *
  * @callback readOption
  * @returns {JSX.element[]}
  */
@@ -39,53 +60,63 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
     const default_option: string = key[0].toUpperCase() + key.slice(1);
     const options: JSX.Element[] = [];
     search_option[key].map((option: number | string): void => {
-        options.push((<option key={option} value={option}>{option}</option>));
-      }
-    );
+      options.push(
+        <option key={option} value={option}>
+          {option}
+        </option>
+      );
+    });
     const box: JSX.Element = (
       <div className={styles.container}>
-        <div className={styles.select_box}>
-          <select onChange = {readOption} defaultValue={default_option}>
-            <option key={default_option} value={default_option} disabled>{default_option}</option>
-            {options}
-          </select>
+        <div className={styles.leftcolumn}>
+          <p>{default_option}:</p>
+          <div className={styles.select_box}>
+            <select onChange={readOption} defaultValue={default_option}>
+              <option key={default_option} value={default_option} disabled>
+                {default_option}
+              </option>
+              {options}
+            </select>
+          </div>
         </div>
       </div>
     );
     search_box.push(box);
   }
+
   return (
     <div>
+      {headers}
       {search_box}
+      {button}
     </div>
-  )
+  );
 };
 
 const Class: React.FC = () => {
-  const [option, setOption] = useState<SearchOptionInterface>({major: null, semester: null});
+  const [option, setOption] = useState<SearchOptionInterface>({ major: null, semester: null });
 
   /**
-   * Set state of option when a selection is made. 
-   * 
-   * @param {React.ChangeEventHandler<HTMLSelectElement>} - onChange event handler 
-   * @todo Figure out what's the type of e 
+   * Set state of option when a selection is made.
+   *
+   * @param {React.ChangeEventHandler<HTMLSelectElement>} - onChange event handler
+   * @todo Figure out what's the type of e
    */
   const readOption = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const key = e.target[0].value.toLowerCase();
     const selection = e.target.value;
-    option[key] = selection; 
+    option[key] = selection;
     setOption(option);
   };
 
   return (
     <div>
-      <SearchBox readOption={readOption}/>
+      <SearchBox readOption={readOption} />
     </div>
   );
 };
 
 export default Class;
-
 
 // // class Requirement extends Component {
 // //   constructor(props) {
@@ -119,4 +150,3 @@ export default Class;
 // //     );
 // //   }
 // // }
-
