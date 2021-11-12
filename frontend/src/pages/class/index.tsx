@@ -57,6 +57,7 @@ const button: JSX.Element = (
 const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
   const search_box: JSX.Element[] = [];
   for (const key in search_option) {
+    console.log(key);
     const default_option: string = key[0].toUpperCase() + key.slice(1);
     const options: JSX.Element[] = [];
     search_option[key].map((option: number | string): void => {
