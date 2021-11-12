@@ -28,24 +28,20 @@ const search_option: SearchOptionInterface = {
   semester: [2020, 2021, 2022, 2024],
 };
 
-const headers: JSX.Element = (
-  <div className={styles.container}>
-    <div className={styles.leftcolumn}>
-      <h1>Search</h1>
-    </div>
-    <div className={styles.rightcolumn}>
-      <h1>Requirements</h1>
-    </div>
-  </div>
-);
+// const headers: JSX.Element = (
+//   <div>
+//     <div className={styles.leftColumn}>
+//       <h1>Search</h1>
+//     </div>
+//     <div className={styles.rightColumn}>
+//       <h1>Requirements</h1>
+//     </div>
+//   </div>
+// );
 
 const button: JSX.Element = (
-  <div className={styles.container}>
-    <div className={styles.leftcolumn}>
-      <div className={styles.button}>
-        <h1>Search</h1>
-      </div>
-    </div>
+  <div className={styles.button}>
+    <h1>Search</h1>
   </div>
 );
 
@@ -67,18 +63,14 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
       );
     });
     const box: JSX.Element = (
-      <div className={styles.container}>
-        <div className={styles.leftcolumn}>
-          <p>{default_option}:</p>
-          <div className={styles.select_box}>
-            <select onChange={readOption} defaultValue={default_option}>
-              <option key={default_option} value={default_option} disabled>
-                {default_option}
-              </option>
-              {options}
-            </select>
-          </div>
-        </div>
+      <div className={styles.selectBox}>
+        <p>{default_option}:</p>
+        <select onChange={readOption} defaultValue={default_option}>
+          <option key={default_option} value={default_option} disabled>
+            {default_option}
+          </option>
+          {options}
+        </select>
       </div>
     );
     search_box.push(box);
@@ -86,15 +78,13 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
 
   return (
     <div>
-      {headers}
       {search_box}
-      {button}
     </div>
   );
 };
 
 const Class: React.FC = () => {
-  const [option, setOption] = useState<SearchOptionInterface>({ major: null, semester: null });
+  const [option, setOption] = useState<SearchOptionInterface>({major: null, semester: null});
 
   /**
    * Set state of option when a selection is made.
@@ -110,9 +100,18 @@ const Class: React.FC = () => {
   };
 
   return (
-    <div>
-      <SearchBox readOption={readOption} />
-    </div>
+    <main className={styles.container}>
+      <div className={styles.container__flex}>
+        <div id={styles.selectBox}>
+          <h1>Search</h1>
+          <SearchBox readOption={readOption} />
+          {button}
+        </div>
+        <div>
+          <h1>Requirements</h1>
+        </div>
+      </div>
+    </main>
   );
 };
 
