@@ -77,15 +77,11 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
     search_box.push(box);
   }
 
-  return (
-    <div>
-      {search_box}
-    </div>
-  );
+  return <div>{search_box}</div>;
 };
 
 const Class: React.FC = () => {
-  const [option, setOption] = useState<SearchOptionInterface>({major: null, semester: null});
+  const [option, setOption] = useState<SearchOptionInterface>({ major: null, semester: null });
 
   /**
    * Set state of option when a selection is made.
@@ -108,7 +104,7 @@ const Class: React.FC = () => {
           <SearchBox readOption={readOption} />
           {button}
         </div>
-        <div>
+        <div className={styles.header}>
           <h1>Requirements</h1>
         </div>
       </div>
