@@ -14,4 +14,4 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
 class CourseProgressSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CourseProgress
-        fields = ('course', 'grade', 'year_taken', 'in_progress')
+        fields = ('student', 'course', 'grade', 'year_taken', 'in_progress')
