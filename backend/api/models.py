@@ -3,8 +3,8 @@ from django.contrib.postgres.fields import ArrayField
 import re
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MinValueValidator
+from django.db.models.deletion import CASCADE
 from django.utils.translation import gettext_lazy as _
-
 
 class Student(Model):
     def validate_doc_num(value):
@@ -39,13 +39,13 @@ class Student(Model):
         validators=[validate_nonnegative], null=True)
     years_left = IntegerField(
         validators=[validate_nonnegative], null=True)
-    # classes = ManyToManyField()
-    # grades = ManyToManyField()
-
 
 class Course(Model):
     # validators and cleaning
     validate_nonnegative = MinValueValidator(0)
+
+    def empty_array():
+        return []
 
     def clean(self):
         super(Course, self).clean()
@@ -91,7 +91,7 @@ class Course(Model):
     instructors = ArrayField(
         CharField(max_length=32, blank=False),
         blank=True,
-        null=True,
+        default=empty_array,
     )
 
 class Degree(Model):
@@ -105,9 +105,13 @@ class Degree(Model):
     active = BooleanField(default=False, blank=False, null=False)
 
 class CourseProgress(Model):
-	validate_nonnegative = MinValueValidator(0)
+    def default_true():
+        return True
 
-	course = ForeignKey(Course, null=True, on_delete=SET_NULL)
-	grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
-	year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
-	in_progress = BooleanField(blank=True, null=True)
+    validate_nonnegative = MinValueValidator(0)
+
+    course = ForeignKey(Course, related_name='+', blank=False, null=True, on_delete=SET_NULL)
+    student = ForeignKey(Student, related_name='courses', blank=False, null=True, on_delete=CASCADE)
+    grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    in_progress = BooleanField(blank=True, default=default_true)

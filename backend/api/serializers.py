@@ -20,3 +20,4 @@ class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Degree 
         fields = ('degree_name', 'reqs', 'active')
+        fields = ('student', 'course', 'grade', 'year_taken', 'in_progress')
