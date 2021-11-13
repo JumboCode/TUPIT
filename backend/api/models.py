@@ -100,7 +100,6 @@ class Degree(Model):
         Course,
         blank=True,
         default=None,
-        null=True,
         symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
