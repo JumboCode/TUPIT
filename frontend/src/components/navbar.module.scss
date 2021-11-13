@@ -1,0 +1,41 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  position: sticky;
+  top: 0px;
+  background-color: cadetblue;
+  padding: 10px;
+  vertical-align: 50%;
+}
+
+.navbar-title {
+  font-size: 140%;
+  font-weight: bold;
+  color: white;
+}
+
+.navbar-hamburger {
+  color: white;
+  font-size: 140%;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 57px;
+  right: 10px;
+  width: 150px;
+  background-color: cadetblue;
+  z-index: 1;
+}
+
+.navbar-menu-item {
+  color: white;
+  font-size: 140%;
+  padding: 10px;
+}
