@@ -24,6 +24,7 @@ from api import views
 router = routers.DefaultRouter()
 router.register(r'students', views.StudentViewSet)
 router.register(r'course', views.CourseViewSet)
+router.register(r'courseprogress', views.CourseProgressViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

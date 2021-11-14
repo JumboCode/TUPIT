@@ -1,5 +1,5 @@
-from api.models import Student, Course
-from api.serializers import StudentSerializer, CourseSerializer
+from api.models import Student, Course, CourseProgress
+from api.serializers import StudentSerializer, CourseSerializer, CourseProgressSerializer
 from rest_framework import viewsets
 
 class StudentViewSet(viewsets.ModelViewSet):
@@ -9,6 +9,10 @@ class StudentViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+class CourseProgressViewSet(viewsets.ModelViewSet):
+    queryset = CourseProgress.objects.all()
+    serializer_class = CourseProgressSerializer
 
 import json
 from django.http import JsonResponse

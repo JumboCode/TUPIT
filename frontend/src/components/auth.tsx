@@ -1,10 +1,16 @@
 import { checkPropTypes } from 'prop-types';
 import React, { useState, useEffect, useContext } from 'react';
 
-export const AuthContext = React.createContext();
+export const AuthContext = React.createContext({
+  isLoggedIn: false,
+  csrfToken: '',
+  login: (username, password) => {},
+  logout: () => {},
+});
+
 export const useAuth = () => useContext(AuthContext);
 
-export default function AuthProvider({ children }) {
+export const AuthProvider: React.FC = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [csrfToken, setCsrfToken] = useState('');
 
@@ -58,6 +64,7 @@ export default function AuthProvider({ children }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
         },
         credentials: 'include',
       })
@@ -111,4 +118,6 @@ export default function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export default AuthProvider;
