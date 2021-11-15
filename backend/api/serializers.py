@@ -1,5 +1,5 @@
 from rest_framework_json_api import serializers
-from api.models import Student, Course, CourseProgress
+from api.models import Student, Course, CourseProgress, Degree
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -15,3 +15,8 @@ class CourseProgressSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CourseProgress
         fields = ('student', 'course', 'grade', 'year_taken', 'in_progress')
+
+class DegreeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Degree 
+        fields = ('degree_name', 'reqs', 'active')
