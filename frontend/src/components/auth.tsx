@@ -4,8 +4,12 @@ import React, { useState, useEffect, useContext } from 'react';
 export const AuthContext = React.createContext({
   isLoggedIn: false,
   csrfToken: '',
-  login: (username, password) => {},
-  logout: () => {},
+  login: async (username, password): Promise<void> => {
+    return new Promise((resolve, reject) => reject());
+  },
+  logout: async (): Promise<void> => {
+    return new Promise((resolve, reject) => reject());
+  },
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -27,8 +31,8 @@ export const AuthProvider: React.FC = ({ children }) => {
     );
   }, [isLoggedIn]);
 
-  const login = (username, password) =>
-    new Promise((resolve, reject) => {
+  const login = async (username: string, password: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
       fetch('http://127.0.0.1:8000/login/', {
         method: 'POST',
         headers: {
@@ -44,22 +48,21 @@ export const AuthProvider: React.FC = ({ children }) => {
         .then((res) => {
           if (res.status === 200) {
             setIsLoggedIn(true);
-            resolve('Successfully logged in');
+            resolve();
           } else {
             setIsLoggedIn(false);
-            reject('Invalid credentials');
+            reject();
           }
         })
         .catch((err) => {
           console.log(err);
-          reject('Error connecting to backend');
+          reject();
         });
     });
+  };
 
-  const checkError = (error) => Promise.resolve();
-
-  const checkAuth = () =>
-    new Promise((resolve, reject) => {
+  const checkAuth = async (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
       fetch('http://127.0.0.1:8000/validate-logged-in/', {
         method: 'POST',
         headers: {
@@ -70,18 +73,18 @@ export const AuthProvider: React.FC = ({ children }) => {
       })
         .then((res) => {
           res.json().then((data) => {
-            if (data.is_logged_in) resolve(true);
-            else resolve(false);
+            resolve(data.is_logged_in);
           });
         })
         .catch((err) => {
           console.log(err);
-          reject('Error connecting to backend');
+          reject();
         });
     });
+  };
 
-  const logout = () =>
-    new Promise((resolve, reject) => {
+  const logout = async (): Promise<void> => {
+    return new Promise((resolve, reject) => {
       fetch('http://127.0.0.1:8000/logout/', {
         method: 'POST',
         headers: {
@@ -91,20 +94,15 @@ export const AuthProvider: React.FC = ({ children }) => {
         credentials: 'include',
       })
         .then((res) => {
-          if (res.status === 200) {
-            setIsLoggedIn(false);
-            resolve('Successfully logged out');
-          } else reject('Not logged in');
+          setIsLoggedIn(res.status === 200);
+          resolve();
         })
         .catch((err) => {
           console.log(err);
-          reject('Error connecting to backend');
+          reject();
         });
     });
-
-  const getIdentity = () => Promise.resolve();
-
-  const getPermissions = (params) => Promise.resolve();
+  };
 
   return (
     <AuthContext.Provider

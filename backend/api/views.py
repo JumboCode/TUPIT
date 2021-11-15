@@ -45,11 +45,11 @@ def LoginUser(request):
     response = JsonResponse({'info': 'Successfully authenticated'}, status=200)
     return response
 
+@csrf_exempt
 def LogoutUser(request):
     if request.user.is_authenticated:
         logout(request)
-        return JsonResponse({'info': 'Successfully logged out'}, status=200)
-    return JsonResponse({'info': 'Failed to logout, not logged in'}, status=401)
+    return JsonResponse({'info': 'Successfully logged out'}, status=200)
 
 @csrf_exempt
 def ValidateLoggedIn(request):

@@ -3,7 +3,7 @@ import Router from 'next/router';
 import { useAuth } from '../components/auth';
 
 export default function LoginForm() {
-  const { isLoggedIn, ready: authReady, login, logout, identity } = useAuth();
+  const { isLoggedIn, csrfToken, login, logout } = useAuth();
 
   function doLogin(e) {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function LoginForm() {
       <form onSubmit={doLogin}>
         <input type="text" name="username" placeholder="username" />
         <input type="password" name="password" placeholder="password" />
-        <button type="submit">Login</button>
+        <input type="submit" value="Login" />
       </form>
     </div>
   );

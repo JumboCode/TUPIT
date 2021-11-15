@@ -13,6 +13,7 @@ const Home: React.FC = () => {
   return (
     <div className={cx('base')}>
       <h1>Hello, TUPIT!</h1>
+      {isLoggedIn ? <a href="/logout">Logout</a> : <a href="/login">Login</a>}
     </div>
   );
 };
