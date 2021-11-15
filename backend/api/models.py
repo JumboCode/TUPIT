@@ -94,6 +94,16 @@ class Course(Model):
         default=empty_array,
     )
 
+class Degree(Model):
+    degree_name = CharField(max_length=32, blank=False, null=False)
+    reqs = ManyToManyField(
+        Course,
+        blank=True,
+        default=None,
+        symmetrical=False,
+    )
+    active = BooleanField(default=False, blank=False, null=False)
+
 class CourseProgress(Model):
     def default_true():
         return True
