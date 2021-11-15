@@ -51,12 +51,12 @@ export const AuthProvider: React.FC = ({ children }) => {
             resolve();
           } else {
             setIsLoggedIn(false);
-            reject();
+            reject('Invalid login credentials');
           }
         })
         .catch((err) => {
           console.log(err);
-          reject();
+          reject('Error connecting to server');
         });
     });
   };
@@ -78,7 +78,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         })
         .catch((err) => {
           console.log(err);
-          reject();
+          reject('Error connecting to server');
         });
     });
   };
@@ -99,7 +99,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         })
         .catch((err) => {
           console.log(err);
-          reject();
+          reject('Error connecting to server');
         });
     });
   };

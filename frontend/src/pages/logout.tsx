@@ -6,7 +6,10 @@ export default function LogoutForm() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
 
   useEffect(() => {
-    logout().then(() => Router.push('/'));
+    logout().then(
+      (res) => Router.push('/'),
+      (err) => alert(err)
+    );
   }, []);
 
   return <div>Logging out...</div>;
