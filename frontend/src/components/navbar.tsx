@@ -7,23 +7,37 @@ const cx = classNames.bind(styles);
 
 type NavbarProps = {
   children?: React.ReactNode;
+  links?: string[];
+  hidden?: boolean;
 };
 
-const Navbar: React.FC<NavbarProps> = ({ children }) => {
+const defaultLinks = ['Tyler', 'Jackson', 'Michael', 'Sarah', 'Skylar'];
+
+const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
+  const [menuVisible, setMenuVisible] = React.useState(false);
   return (
     <>
-      <div className={cx('navbar-container')}>
-        <div className={cx('navbar-title')}>TUPIT</div>
+      {hidden == undefined || !hidden ? (
+        <>
+          <div className={cx('navbar-container')}>
+            <div className={cx('navbar-title')}>TUPIT</div>
 
-        <span className={cx('navbar-hamburger')}>
-          <i className={cx('fa fa-bars')}></i>
-        </span>
-      </div>
-      <div className={cx('navbar-menu')}>
-        <div className={cx('navbar-menu-item')}> Jackson </div>
-        <div className={cx('navbar-menu-item')}> Tyler </div>
-      </div>
-      {children}
+            <span className={cx('navbar-hamburger')} onClick={() => setMenuVisible(!menuVisible)}>
+              <i className={cx('fa fa-bars')}></i>
+            </span>
+          </div>
+          <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
+            {(links == undefined ? defaultLinks : links).map((link, index) => (
+              <div key={index} className={cx('navbar-menu-item')}>
+                {link}
+              </div>
+            ))}
+          </div>
+          {children}
+        </>
+      ) : (
+        <>{children}</>
+      )}
     </>
   );
 };

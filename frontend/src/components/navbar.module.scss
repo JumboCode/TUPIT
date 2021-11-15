@@ -32,6 +32,11 @@
   width: 150px;
   background-color: cadetblue;
   z-index: 1;
+  box-shadow: lightgray 0px 10px 10px;
+}
+
+.navbar-menu-invisible {
+  display: none;
 }
 
 .navbar-menu-item {
