@@ -1,10 +1,10 @@
 .letterBox {
-  background-color: #f1f1f1;
-  border: 1px solid black;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 1%;
+  background-color: #f1f1f1;
+  border: 1px solid black;
 }
 
 .letterItem {
@@ -30,6 +30,11 @@
   color: white;
 }
 
+.header {
+  border-bottom: 1px solid black;
+  padding: 0.3%;
+}
+
 .section {
   font-size: 1rem;
   margin: 1rem;
@@ -46,13 +51,60 @@
   flex: 1 0 21%;
 }
 
-.popup {
-  background-color: #fffdd0;
+// .popup {
+//   background-color: #f1f1f1;
+//   border: 1px solid black;
+//   position: fixed;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   margin: auto;
+//   width: 70%;
+//   min-height: 350px;
+// }
+
+.overlay {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  position: relative;
   margin: auto;
-  width: 50%;
+  top: 20%;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 60%;
   min-height: 350px;
+  transition: all 5s ease-in-out;
+}
+.popup .close {
+  position: absolute;
+  right: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+@media (max-width: 700px) {
+  .letterBox {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media (max-width: 400px) {
+  .section__student {
+    flex-direction: column;
+    justify-content: center;
+  }
 }

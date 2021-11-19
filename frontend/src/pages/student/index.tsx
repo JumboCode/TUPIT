@@ -7,8 +7,8 @@ const cx: any = className.bind(styles);
 
 interface StudentInterface {
   student: string;
-  year: number; 
-  displayPopUp: (student: string) => void; 
+  year: number;
+  displayPopUp: (student: string) => void;
 }
 
 const getAlphabet = (): string[] => {
@@ -54,58 +54,65 @@ const LetterSelection: React.FC = () => {
   return <div className={styles.letterBox}>{options}</div>;
 };
 
-
 const student_test = {
   A: [
-    {student: "Jackson", year: 2023},
-    {student: "Tyler", year: 2024},
-    {student: "Sara", year: 2025},
-    {student: "Jason", year: 2022},
-    {student: "Michael", year: 2023},
-    {student: "Eddie", year: 2023}, 
-    {student: "ABCD", year: 2000},
-    {student: "BDEBASd", year: 2000},
-    {student: "CASDASD", year: 2000},
-    {student: "DASDasd", year: 2000},
-    {student: "EASDASD", year: 2000},
-    {student: "FASDASD", year: 2000},
-    {student: "GASDASD", year: 2000},
+    { student: 'Jackson', year: 2023 },
+    { student: 'Tyler', year: 2024 },
+    { student: 'Sara', year: 2025 },
+    { student: 'Jason', year: 2022 },
+    { student: 'Michael', year: 2023 },
+    { student: 'Eddie', year: 2023 },
+    { student: 'ABCD', year: 2000 },
+    { student: 'BDEBASd', year: 2000 },
+    { student: 'CASDASD', year: 2000 },
+    { student: 'DASDasd', year: 2000 },
+    { student: 'EASDASD', year: 2000 },
+    { student: 'FASDASD', year: 2000 },
+    { student: 'GASDASD', year: 2000 },
   ],
   B: [
-    {student: "Jackson", year: 2023},
-    {student: "Tyler", year: 2024},
-    {student: "Sara", year: 2025},
-    {student: "Jason", year: 2022},
-    {student: "Michael", year: 2023},
-    {student: "Eddie", year: 2023}, 
-    {student: "ABCD", year: 2000},
-    {student: "BDEBASd", year: 2000},
-    {student: "CASDASD", year: 2000},
-    {student: "DASDasd", year: 2000},
-    {student: "EASDASD", year: 2000},
-    {student: "FASDASD", year: 2000},
-    {student: "GASDASD", year: 2000},
-  ]
-}
+    { student: 'Jackson', year: 2023 },
+    { student: 'Tyler', year: 2024 },
+    { student: 'Sara', year: 2025 },
+    { student: 'Jason', year: 2022 },
+    { student: 'Michael', year: 2023 },
+    { student: 'Eddie', year: 2023 },
+    { student: 'ABCD', year: 2000 },
+    { student: 'BDEBASd', year: 2000 },
+    { student: 'CASDASD', year: 2000 },
+    { student: 'DASDasd', year: 2000 },
+    { student: 'EASDASD', year: 2000 },
+    { student: 'FASDASD', year: 2000 },
+    { student: 'GASDASD', year: 2000 },
+  ],
+};
 
-const Student: React.FC<StudentInterface> = ({ student, year, displayPopUp}) => {
+const Student: React.FC<StudentInterface> = ({ student, year, displayPopUp }) => {
   return (
-    <p className={styles.section__studentInner} onClick={() => {displayPopUp(student)}}>
+    <p
+      className={styles.section__studentInner}
+      onClick={() => {
+        displayPopUp(student);
+      }}
+    >
       {student}
     </p>
-  )
+  );
 };
 
 const StudentDirectory: React.FC = () => {
   const [popUp, setPopUp] = useState<boolean>(false);
   const [popUpContent, setPopUpContent] = useState<JSX.Element | null>(null);
   const alphabet: string[] = getAlphabet();
-  
+
   const displayPopUp = (student: string): void => {
     setPopUp(true);
     const content: JSX.Element = (
-      <div className={styles.popup}>
-        {student}
+      <div className={styles.overlay}>
+        <div className={styles.popup}>
+          <a className={styles.close}>x</a>
+          {student}
+        </div>
       </div>
     );
     setPopUpContent(content);
@@ -115,18 +122,24 @@ const StudentDirectory: React.FC = () => {
     const students: JSX.Element[] = [];
     if (student_test.hasOwnProperty(option)) {
       student_test[option].map((student: StudentInterface) => {
-        students.push(<Student key={student.student} student={student.student} year={student.year} 
-          displayPopUp={displayPopUp}/>);
+        students.push(
+          <Student
+            key={student.student}
+            student={student.student}
+            year={student.year}
+            displayPopUp={displayPopUp}
+          />
+        );
       });
     }
     return (
       <div key={option} id={option} className={styles.section}>
-        <h1>{option}</h1>
-        <div className={styles.section__student}>
-          {students}
+        <div className={styles.header}>
+          <h1>{option}</h1>
         </div>
+        <div className={styles.section__student}>{students}</div>
       </div>
-    )
+    );
   });
 
   return (
@@ -138,4 +151,4 @@ const StudentDirectory: React.FC = () => {
   );
 };
 
-export default StudentDirectory; 
+export default StudentDirectory;
