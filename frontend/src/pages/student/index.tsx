@@ -22,22 +22,21 @@ const getAlphabet = (): string[] => {
   return alphabet;
 };
 
-
-const LetterBox =  (
-    option: string, 
-    handleActiveLink: (e) => void, 
-    activeLinkStyle: boolean
-  ): JSX.Element => {
-
+const LetterBox = (
+  option: string,
+  handleActiveLink: (e) => void,
+  activeLinkStyle: boolean
+): JSX.Element => {
   return (
-    <div key={option} className={activeLinkStyle? styles.letterItemClick: ''}>
+    <div key={option} className={activeLinkStyle ? styles.letterItemClick : ''}>
       <button onClick={handleActiveLink}>
-        <a href={`#${option}`} className={styles.letterItem}>{option}</a>
+        <a href={`#${option}`} className={styles.letterItem}>
+          <div>{option}</div>
+        </a>
       </button>
-    </div> 
-  ); 
+    </div>
+  );
 };
-
 
 const LetterSelection: React.FC = () => {
   const [activeLink, setActiveLink] = useState<number | null>(null);
@@ -46,7 +45,7 @@ const LetterSelection: React.FC = () => {
   // value of activeLink. Because setActiveLink changes the state of the component, it is
   // re-rendered. The new state of activeLink is then set to stateRef.current
   const stateRef = useRef<number | null>(null);
-  stateRef.current = activeLink; 
+  stateRef.current = activeLink;
 
   const handleActiveLink = (e): void => {
     // Read the current header selected and convert to integer value
@@ -65,9 +64,9 @@ const LetterSelection: React.FC = () => {
   };
 
   const letters: string[] = getAlphabet();
-  const [options, setOptions] = useState<Array<JSX.Element>>(letters.map((option: string) => (
-    LetterBox(option, handleActiveLink, false)
-  )));
+  const [options, setOptions] = useState<Array<JSX.Element>>(
+    letters.map((option: string) => LetterBox(option, handleActiveLink, false))
+  );
 
   return <div className={styles.letterBox}>{options}</div>;
 };
@@ -128,7 +127,15 @@ const StudentDirectory: React.FC = () => {
     const content: JSX.Element = (
       <div className={styles.overlay}>
         <div className={styles.popup}>
-          <a className={styles.close}>x</a>
+          <button
+            onClick={() => {
+              setPopUp(false);
+            }}
+          >
+            <a className={styles.close}>x</a>
+          </button>
+          <br></br>
+          <br></br>
           {student}
         </div>
       </div>

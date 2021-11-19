@@ -5,19 +5,23 @@
   padding: 1%;
   background-color: #f1f1f1;
   border: 1px solid black;
+  position: fixed;
+  width: 100%;
+  top: 0;
 }
 
 .letterItem {
   background-color: #f1f1f1;
-  border-bottom: 1px solid black;
+  //border: 1px solid black;
   //padding: 2%;
 }
 
 .letterItemClick {
-  background-color: black;
+  //background-color: black;
   border: 2px solid black;
-  //padding: .3%;
-  //color: white;
+  border-radius: 5px;
+  padding: 0.3%;
+  color: white;
 }
 
 .letterItem {
@@ -37,6 +41,7 @@
 .header {
   border-bottom: 1px solid black;
   padding: 0.3%;
+  padding-top: 5%;
 }
 
 .section {
@@ -66,6 +71,10 @@
 //   width: 70%;
 //   min-height: 350px;
 // }
+.hide {
+  display: none;
+  background: rgba(0, 0, 0, 0);
+}
 
 .overlay {
   position: fixed;
@@ -99,11 +108,11 @@
   color: black;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 500px) {
   .letterBox {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    //justify-content: center;
   }
 }
 @media (max-width: 400px) {
