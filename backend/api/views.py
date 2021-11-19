@@ -1,6 +1,6 @@
 from api.models import Student, Course, CourseProgress, Degree
 from api.serializers import StudentSerializer, CourseSerializer, CourseProgressSerializer, DegreeSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -9,6 +9,8 @@ class StudentViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['=course_title']
 
 class CourseProgressViewSet(viewsets.ModelViewSet):
     queryset = CourseProgress.objects.all()
