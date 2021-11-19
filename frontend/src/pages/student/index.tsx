@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './student.module.scss';
 import className from 'classnames/bind';
-import { info } from 'console';
 
 const cx: any = className.bind(styles);
 
@@ -23,33 +22,52 @@ const getAlphabet = (): string[] => {
   return alphabet;
 };
 
-const LetterBox: React.FC = ({ alphabet }) => {
-  const [style, setStyle] = useState(styles.letterItem);
-  const changeStyle = (e) => {
-    // if (chosen == "") {
-    //     setStyle(styles.letterItem);
-    //     LetterBox(chosen);
-    // }
-    e.preventDefault();
-    setStyle(styles.letterItemClick);
-    //setChosen({alphabet});
-  };
+
+const LetterBox =  (
+    option: string, 
+    handleActiveLink: (e) => void, 
+    activeLinkStyle: boolean
+  ): JSX.Element => {
 
   return (
-    <div className={style}>
-      <button onClick={changeStyle}>
-        <a href={`#${alphabet}`}>{alphabet}</a>
+    <div key={option} className={activeLinkStyle? styles.letterItemClick: ''}>
+      <button onClick={handleActiveLink}>
+        <a href={`#${option}`} className={styles.letterItem}>{option}</a>
       </button>
-    </div>
-  );
+    </div> 
+  ); 
 };
 
+
 const LetterSelection: React.FC = () => {
+  const [activeLink, setActiveLink] = useState<number | null>(null);
+
+  // React does not update the state immediately in callbacks. useRef gives access to the previous
+  // value of activeLink. Because setActiveLink changes the state of the component, it is
+  // re-rendered. The new state of activeLink is then set to stateRef.current
+  const stateRef = useRef<number | null>(null);
+  stateRef.current = activeLink; 
+
+  const handleActiveLink = (e): void => {
+    // Read the current header selected and convert to integer value
+    const current = e.target.innerHTML;
+    const index = current.charCodeAt(0) - 65;
+
+    // If a choice has been selected, unchange the active style for the component at the index
+    if (stateRef.current) {
+      const previous = String.fromCharCode(65 + stateRef.current);
+      options[stateRef.current] = LetterBox(previous, handleActiveLink, false);
+    }
+    setActiveLink(index);
+    options[index] = LetterBox(current, handleActiveLink, true);
+    setOptions([...options]);
+    e.preventDefault();
+  };
+
   const letters: string[] = getAlphabet();
-  const options: JSX.Element[] = [];
-  letters.map((option: string) => {
-    options.push(<LetterBox alphabet={option} />);
-  });
+  const [options, setOptions] = useState<Array<JSX.Element>>(letters.map((option: string) => (
+    LetterBox(option, handleActiveLink, false)
+  )));
 
   return <div className={styles.letterBox}>{options}</div>;
 };
