@@ -1,0 +1,58 @@
+.letterBox {
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1%;
+}
+
+.letterItem {
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  padding: 1%;
+}
+
+.letterItemClick {
+  background-color: black;
+  border: 1px solid black;
+  padding: 1%;
+  color: white;
+}
+
+.letterItem a {
+  text-decoration: none;
+  color: black;
+}
+
+.letterItem a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.section {
+  font-size: 1rem;
+  margin: 1rem;
+}
+
+.section__student {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.section__studentInner {
+  flex: 1 0 21%;
+}
+
+.popup {
+  background-color: #fffdd0;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+  width: 50%;
+  min-height: 350px;
+}
