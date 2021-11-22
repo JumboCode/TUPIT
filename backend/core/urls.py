@@ -30,7 +30,11 @@ router.register(r'degree', views.DegreeViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-	path('', RedirectView.as_view(url='api/'))
+	path('', RedirectView.as_view(url='api/')),
+    path('get-csrf-token/', views.GetCSRFToken),
+    path('login/', views.LoginUser),
+    path('logout/', views.LogoutUser),
+    path('validate-logged-in/', views.ValidateLoggedIn),
 ]
 
 if settings.DEBUG:
