@@ -6,7 +6,23 @@ from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db.models.deletion import CASCADE
 from django.utils.translation import gettext_lazy as _
 
+__all__ = ["Student", "Course", "Degree", "CourseProgress"]
+
 class Student(Model):
+
+    def __str__(self):
+
+        model = f'''
+        Student ID - {self.id}
+        Firstname - {self.firstname}
+        Lastname - {self.lastname}
+        Birthday - {self.birthday}
+        Cohort - {self.cohort}
+        Years given - {self.years_given}
+        Years left - {self.years_left}
+        '''    
+        return re.sub('^\s+', '', model, flags = re.MULTILINE)
+        
     def validate_doc_num(value):
         regex = re.compile('^W\d+$')
         if not regex.match(value):
@@ -39,6 +55,7 @@ class Student(Model):
         validators=[validate_nonnegative], null=True)
     years_left = IntegerField(
         validators=[validate_nonnegative], null=True)
+
 
 class Course(Model):
     # validators and cleaning
@@ -94,6 +111,18 @@ class Course(Model):
         default=empty_array,
     )
 
+    def __str__(self):
+
+        model = f'''
+        Course ID - {self.id}
+        Course - {self.course_title}
+        Tufts number - {self.course_number_tufts}
+        BHCC number - {self.course_number_bhcc}
+        Department - {self.department}
+        Instructors - {self.instructors}
+        '''
+        return re.sub('^\s+', '', model, flags = re.MULTILINE)
+
 class Degree(Model):
     degree_name = CharField(max_length=32, blank=False, null=False)
     reqs = ManyToManyField(
@@ -115,3 +144,14 @@ class CourseProgress(Model):
     grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
     year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
     in_progress = BooleanField(blank=True, default=default_true)
+
+    def __str__(self):
+
+        model = f'''
+        CourseProgress ID - {self.id}
+        Grade - {self.grade}
+        Year taken - {self.year_taken}
+        Relationship - {type(self.student)} 
+        {self.student}
+        '''
+        return re.sub('^\s+', '', model, flags = re.MULTILINE)
