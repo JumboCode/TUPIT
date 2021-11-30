@@ -134,7 +134,7 @@ REST_FRAMEWORK = {
         'rest_framework_json_api.filters.OrderingFilter',
         'rest_framework_json_api.django_filters.DjangoFilterBackend',
 
-        # TODO - It's weird that including this as the default filter does not work 
+        # TODO - Add to default filter
         # 'django_filters.rest_framework.DjangoFilterBackend'
     ), 
     'SEARCH_PARAM': 'filter[search]',

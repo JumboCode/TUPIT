@@ -21,24 +21,21 @@ class CourseFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Course 
-        fields = (
-            'course_title', 
-            'course_number_tufts', 
-            'course_number_bhcc',
-            'credits_tufts', 
-            'credits_bhcc', 
-            'department', 
-            'prereqs',
-            'instructors'
-        )
+
+        fields = {
+            'course_title': ['exact', 'icontains'],
+            'course_number_tufts': ['exact', 'icontains'],
+            'course_number_bhcc': ['exact', 'icontains'],
+            'credits_tufts': ['exact'],
+            'credits_bhcc': ['exact'],
+            'department': ['exact', 'icontains'],
+            'prereqs': ['exact', 'icontains']
+        }
     
     def instructors__contains(self, queryset, name, value):
         '''
         Support ArrayField type and overrides the default endpoint for querying
         instructors. Name of instructors must match the database.
-
-        NOTE - This function cannot be made as a private by adding __ at the 
-        start. Django will try to access it and raise an error.
 
         >>> api/course?course_title=Algorithm&instructors=Karen,Dianne
         Returns successful match
@@ -61,11 +58,11 @@ class StudentFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Student
-        fields = (
-            'firstname',
-            'lastname',
-            'cohort'
-        )
+        fields = {
+            'firstname': ['exact', 'icontains'],
+            'lastname': ['exact', 'icontains'],
+            'cohort': ['exact', 'icontains']
+        }
 
 class CourseProgressFilterSet(django_filters.FilterSet):
 
