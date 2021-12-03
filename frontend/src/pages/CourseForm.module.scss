@@ -1,0 +1,25 @@
+.formContainer {
+  border: 1px solid black;
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+
+  span {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-right: 5px;
+  }
+  input {
+    border: 1px solid gray;
+    flex-grow: 1;
+  }
+
+  > div {
+    display: flex;
+    margin: 10px;
+    display: inline;
+  }
+}
