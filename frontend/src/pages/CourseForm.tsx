@@ -1,5 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import Router from 'next/router';
+import styles from './CourseForm.module.scss';
+import { string } from 'prop-types';
 
 interface Course {
   course_title: string;
@@ -9,12 +11,14 @@ interface Course {
   credits_bhcc: number;
   department: string;
   instructors: string[];
-  prereqs: [];
+  prereqs: string[];
 }
 
 export const CourseForm = memo(function CourseFormFn() {
+  // departments is a map from display name -> department abbreviation
   const [departments, setDepartments] = useState<Map<string, string> | undefined>(new Map());
-  const [courses, setCourses] = useState();
+  // courses is a map from name -> id
+  const [courses, setCourses] = useState<Map<string, string> | undefined>(new Map());
 
   useEffect(() => {
     console.log('hello');
@@ -42,14 +46,24 @@ export const CourseForm = memo(function CourseFormFn() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res.data);
-        // setDepartments(res.data.actions.POST.department.choices);
+        const courses = new Map<string, string>(
+          res.data.map((x) => [x.attributes.course_title, x.id])
+        );
+        setCourses(courses);
       });
   }, []);
 
   const submit = async (event) => {
     event.preventDefault();
-    console.log('Hello');
-    console.log('This is the course title', event.target.course_title.value);
+
+    let options = event.target.prereqs.options;
+    let result = [];
+    for (var i = 0, iLen = options.length; i < iLen; i++) {
+      let opt = options[i];
+      if (opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
 
     let newCourse: Course = {} as Course;
 
@@ -59,19 +73,21 @@ export const CourseForm = memo(function CourseFormFn() {
     newCourse.credits_tufts = event.target.credits_tufts.value;
     newCourse.credits_bhcc = event.target.credits_bhcc.value;
     newCourse.department = departments.get(event.target.department.value);
+    newCourse.prereqs = result;
     console.log('this is the department', newCourse.department, event.target.department.value);
-    // newCourse.instructors = event.target.instructor.value;
+    console.log('this is the newcourse', newCourse);
+    newCourse.instructors = [event.target.instructors.value];
 
-    // const relationships = {
-    //   prereqs: {
-    //     data: newCourse.prereqs.map((course) => {
-    //       return {
-    //         type: 'Course',
-    //         id: 1,
-    //       };
-    //     }),
-    //   },
-    // };
+    const relationships = {
+      prereqs: {
+        data: newCourse.prereqs.map(
+          (course) => 'http://localhost:8000/api/course/' + courses.get(course) + '/'
+        ),
+        meta: {
+          count: newCourse.prereqs.length,
+        },
+      },
+    };
     const res = await fetch('http://localhost:8000/api/course/', {
       method: 'POST',
       headers: {
@@ -87,8 +103,9 @@ export const CourseForm = memo(function CourseFormFn() {
             credits_tufts: newCourse.credits_tufts,
             credits_bhcc: newCourse.credits_bhcc,
             department: newCourse.department,
-            instructors: [],
+            instructors: newCourse.instructors,
           },
+          relationships: relationships,
         },
       }),
     });
@@ -98,39 +115,51 @@ export const CourseForm = memo(function CourseFormFn() {
   };
 
   return (
-    <div>
-      <form onSubmit={submit}>
-        <div>
-          Course Title:
-          <input type="text" id="course_title" />
-        </div>
-        <div>
-          Tufts Course Number:
-          <input type="text" id="course_number_tufts" />
-        </div>
-        <div>
-          BHCC Course Number:
-          <input id="course_number_bhcc" type="text" />
-        </div>
-        <div>
-          Tufts Credits :
-          <input id="credits_tufts" type="text" />
-        </div>
-        <div>
-          BHCC Credits :
-          <input id="credits_bhcc" type="text" />
-        </div>
-        <div>
-          Department :
-          <select name="department" id="department" size="1">
-            {Array.from(departments.keys()).map((key) => (
-              <option> {key} </option>
-            ))}
-          </select>
-        </div>
+    <form onSubmit={submit} className={styles.formContainer}>
+      <div>
+        <span>Course Title:</span>
+        <input type="text" id="course_title" />
+      </div>
+      <div>
+        <span>Tufts Course Number:</span>
+        <input type="text" id="course_number_tufts" />
+      </div>
+      <div>
+        <span>BHCC Course Number: </span>
+        <input id="course_number_bhcc" type="text" />
+      </div>
+      <div>
+        <span>Tufts Credits :</span>
+        <input id="credits_tufts" type="text" />
+      </div>
+      <div>
+        <span>BHCC Credits :</span>
+        <input id="credits_bhcc" type="text" />
+      </div>
+      <div>
+        <span>Department : </span>
+        <select name="department" id="department" size="1">
+          {Array.from(departments.keys()).map((key) => (
+            <option> {key} </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <span>Prereqs : </span>
+        <select name="prereqs" id="prereqs" size="1" multiple>
+          {Array.from(courses.keys()).map((key) => (
+            <option> {key} </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <span>Instructors : </span>
+        <input id="instructors" type="text" />
+      </div>
 
-        <button type="submit">SUBMIT</button>
-      </form>
-    </div>
+      <button className={styles.submit} type="submit">
+        SUBMIT
+      </button>
+    </form>
   );
 });
