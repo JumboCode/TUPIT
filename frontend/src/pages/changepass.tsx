@@ -5,10 +5,6 @@ import { useAuth } from '../components/auth';
 export default function ChangePass() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
 
-  useEffect(() => {
-    if (isLoggedIn == false) Router.push('/');
-  }, []);
-
   function doChangePass(e) {
     e.preventDefault();
 

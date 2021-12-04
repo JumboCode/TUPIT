@@ -1,4 +1,4 @@
-import { checkPropTypes } from 'prop-types';
+import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
 
 export const AuthContext = React.createContext({
@@ -18,6 +18,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [csrfToken, setCsrfToken] = useState('');
 
+  const router = useRouter();
+
   useEffect(() => {
     // Get and store CSRF token
     fetch('http://127.0.0.1:8000/get-csrf-token/', { credentials: 'include' })
@@ -29,6 +31,8 @@ export const AuthProvider: React.FC = ({ children }) => {
       (res) => setIsLoggedIn(res),
       (err) => console.log(err)
     );
+
+    if (isLoggedIn == false) router.push('/login');
   }, [isLoggedIn]);
 
   const login = async (username: string, password: string): Promise<void> => {
@@ -94,7 +98,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         credentials: 'include',
       })
         .then((res) => {
-          setIsLoggedIn(res.status === 200);
+          setIsLoggedIn(false);
           resolve();
         })
         .catch((err) => {

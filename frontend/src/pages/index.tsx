@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useAuth } from '../components/auth';
 
 // Import styles
@@ -9,13 +9,22 @@ const cx = classNames.bind(styles);
 
 const Home: React.FC = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const router = useRouter();
 
   return (
     <div className={cx('base')}>
       <h1>Hello, TUPIT!</h1>
-      {isLoggedIn ? <a href="/logout">Logout</a> : <a href="/login">Login</a>}
+      {isLoggedIn ? (
+        <input type="button" onClick={() => router.push('/logout')} value="Logout" />
+      ) : (
+        <input type="button" onClick={() => router.push('/login')} value="Login" />
+      )}
       <br />
-      {isLoggedIn ? <a href="/changepass">Change Password</a> : ''}
+      {isLoggedIn ? (
+        <input type="button" onClick={() => router.push('/changepass')} value="Change Password" />
+      ) : (
+        ''
+      )}
     </div>
   );
 };
