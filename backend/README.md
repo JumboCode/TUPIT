@@ -89,6 +89,10 @@ SyntaxError: invalid syntax
 - Or a Python dependency is missing
   - `pip install -r requirements.txt`
 
+```[Error] Origin http://localhost:3000 is not allowed by Access-Control-Allow-Origin.```
+
+- Use 127.0.0.1:3000 to connect to the frontend instead of localhost
+
 ## Nuke Database
 
 If Django migrations have gone off the rails, dropping the PostgreSQL database almost always fixes things.
