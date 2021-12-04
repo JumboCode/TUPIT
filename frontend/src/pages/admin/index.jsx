@@ -48,21 +48,24 @@ const ControlContainer = ({ setIsClass }) => {
   return (
     <div className={cx('admin-control-container')}>
       <div className={cx('admin-control-profile')}>
-        <p>
-          Profile
-          <br />
-          <br />
-          <br />
-          <br />
-          hi
-        </p>
-      </div>
-      <div className={cx('admin-control-buttons')}>
-        <div className={cx('admin-control-buttons-item')} onClick={() => setIsClass(false)}>
-          <p>students</p>
+        <div className={cx('welcome-message')}>
+          <p style={{ color: '#4C8FA5' }}>John Smithson,</p>
+          <p style={{ color: 'whitesmoke' }}>welcome back!</p>
         </div>
-        <div className={cx('admin-control-buttons-item')} onClick={() => setIsClass(true)}>
-          <p>class</p>
+
+        <div className={cx('admin-control-buttons')}>
+          <div className={cx('admin-control-buttons-item')} onClick={() => setIsClass(true)}>
+            <p>View Class</p>
+          </div>
+          <div className={cx('admin-control-buttons-item')} onClick={() => setIsClass(false)}>
+            <p>View Student</p>
+          </div>
+          <div className={cx('admin-control-buttons-item')}>
+            <p>Add Class</p>
+          </div>
+          <div className={cx('admin-control-buttons-item')}>
+            <p>Add Student</p>
+          </div>
         </div>
       </div>
     </div>
