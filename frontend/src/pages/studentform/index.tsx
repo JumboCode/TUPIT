@@ -5,12 +5,6 @@ import styles from './index.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-
-  console.log('hello world');
-};
-
 const StudentForm: React.FC = () => {
   const [student, setStudent] = useState({
     firstname: '',
@@ -26,10 +20,24 @@ const StudentForm: React.FC = () => {
     years_left: 0,
   });
 
-  useEffect(() => console.log(student));
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        fetch('http://localhost:8000/api/students/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/vnd.api+json',
+          },
+          body: JSON.stringify({
+            data: {
+              type: 'Student',
+              attributes: { ...student },
+            },
+          }),
+        });
+      }}
+    >
       <label>
         First name:{' '}
         <input
@@ -97,8 +105,7 @@ const StudentForm: React.FC = () => {
       <br />
       <label>
         Parole status:{' '}
-        <input
-          type="textarea"
+        <textarea
           name="parole_status"
           value={student.parole_status}
           onChange={(e) => setStudent({ ...student, parole_status: e.target.value })}
@@ -107,12 +114,11 @@ const StudentForm: React.FC = () => {
       <br />
       <label>
         Student status:{' '}
-        <input
-          type="textarea"
+        <textarea
           name="student_status"
           value={student.student_status}
           onChange={(e) => setStudent({ ...student, student_status: e.target.value })}
-        />
+        ></textarea>
       </label>
       <br />
       <label>
@@ -120,7 +126,7 @@ const StudentForm: React.FC = () => {
         <input
           type="number"
           name="cohort"
-          value={student.parole_status}
+          value={student.cohort}
           onChange={(e) => {
             const incoming: number = e.target.value == '' ? 0 : parseInt(e.target.value);
             setStudent({ ...student, cohort: incoming });
