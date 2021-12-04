@@ -19,14 +19,14 @@ export type HamburgerLink = {
 };
 
 const defaultLinks = [
-  {
-    display: 'Link 1',
-    location: '/link1',
-  },
-  {
-    display: 'Link 2',
-    location: '/link2',
-  },
+  // {
+  //   display: 'Link 1',
+  //   location: '/link1',
+  // },
+  // {
+  //   display: 'Link 2',
+  //   location: '/link2',
+  // },
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
@@ -47,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
               <div className={cx('navbar-link')}>Students</div>
             </Link>
 
-            {auth.isLoggedIn ? (
+            {!auth.isLoggedIn ? (
               <span className={cx('navbar-hamburger')} onClick={() => setMenuVisible(!menuVisible)}>
                 <i className={cx('fa fa-bars')}></i>
               </span>
@@ -57,10 +57,13 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
           </div>
           <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
             {(links == undefined ? defaultLinks : links).map((link, index) => (
-              <div key={index} className={cx('navbar-menu-item')}>
-                <Link href={link.location}>{link.display}</Link>
-              </div>
+              <Link href={link.location} key={index}>
+                <span className={cx('navbar-menu-item')}>{link.display}</span>
+              </Link>
             ))}
+            <button className={cx('logout-button')} onClick={auth.logout}>
+              Log Out
+            </button>
           </div>
           {children}
         </>
