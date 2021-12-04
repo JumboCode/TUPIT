@@ -11,7 +11,7 @@
     // "plugin:prettier/recommended"
   ],
 
-  "env": { "browser": true },
+  "env": { "browser": true, "es6": true },
   "parser": "@babel/eslint-parser",
 
   // Recognize relative imports from the 'src' directory
