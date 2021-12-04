@@ -10,11 +10,19 @@
   background-color: #4c8fa5;
   color: white;
   padding: 10px;
-  vertical-align: 50%;
 }
 
 .navbar-title {
+  display: flex;
+  align-items: center;
   font-weight: bold;
+  vertical-align: middle;
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
 }
 
 @media screen and (max-width: 600px) {
@@ -26,6 +34,16 @@
 .navbar-hamburger {
   color: white;
   font-size: 140%;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 2px;
 }
 
 .navbar-menu {
