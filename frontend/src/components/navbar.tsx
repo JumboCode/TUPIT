@@ -18,16 +18,7 @@ export type HamburgerLink = {
   location: string;
 };
 
-const defaultLinks = [
-  // {
-  //   display: 'Link 1',
-  //   location: '/link1',
-  // },
-  // {
-  //   display: 'Link 2',
-  //   location: '/link2',
-  // },
-];
+const defaultLinks: HamburgerLink[] = [];
 
 const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -47,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
               <div className={cx('navbar-link')}>Students</div>
             </Link>
 
-            {!auth.isLoggedIn ? (
+            {auth.isLoggedIn ? (
               <span className={cx('navbar-hamburger')} onClick={() => setMenuVisible(!menuVisible)}>
                 <i className={cx('fa fa-bars')}></i>
               </span>
