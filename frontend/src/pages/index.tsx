@@ -16,7 +16,7 @@ const Home: NextPage = () => {
 
 Home.getInitialProps = async () => ({
   navbar: {
-    links: ['Tyler', 'Jackson', 'Michael'],
+    // links: ['Tyler', 'Jackson', 'Michael'],
   },
 });
 

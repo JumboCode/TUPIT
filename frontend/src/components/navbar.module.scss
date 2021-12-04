@@ -3,19 +3,24 @@
 .navbar-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
   position: sticky;
   top: 0px;
-  background-color: cadetblue;
+  background-color: #4c8fa5;
+  color: white;
   padding: 10px;
   vertical-align: 50%;
 }
 
 .navbar-title {
-  font-size: 140%;
   font-weight: bold;
-  color: white;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-link {
+    display: none;
+  }
 }
 
 .navbar-hamburger {
@@ -30,7 +35,7 @@
   top: 57px;
   right: 10px;
   width: 150px;
-  background-color: cadetblue;
+  background-color: #9ec8d6;
   z-index: 1;
   box-shadow: lightgray 0px 10px 10px;
 }
