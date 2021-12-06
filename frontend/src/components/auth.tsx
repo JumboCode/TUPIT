@@ -27,12 +27,14 @@ export const AuthProvider: React.FC = ({ children }) => {
       .catch((err) => console.log(err));
 
     // Check if user is logged in and set isLoggedIn state
+    // Reroute to login page if not logged in
     checkAuth().then(
-      (res) => setIsLoggedIn(res),
+      (res) => {
+        setIsLoggedIn(res);
+        if (!res) router.push('/login');
+      },
       (err) => console.log(err)
     );
-
-    if (isLoggedIn == false) router.push('/login');
   }, [isLoggedIn]);
 
   const login = async (username: string, password: string): Promise<void> => {
