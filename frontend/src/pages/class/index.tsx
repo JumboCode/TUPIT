@@ -58,15 +58,26 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
       );
     });
     const box: JSX.Element = (
-      <div className={styles.selectBox}>
-        <div className={styles.container__flex}>
-          <p>{default_option}:</p>
+      <div className={styles.row}>
+        <div className={styles.col_1}>
+          <p>{default_option}</p>
+        </div>
+        <div className={`${styles.col} ${styles.selectBox}`}>
           <select onChange={readOption} defaultValue={default_option}>
             <option key={default_option} value={default_option} disabled></option>
             {options}
           </select>
-        </div>
+       </div>
       </div>
+      // <div className={styles.selectBox}>
+      //   <div className={styles.container__flex}>
+      //     <p>{default_option}:</p>
+      //     <select onChange={readOption} defaultValue={default_option}>
+      //       <option key={default_option} value={default_option} disabled></option>
+      //       {options}
+      //     </select>
+      //   </div>
+      // </div>
     );
     search_box.push(box);
   }
@@ -135,14 +146,24 @@ const Class: React.FC = () => {
   return (
     <main className={styles.container}>
       <div className={styles.box}>
-        <div id={styles.selectBox}>
-          <h1>Search Classes</h1>
-          <SearchBox readOption={readOption} />
-          <button onClick={parseOption} className={styles.button}>Search</button>
+        <h1>Search Classes</h1>
+        <SearchBox readOption={readOption} />
+        <div className={styles.button}>
+          <button onClick={parseOption}>Search</button>
         </div>
       </div>
       {course}
     </main>
+    // <main className={styles.container}>
+    //   <div className={styles.box}>
+    //     <div id={styles.selectBox}>
+    //       <h1>Search Classes</h1>
+    //       <SearchBox readOption={readOption} />
+    //       <button onClick={parseOption} className={styles.button}>Search</button>
+    //     </div>
+    //   </div>
+    //   {course}
+    // </main>
     // <div className={styles.container}>
     //     <div className={styles.container__flex}>
     //         <div>
