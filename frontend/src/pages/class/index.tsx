@@ -64,13 +64,13 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
     });
     const box: JSX.Element = (
       <div className={styles.selectBox}>
-        <p>{default_option}:</p>
-        <select onChange={readOption} defaultValue={default_option}>
-          <option key={default_option} value={default_option} disabled>
-            {default_option}
-          </option>
-          {options}
-        </select>
+        <div className={styles.container__flex}>
+          <p>{default_option}:</p>
+          <select onChange={readOption} defaultValue={default_option}>
+            <option key={default_option} value={default_option} disabled></option>
+            {options}
+          </select>
+        </div>
       </div>
     );
     search_box.push(box);
@@ -97,17 +97,20 @@ const Class: React.FC = () => {
 
   return (
     <main className={styles.container}>
-      <div className={styles.container__flex}>
+      <div className={styles.box}>
         <div id={styles.selectBox}>
-          <h1>Search</h1>
+          <h1>Search Classes</h1>
           <SearchBox readOption={readOption} />
-          {button}
-        </div>
-        <div>
-          <h1>Requirements</h1>
         </div>
       </div>
     </main>
+    // <div className={styles.container}>
+    //     <div className={styles.container__flex}>
+    //         <div>
+    //         <h1>Requirements</h1>
+    //         </div>
+    //     </div>
+    // </div>
   );
 };
 
