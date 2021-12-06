@@ -15,7 +15,7 @@ import className from 'classnames/bind';
 const cx = className.bind(styles);
 
 interface SearchOptionInterface {
-  major: string | string[] | null;
+  department: string | string[] | null;
   semester: number | number[] | null;
 }
 
@@ -24,7 +24,7 @@ interface SearchBoxInterface {
 }
 
 const search_option: SearchOptionInterface = {
-  major: ['Computer Science', 'Cognitive Studies', 'Math', 'Psychology'],
+  department: ['COMP', 'MATH'],
   semester: [2020, 2021, 2022, 2024],
 };
 
@@ -39,11 +39,6 @@ const search_option: SearchOptionInterface = {
 //   </div>
 // );
 
-const button: JSX.Element = (
-  <div className={styles.button}>
-    <h1>Search</h1>
-  </div>
-);
 
 /**
  *
@@ -79,8 +74,50 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
   return <div>{search_box}</div>;
 };
 
+async function getCourse(url: string) {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  });
+  const data = await res.json();
+  if (!data) {
+    throw new Error('Unable to fetch data from Django');
+  } 
+  return data;
+}
+
 const Class: React.FC = () => {
-  const [option, setOption] = useState<SearchOptionInterface>({ major: null, semester: null });
+  const [option, setOption] = useState<SearchOptionInterface>({ department: null, semester: null });
+  const [course, setCourse] = useState<JSX.Element[] | null>(null);
+
+  const parseOption = (): void => {
+    let url = "http://127.0.0.1:8000/api/course?";
+    for (let [key, value] of Object.entries(option)) {
+      if (value) {
+        url += `${key}=${value}&`
+      }
+    }
+    url = url.slice(0, url.length - 1);
+    getCourse(url)
+      .catch(() => {
+        console.error;
+        setCourse(null);
+      })
+      .then((data) => {
+        if (data.hasOwnProperty('data')) {
+          console.log(data.data);
+          const tmp = data.data.map((attributes) => (
+            <ul key={attributes.id}> 
+              <li>{attributes.attributes.course_title}</li>
+            </ul>
+          ));
+          setCourse(tmp);
+        }
+      }); 
+  };
 
   /**
    * Set state of option when a selection is made.
@@ -101,8 +138,10 @@ const Class: React.FC = () => {
         <div id={styles.selectBox}>
           <h1>Search Classes</h1>
           <SearchBox readOption={readOption} />
+          <button onClick={parseOption} className={styles.button}>Search</button>
         </div>
       </div>
+      {course}
     </main>
     // <div className={styles.container}>
     //     <div className={styles.container__flex}>
