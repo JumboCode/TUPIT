@@ -18,7 +18,6 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
 
     # It is a good practice to include field that can be ordered by to prevent
