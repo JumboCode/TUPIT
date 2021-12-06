@@ -88,3 +88,47 @@ def ValidateLoggedIn(request):
         return JsonResponse({'is_logged_in': True}, status=200)
     else:
         return JsonResponse({'is_logged_in': False}, status=200)
+
+# Create a progress report comparing a student's course progress to the courses required by the active degree
+@csrf_exempt
+def AuditStudentProgress(request):
+    data = json.loads(request.body)
+    student_id = data.get('student_id')
+    if student_id == '':
+        return JsonResponse({'info': 'Missing student_id'}, status=400)
+
+    ### FETCH STUDENT ###
+    
+    student = Student.objects.get(id=student_id)
+    if student is None:
+        return JsonResponse({'info': 'Invalid student_id'}, status=400)
+
+    # IDs of the courses the student has taken
+    taken_ids = [course.course.id for course in student.courses.all()]
+
+    ### FETCH DEGREE ###
+    
+    degree = Degree.objects.get(active=True)
+    if degree is None:
+        return JsonResponse({'info': 'No active degree'}, status=400)
+    
+    req_ids = [req.id for req in degree.reqs.all()]
+
+    ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
+    
+    # Degree requirements which the student has completed
+    completed_ids = [course for course in req_ids if course in taken_ids]
+
+    # Degree requirements which the student has not completed
+    not_completed_ids = [course for course in req_ids if course not in taken_ids]
+
+    ### GENERATE RESPONSE ###
+
+    completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in completed_ids]
+    not_completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in not_completed_ids]
+
+    return JsonResponse({
+        'info': 'Successfully generated audit report',
+        'completed': completed_course_titles,
+        'not_completed': not_completed_course_titles,
+        }, status=200)
