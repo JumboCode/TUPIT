@@ -31,6 +31,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         if len(self.request.query_params) == 0:
             return queryset.order_by('course_number_tufts')
         return queryset.order_by('course_number_tufts')
+    
 
 class CourseProgressViewSet(viewsets.ModelViewSet):
     queryset = CourseProgress.objects.all()
