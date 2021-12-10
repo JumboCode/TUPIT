@@ -2,21 +2,17 @@
  * @author Sara
  * @author Nick
  *
- * @todo Format API endpoint. This entails finishing up renderRequest function in Class component.
  * @todo Format and refactor CSS.
  * @todo Refactor code.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect }  from 'react';
+
+import { SearchOptionInterface, SearchBoxInterface } from './interface';
 import styles from './class.module.scss';
 import className from 'classnames/bind';
 
 const cx = className.bind(styles);
-
-interface SearchOptionInterface {
-  course_title: number | Set<string> | null;
-  department: string | Set<string> | null;
-}
 
 async function getCourse(url: string) {
   const res = await fetch(url, {
@@ -36,42 +32,34 @@ async function getCourse(url: string) {
 /**
  *
  * @callback readOption
- * @returns {JSX.element[]}
+ * @returns {JSX.element}
  */
-const SearchBox = (React.FC = ({ readQuery, option }): JSX.Element => {
-  const search_box: JSX.Element[] = [];
-  for (const [key, values] of Object.entries(option)) {
-    const default_option: string = key[0].toUpperCase() + key.slice(1);
-    const options: JSX.Element[] = [];
-    values.forEach((value) => {
-      options.push(
-        <option key={value} value={value}>
-          {value}
-        </option>
-      );
-    });
-    search_box.push(
-      <div key={key} className={styles.row}>
-        <div className={styles.col_1}>
-          <p>{default_option}:</p>
-        </div>
-        <div className={`${styles.col} ${styles.selectBox}`}>
-          <select onChange={readQuery} defaultValue={default_option}>
-            <option key={default_option} value={default_option} disabled></option>
-            {options}
-          </select>
-        </div>
+const SearchBox = (props: SearchBoxInterface): JSX.Element =>  {
+  return (
+    <div className={styles.row}>
+      <div className={styles.col_1}>
+        <p>{props.boxName}</p>
       </div>
-    );
-  }
-  return <div>{search_box}</div>;
-});
+      <div className={`${styles.col} ${styles.selectBox}`}>
+        <select id={props.boxKey} onChange={props.handleQuery}>
+          <option value={''}></option>
+          {Array
+            .from(props.boxValue)
+            .map((entry) => (<option key={entry} value={entry}>{entry}</option>))
+          }
+        </select>
+      </div>
+    </div>
+  )
+};
 
-const Class: React.FC = () => {
-  const [option, setOption] = useState({ course_title: new Set(), department: new Set() });
-  const [query, setQuery] = useState({
-    course_title: null,
-    department: null,
+const Class = () => {
+  const [option, setOption] = useState<SearchOptionInterface>(
+    { course_title: new Set(), department: new Set() }
+  );
+  const [query, setQuery] = useState<SearchOptionInterface>({
+    course_title: '',
+    department: '',
   });
   const [course, setCourse] = useState<JSX.Element[] | null>(null);
 
@@ -104,7 +92,6 @@ const Class: React.FC = () => {
     url = url.slice(0, url.length - 1);
     getCourse(url)
       .catch((e) => {
-        console.log(e);
         setCourse(null);
       })
       .then((data) => {
@@ -125,10 +112,8 @@ const Class: React.FC = () => {
    * @param {React.ChangeEventHandler<HTMLSelectElement>} - onChange event handler
    * @todo Figure out what's the type of e
    */
-  const readQuery = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const key = e.target[0].value.toLowerCase();
-    const selection = e.target.value;
-    query[key] = selection;
+  const handleQuery = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    query[e.target.id] = e.target.value;
     setQuery(query);
   };
 
@@ -136,30 +121,24 @@ const Class: React.FC = () => {
     <main className={styles.container}>
       <div className={styles.box}>
         <h1>Search Classes</h1>
-        <SearchBox readQuery={readQuery} option={option} />
+        <SearchBox 
+          boxName={'Course'}
+          boxKey={'course_title'}
+          boxValue={option.course_title}
+          handleQuery={handleQuery}
+        />
+        <SearchBox
+          boxName={'Department'}
+          boxKey={'department'}
+          boxValue={option.department}
+          handleQuery={handleQuery}
+        />
         <div className={styles.button}>
           <button onClick={parseOption}>Search</button>
         </div>
       </div>
       {course}
     </main>
-    // <main className={styles.container}>
-    //   <div className={styles.box}>
-    //     <div id={styles.selectBox}>
-    //       <h1>Search Classes</h1>
-    //       <SearchBox readOption={readOption} />
-    //       <button onClick={parseOption} className={styles.button}>Search</button>
-    //     </div>
-    //   </div>
-    //   {course}
-    // </main>
-    // <div className={styles.container}>
-    //     <div className={styles.container__flex}>
-    //         <div>
-    //         <h1>Requirements</h1>
-    //         </div>
-    //     </div>
-    // </div>
   );
 };
 
