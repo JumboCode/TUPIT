@@ -39,7 +39,6 @@ const search_option: SearchOptionInterface = {
 //   </div>
 // );
 
-
 /**
  *
  * @callback readOption
@@ -60,14 +59,14 @@ const SearchBox: React.FC<SearchBoxInterface> = ({ readOption }) => {
     const box: JSX.Element = (
       <div className={styles.row}>
         <div className={styles.col_1}>
-          <p>{default_option}</p>
+          <p>{default_option}:</p>
         </div>
         <div className={`${styles.col} ${styles.selectBox}`}>
           <select onChange={readOption} defaultValue={default_option}>
             <option key={default_option} value={default_option} disabled></option>
             {options}
           </select>
-       </div>
+        </div>
       </div>
       // <div className={styles.selectBox}>
       //   <div className={styles.container__flex}>
@@ -91,12 +90,12 @@ async function getCourse(url: string) {
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include'
+    credentials: 'include',
   });
   const data = await res.json();
   if (!data) {
     throw new Error('Unable to fetch data from Django');
-  } 
+  }
   return data;
 }
 
@@ -105,10 +104,10 @@ const Class: React.FC = () => {
   const [course, setCourse] = useState<JSX.Element[] | null>(null);
 
   const parseOption = (): void => {
-    let url = "http://127.0.0.1:8000/api/course?";
+    let url = 'http://127.0.0.1:8000/api/course?';
     for (let [key, value] of Object.entries(option)) {
       if (value) {
-        url += `${key}=${value}&`
+        url += `${key}=${value}&`;
       }
     }
     url = url.slice(0, url.length - 1);
@@ -121,13 +120,13 @@ const Class: React.FC = () => {
         if (data.hasOwnProperty('data')) {
           console.log(data.data);
           const tmp = data.data.map((attributes) => (
-            <ul key={attributes.id}> 
+            <ul key={attributes.id}>
               <li>{attributes.attributes.course_title}</li>
             </ul>
           ));
           setCourse(tmp);
         }
-      }); 
+      });
   };
 
   /**
