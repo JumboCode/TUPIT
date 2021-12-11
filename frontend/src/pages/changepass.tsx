@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useAuth } from '../components/auth';
 
 export default function ChangePass() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const router = useRouter();
 
   function doChangePass(e) {
     e.preventDefault();
@@ -31,7 +32,7 @@ export default function ChangePass() {
         .then((res) => {
           if (res.ok) {
             alert('Successfully changed password');
-            Router.push('/');
+            router.push('/');
           } else {
             alert('Password was incorrect');
           }
