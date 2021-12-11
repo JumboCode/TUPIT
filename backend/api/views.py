@@ -103,8 +103,11 @@ def AuditStudentProgress(request):
     if student is None:
         return JsonResponse({'info': 'Invalid student_id'}, status=400)
 
-    # IDs of the courses the student has taken
-    taken_ids = [course.course.id for course in student.courses.all()]
+    # IDs of the courses the student has completed
+    completed_ids = [courseProg.course.id for courseProg in student.courses.all() if not courseProg.in_progress]
+
+    # IDs of the courses the student is currently taking
+    in_progress_ids = [courseProg.course.id for courseProg in student.courses.all() if courseProg.in_progress]
 
     ### FETCH DEGREE ###
     
@@ -117,18 +120,23 @@ def AuditStudentProgress(request):
     ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
     
     # Degree requirements which the student has completed
-    completed_ids = [course for course in req_ids if course in taken_ids]
+    completed_req_ids = [course for course in req_ids if course in completed_ids]
+
+    # Degree requirements which the student is currently taking
+    in_progress_req_ids = [course for course in req_ids if course in in_progress_ids]
 
     # Degree requirements which the student has not completed
-    not_completed_ids = [course for course in req_ids if course not in taken_ids]
+    not_completed_req_ids = [course for course in req_ids if (course not in completed_ids and course not in in_progress_ids)]
 
     ### GENERATE RESPONSE ###
 
-    completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in completed_ids]
-    not_completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in not_completed_ids]
+    completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in completed_req_ids]
+    in_progress_course_titles = [Course.objects.get(id=course_id).course_title for course_id in in_progress_req_ids]
+    not_completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in not_completed_req_ids]
 
     return JsonResponse({
         'info': 'Successfully generated audit report',
         'completed': completed_course_titles,
+        'in_progress': in_progress_course_titles,
         'not_completed': not_completed_course_titles,
         }, status=200)
