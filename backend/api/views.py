@@ -89,6 +89,25 @@ def ValidateLoggedIn(request):
     else:
         return JsonResponse({'is_logged_in': False}, status=200)
 
+def ChangePassword(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'info': 'Not authenticated'}, status=401)
+
+    data = json.loads(request.body)
+    username = request.user.username
+    current_password = data.get('old_password')
+    new_password = data.get('new_password')
+    user = authenticate(request, username=username, password=current_password)
+
+    if user is None:
+        return JsonResponse({'info': 'Invalid credentials'}, status=401)
+
+    user.set_password(new_password)
+    user.save()
+    login(request, user)
+    
+    return JsonResponse({'info': 'Successfully changed password'}, status=200)
+
 # Create a progress report comparing a student's course progress to the courses required by the active degree
 @csrf_exempt
 def AuditStudentProgress(request):
