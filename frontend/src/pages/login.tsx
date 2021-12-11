@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useAuth } from '../components/auth';
 
 export default function LoginForm() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn) router.push('/');
+  }, [isLoggedIn]);
 
   function doLogin(e) {
     e.preventDefault();
     login(e.target.username.value, e.target.password.value).then(
-      () => Router.push('/'),
+      () => router.push('/'),
       (err) => alert(err)
     );
   }
-
-  if (isLoggedIn) Router.push('/');
 
   return (
     <div>
