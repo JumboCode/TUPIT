@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../components/auth';
+import styles from './ChangePass.module.scss';
 
 export default function ChangePass() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
@@ -44,12 +45,21 @@ export default function ChangePass() {
   }
 
   return (
-    <div>
-      <form onSubmit={doChangePass}>
-        <input type="password" name="old_password" placeholder="Current Password" />
-        <input type="password" name="new_password" placeholder="New Password" />
-        <input type="password" name="new_password_confirm" placeholder="Confirm new Password" />
-        <input type="submit" />
+    <div className={styles.container}>
+      <h1>Change Password</h1>
+      <form className={styles.changePassForm} onSubmit={doChangePass}>
+        <p>Old Password: </p>
+        <input className={styles.textField} type="password" name="old_password" />
+        <br />
+        <p>New Password: </p>
+        <input className={styles.textField} type="password" name="new_password" />
+        <br />
+        <p>Confirm Password: </p>
+        <input className={styles.textField} type="password" name="new_password_confirm" />
+        <br />
+        <div className={styles.submitContainer}>
+          <input className={styles.submit} type="submit" value="Change Password" />
+        </div>
       </form>
     </div>
   );
