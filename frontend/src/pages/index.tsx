@@ -21,7 +21,7 @@ const Home: React.FC = () => {
       )}
       <br />
       {isLoggedIn ? (
-        <input type="button" onClick={() => router.push('/changepass')} value="Change Password" />
+        <input type="button" onClick={() => router.push('/ChangePass')} value="Change Password" />
       ) : (
         ''
       )}
