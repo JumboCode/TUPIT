@@ -5,6 +5,7 @@ import Link from 'next/link';
 import styles from './navbar.module.scss';
 import classNames from 'classnames/bind';
 import { useAuth } from './auth';
+import router from 'next/router';
 const cx = classNames.bind(styles);
 
 type NavbarProps = {
@@ -43,7 +44,9 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
                 <i className={cx('fa fa-bars')}></i>
               </span>
             ) : (
-              <div className={cx('login-button')}>Log In</div>
+              <button className={cx('login-button')} onClick={() => router.push('/login')}>
+                Log In
+              </button>
             )}
           </div>
           <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
@@ -52,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
                 <span className={cx('navbar-menu-item')}>{link.display}</span>
               </Link>
             ))}
-            <button className={cx('logout-button')} onClick={auth.logout}>
+            <button className={cx('logout-button')} onClick={() => router.push('/logout')}>
               Log Out
             </button>
           </div>
