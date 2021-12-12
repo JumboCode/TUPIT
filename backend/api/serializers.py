@@ -1,6 +1,13 @@
 from rest_framework_json_api import serializers
 from api.models import Student, Course, CourseProgress, Degree
 
+__all__ = [
+    "StudentSerializer", 
+    "CourseSerializer", 
+    "CourseProgressSerializer",
+    "DegreeSerializer"
+]
+    
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
