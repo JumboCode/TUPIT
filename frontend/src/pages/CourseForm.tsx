@@ -116,6 +116,7 @@ export const CourseForm = memo(function CourseFormFn() {
 
   return (
     <form onSubmit={submit} className={styles.formContainer}>
+      <span className={styles.title}>Course Form</span>
       <div>
         <span>Course Title:</span>
         <input type="text" id="course_title" />
