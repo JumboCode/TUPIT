@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../components/auth';
-import styles from './ChangePass.module.scss';
+import { useAuth } from '../../components/auth';
+import styles from './index.module.scss';
 
 export default function ChangePass() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
