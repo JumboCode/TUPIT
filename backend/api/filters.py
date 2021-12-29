@@ -61,7 +61,10 @@ class StudentFilterSet(django_filters.FilterSet):
         fields = {
             'firstname': ['exact', 'icontains'],
             'lastname': ['exact', 'icontains'],
-            'cohort': ['exact', 'icontains']
+            'doc_num': ['exact'],
+            'tufts_num': ['exact'],
+            'bhcc_num': ['exact'],
+            'cohort': ['exact'],
         }
 
 class CourseProgressFilterSet(django_filters.FilterSet):
