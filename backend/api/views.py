@@ -124,9 +124,15 @@ def AuditStudentProgress(request):
 
     # IDs of the courses the student has completed
     completed_ids = [courseProg.course.id for courseProg in student.courses.all() if not courseProg.in_progress]
+    # Remove duplicates
+    completed_ids = list(set(completed_ids))
 
     # IDs of the courses the student is currently taking
     in_progress_ids = [courseProg.course.id for courseProg in student.courses.all() if courseProg.in_progress]
+    # Remove duplicates
+    in_progress_ids = list(set(in_progress_ids))
+    # Remove IDs that are already completed
+    in_progress_ids = [course_id for course_id in in_progress_ids if course_id not in completed_ids]
 
     ### FETCH DEGREE ###
     
