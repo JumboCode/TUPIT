@@ -50,16 +50,11 @@ export default function ChangePass() {
       <form className={styles.changePassForm} onSubmit={doChangePass}>
         <p>Old Password: </p>
         <input className={styles.textField} type="password" name="old_password" />
-        <br />
         <p>New Password: </p>
         <input className={styles.textField} type="password" name="new_password" />
-        <br />
         <p>Confirm Password: </p>
         <input className={styles.textField} type="password" name="new_password_confirm" />
-        <br />
-        <div className={styles.submitContainer}>
-          <input className={styles.submit} type="submit" value="Change Password" />
-        </div>
+        <input className={styles.button} type="submit" />
       </form>
     </div>
   );

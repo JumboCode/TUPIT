@@ -20,13 +20,16 @@
 }
 
 .changePassForm {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
   background: #9ec8d6;
   border-radius: 49px;
   padding: 40px;
 }
 
 .changePassForm p {
-  margin: 20px;
+  padding: 0 12px;
 }
 
 .textField {
@@ -38,8 +41,13 @@
   height: 60px;
 }
 
+.textField:hover {
+  padding: 0 19px !important;
+  border: 1px solid #4c8fa5;
+}
+
 .textField:focus {
-  padding: 0 16px !important;
+  padding: 0 18px !important;
   border: 2px solid #4c8fa5;
 }
 
@@ -50,12 +58,27 @@
   margin-top: 40px;
 }
 
-.submit {
-  background-color: #4c8fa5;
-  color: white;
-  border-radius: 28px;
+.button {
+  display: flex;
+  justify-content: center;
   border: none;
-  font-size: 30px;
-  padding: 20px;
+  background: #4c8fa5;
+  border-radius: 28px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px 12px;
   cursor: pointer;
+  user-select: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+  margin: 0;
+}
+
+.button:hover {
+  background: #3b7d9a;
+}
+
+.button:active {
+  transform: translateY(2px);
 }
