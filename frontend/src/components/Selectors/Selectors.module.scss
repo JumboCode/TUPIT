@@ -1,0 +1,92 @@
+.windowContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #4c8fa5;
+}
+
+.popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  background: #9ec8d6;
+  border-radius: 24px;
+  width: 500px;
+  height: 600px;
+  padding: 24px;
+  z-index: 6;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+}
+
+.closeArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  cursor: pointer;
+}
+
+.popup > .searchBox {
+  width: 100%;
+  padding: 16px;
+  margin: 4px;
+  border-radius: 16px;
+  font-size: 24px;
+  height: 60px;
+  background: white;
+}
+
+.popup > .searchBox:hover {
+  border: 1px solid #4c8fa5;
+  padding: 15px;
+}
+
+.popup > .searchBox:focus {
+  border: 2px solid #4c8fa5;
+  padding: 14px;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 4px;
+  overflow-y: scroll;
+  max-height: 518px;
+}
+
+.result {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  word-wrap: break-word;
+}
+
+.result:hover {
+  background: #4c8fa5;
+  color: white;
+}
