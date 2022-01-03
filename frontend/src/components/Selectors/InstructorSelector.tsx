@@ -40,7 +40,7 @@ export const InstructorSelector: React.FC<InstructorSelectorProps> = (props) => 
     }
 
     getInstructors();
-  });
+  }, []);
 
   useEffect(() => {
     setFilteredInstructors(master);
