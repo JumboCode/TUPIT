@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../components/auth';
+import CourseSelector from '../../components/Selectors/CourseSelector';
 import styles from './add.module.scss';
 
 export default function addDegree() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const [reqState, setReqState] = useState([]);
+  const [showCourseSelector, setShowCourseSelector] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e) {
@@ -24,6 +27,7 @@ export default function addDegree() {
           attributes: {
             degree_name: t.degree_name.value,
             active: t.active.checked,
+            reqs: reqState.map((req) => `http://127.0.0.1:8000/api/course/${req.id}/`),
           },
         },
       }),
@@ -60,20 +64,57 @@ export default function addDegree() {
     }
   }
 
+  function addReq(req) {
+    setReqState([...reqState, req]);
+  }
+
+  function removeReq(index) {
+    const newReqs = [...reqState];
+    newReqs.splice(index, 1);
+    setReqState(newReqs);
+  }
+
   return (
     <div className={styles.container}>
       <form className={styles.degreeForm} onSubmit={handleSubmit}>
         <div className={styles.title}>Add Degree</div>
+
         <div className={styles.row}>
           <p>Degree Name</p>
           <input type="text" name="degree_name" />
-          <label>
+        </div>
+
+        <div className={styles.row}>
+          <label className={styles.checkbox}>
             Active
             <input type="checkbox" name="active" />
           </label>
         </div>
+
+        <div className={styles.row}>
+          <p>Requirements</p>
+          <div className={styles.fieldList}>
+            {reqState.map((course, index) => (
+              <div className={styles.req} key={index}>
+                <a href={`/class/${course.id}`}>{course.course_title}</a>
+                <div className={styles.removeButton} onClick={() => removeReq(index)}>
+                  &#10005;
+                </div>
+              </div>
+            ))}
+            <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+              +
+            </div>
+          </div>
+        </div>
+
         <input className={styles.button} type="submit" />
       </form>
+      <CourseSelector
+        show={showCourseSelector}
+        writeFunction={addReq}
+        onClose={() => setShowCourseSelector(false)}
+      />
     </div>
   );
 }

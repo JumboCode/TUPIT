@@ -42,13 +42,15 @@
   padding: 0 12px;
 }
 
-.row > label {
+.checkbox {
   font-weight: bold;
   padding: 0 12px;
   display: flex;
   align-items: center;
   column-gap: 8px;
+  cursor: pointer;
 }
+
 .row input {
   background: white;
   border: unset;
@@ -69,6 +71,51 @@
   border: 2px solid #4c8fa5;
   outline: unset;
   padding: 18px;
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+
+  background: white;
+  color: #4c8fa5;
+  padding: 20px;
+  font-size: 24px;
+  border-radius: 28px;
+}
+
+.req {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.req > a {
+  color: #4c8fa5;
+  text-decoration: unset;
+}
+
+.req > a:hover {
+  text-decoration: underline;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  color: #4c8fa5;
+  cursor: pointer;
+  z-index: -1;
+  font-size: 32px;
+  user-select: none;
+}
+
+.fieldList > div:hover > .removeButton {
+  z-index: unset;
 }
 
 .button {
