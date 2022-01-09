@@ -38,7 +38,7 @@ export const CourseSelector: React.FC<CourseSelectorProps> = (props) => {
     }
 
     getCourses();
-  });
+  }, []);
 
   useEffect(() => {
     setFilteredCourses(master);
