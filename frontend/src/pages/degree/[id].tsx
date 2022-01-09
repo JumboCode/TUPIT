@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../components/auth';
+import CourseSelector from '../../components/Selectors/CourseSelector';
 import styles from './[id].module.scss';
 
 async function fetchCourseName(id) {
@@ -26,6 +27,7 @@ export default function ViewDegree() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const [degreeData, setDegreeData] = useState(null);
   const [reqState, setReqState] = useState([]);
+  const [showCourseSelector, setShowCourseSelector] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
@@ -48,10 +50,9 @@ export default function ViewDegree() {
         setDegreeData(data.data);
         let reqs = [];
         for (let req of data.data.relationships.reqs.data) {
-          const title = await fetchCourseName(req.id);
           reqs.push({
             id: req.id,
-            title: title,
+            course_title: await fetchCourseName(req.id),
           });
         }
         setReqState(reqs);
@@ -60,6 +61,10 @@ export default function ViewDegree() {
 
     if (id) fetchDegreeData();
   }, [id]);
+
+  function addReq(req) {
+    setReqState([...reqState, req]);
+  }
 
   function removeReq(index) {
     const newReqs = [...reqState];
@@ -169,15 +174,15 @@ export default function ViewDegree() {
             <div className={styles.fieldList}>
               {reqState.map((course, index) => (
                 <div className={styles.req} key={index}>
-                  <a href={`/class/${course.id}`}>{course.title}</a>
+                  <a href={`/class/${course.id}`}>{course.course_title}</a>
                   <div className={styles.removeButton} onClick={() => removeReq(index)}>
                     &#10005;
                   </div>
                 </div>
               ))}
-              {/* <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+              <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
                 +
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -192,6 +197,11 @@ export default function ViewDegree() {
       ) : (
         <h1>Loading...</h1>
       )}
+      <CourseSelector
+        show={showCourseSelector}
+        writeFunction={addReq}
+        onClose={() => setShowCourseSelector(false)}
+      />
     </div>
   );
 }
