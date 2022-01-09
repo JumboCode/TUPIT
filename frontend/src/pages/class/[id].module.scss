@@ -55,15 +55,27 @@
   resize: none;
 }
 
-.row > input:hover {
+.row > .select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: white;
+  color: #4c8fa5;
+  padding: 20px;
+  font-size: 24px;
+  border-radius: 28px;
+  border: none;
+}
+
+.row > input:hover,
+.row > .select:hover {
   border: 1px solid #4c8fa5;
-  padding: 0 19px;
+  padding: 19px;
 }
 
 .row > input:focus {
   border: 2px solid #4c8fa5;
   outline: unset;
-  padding: 0 18px;
+  padding: 18px;
 }
 
 .fieldList {
