@@ -44,12 +44,13 @@
   padding: 0 12px;
 }
 
-.row > label {
+.checkbox {
   font-weight: bold;
   padding: 0 12px;
   display: flex;
   align-items: center;
   column-gap: 8px;
+  cursor: pointer;
 }
 
 .row > input {

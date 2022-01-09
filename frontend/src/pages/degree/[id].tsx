@@ -163,7 +163,7 @@ export default function ViewDegree() {
           />
 
           <div className={styles.row}>
-            <label>
+            <label className={styles.checkbox}>
               Active
               <input name="active" type="checkbox" defaultChecked={degreeData.attributes.active} />
             </label>
