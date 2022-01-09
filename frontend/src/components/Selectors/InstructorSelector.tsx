@@ -66,9 +66,10 @@ export const InstructorSelector: React.FC<InstructorSelectorProps> = (props) => 
         <input className={styles.searchBox} placeholder="Search by name" onChange={query} />
         <div className={styles.results}>
           {filteredInstructors &&
-            filteredInstructors.map((instructor) => (
+            filteredInstructors.map((instructor, key) => (
               <div
                 className={styles.result}
+                key={key}
                 onClick={() => {
                   props.writeFunction(instructor);
                   props.onClose();
