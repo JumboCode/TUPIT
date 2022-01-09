@@ -30,6 +30,7 @@ export default function ViewClass() {
   const [showCourseSelector, setShowCourseSelector] = useState(false);
   const [instructorsState, setInstructors] = useState([]);
   const [prereqsState, setPrereqs] = useState([]);
+  const [depOpts, setDepOpts] = useState([]);
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const { id } = router.query;
@@ -65,7 +66,29 @@ export default function ViewClass() {
         }
     }
 
-    if (id) getCourseData();
+    async function getDepartmentData() {
+      fetch('http://127.0.0.1:8000/api/course/', {
+        method: 'OPTIONS',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include',
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          let deps = [];
+          res.data.actions.POST.department.choices.map((dep) =>
+            deps.push({ name: dep.display_name, value: dep.value })
+          );
+          setDepOpts(deps);
+        });
+    }
+
+    if (id) {
+      getCourseData();
+      getDepartmentData();
+    }
   }, [id]);
 
   function addInstructor(name) {
@@ -198,11 +221,17 @@ export default function ViewClass() {
 
           <div className={styles.row}>
             <p>Department</p>
-            <input
+            <select
               name="department"
-              type="text"
+              className={styles.select}
               defaultValue={courseData.attributes.department}
-            ></input>
+            >
+              {depOpts.map((dep) => (
+                <option key={dep.value} value={dep.value}>
+                  {dep.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className={styles.row}>
