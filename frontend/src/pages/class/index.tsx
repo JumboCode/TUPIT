@@ -54,9 +54,10 @@ const SearchBox = (props: SearchBoxInterface): JSX.Element =>  {
 };
 
 const Class = () => {
-  const [option, setOption] = useState<SearchOptionInterface>(
-    { course_title: new Set(), department: new Set() }
-  );
+  const [option, setOption] = useState<SearchOptionInterface>({
+    course_title: new Set(),
+    department: new Set() 
+  });
   const [query, setQuery] = useState<SearchOptionInterface>({
     course_title: '',
     department: '',
@@ -124,13 +125,13 @@ const Class = () => {
         <SearchBox 
           boxName={'Course'}
           boxKey={'course_title'}
-          boxValue={option.course_title}
+          boxValue={option.course_title as Set<string>}
           handleQuery={handleQuery}
         />
         <SearchBox
           boxName={'Department'}
           boxKey={'department'}
-          boxValue={option.department}
+          boxValue={option.department as Set<string>}
           handleQuery={handleQuery}
         />
         <div className={styles.button}>
