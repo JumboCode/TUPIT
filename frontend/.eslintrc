@@ -6,12 +6,17 @@
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "next",
+    "next/babel",
     "next/core-web-vitals"
     // "prettier",
     // "plugin:prettier/recommended"
   ],
 
-  "env": { "browser": true, "es6": true },
+  "env": {
+    "browser": true, 
+    "es6": true,
+    "jest": true
+  },
   "parser": "@babel/eslint-parser",
 
   // Recognize relative imports from the 'src' directory

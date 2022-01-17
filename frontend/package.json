@@ -6,7 +6,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "prepare": "cd .. && husky install frontend/.husky"
+    "prepare": "cd .. && husky install frontend/.husky",
+    "test": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "classnames": "^2.3.1",
+    "identity-obj-proxy": "^3.0.0",
     "next": "^11.1.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -22,7 +24,10 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.7",
     "@next/bundle-analyzer": "^11.1.2",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.34",
+    "babel-jest": "^27.4.6",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint": "^7.32.0",
     "eslint-config-next": "^11.1.2",
@@ -33,6 +38,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.2",
+    "jest": "^27.4.7",
     "pretty-quick": "^3.1.1",
     "sass": "^1.42.1",
     "sitemap": "^7.0.0",
