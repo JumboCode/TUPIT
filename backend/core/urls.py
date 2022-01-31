@@ -37,6 +37,7 @@ urlpatterns = [
     path('validate-logged-in/', views.ValidateLoggedIn),
     path('change-password/', views.ChangePassword),
     path('audit-student/', views.AuditStudentProgress),
+    path('set-active-degree/', views.SetActiveDegree),
 ]
 
 if settings.DEBUG:

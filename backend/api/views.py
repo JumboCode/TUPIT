@@ -165,3 +165,29 @@ def AuditStudentProgress(request):
         'in_progress': in_progress_course_titles,
         'not_completed': not_completed_course_titles,
         }, status=200)
+
+# Set the active degree to the degree with the given ID
+# After this, only the degree with the given ID will be active
+# All other degrees will be set to inactive
+def SetActiveDegree(request):
+    data = json.loads(request.body)
+    degree_id = data.get('degree_id')
+    if degree_id == '':
+        return JsonResponse({'info': 'Missing degree_id'}, status=400)
+
+    ### FETCH DEGREE ###
+
+    degree = Degree.objects.get(id=degree_id)
+    if degree is None:
+        return JsonResponse({'info': 'Invalid degree_id'}, status=400)
+
+    ### SET DEGREE TO ACTIVE ###
+
+    # Set all degrees to inactive
+    Degree.objects.all().update(active=False)
+
+    # Set the given degree to active
+    degree.active = True
+    degree.save()
+
+    return JsonResponse({'info': 'Successfully set active degree'}, status=200)
