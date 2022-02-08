@@ -10,6 +10,9 @@ __all__ = ["Student", "Course", "Degree", "CourseProgress"]
 
 class Student(Model):
 
+    def empty_array():
+        return []
+
     def __str__(self):
 
         model = f'''
@@ -20,6 +23,7 @@ class Student(Model):
         Cohort - {self.cohort}
         Years given - {self.years_given}
         Years left - {self.years_left}
+        Associated files - {self.associated_files}
         '''    
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
         
@@ -55,6 +59,11 @@ class Student(Model):
         validators=[validate_nonnegative], null=True)
     years_left = IntegerField(
         validators=[validate_nonnegative], null=True)
+    associated_files = ArrayField(
+        CharField(max_length=512), # TODO: validate this with specific service
+        blank=True,
+        default=empty_array,
+    )
 
 
 class Course(Model):
