@@ -132,6 +132,7 @@ class Degree(Model):
         symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
+    is_tufts = BooleanField(default=False, blank=False, null=False)
 
 class CourseProgress(Model):
     def default_true():

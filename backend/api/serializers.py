@@ -26,4 +26,4 @@ class CourseProgressSerializer(serializers.HyperlinkedModelSerializer):
 class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Degree 
-        fields = ('degree_name', 'reqs', 'active')
+        fields = ('degree_name', 'reqs', 'active', 'is_tufts')
