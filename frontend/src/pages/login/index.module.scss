@@ -32,17 +32,17 @@
   margin: 20px;
 }
 
-.textField {
-  background: white !important;
-  color: #4c8fa5 !important;
-  padding: 0 20px !important;
-  font-size: 30px !important;
+.loginForm .textField {
+  background: white;
+  color: #4c8fa5;
+  padding: 0 20px;
+  font-size: 30px;
   border-radius: 28px;
   height: 60px;
 }
 
-.textField:focus {
-  padding: 0 16px !important;
+.loginForm .textField:focus {
+  padding: 0 18px;
   border: 2px solid #4c8fa5;
 }
 
@@ -61,4 +61,25 @@
   font-size: 30px;
   padding: 20px 40px;
   cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .container {
+    font-size: 32px;
+  }
+
+  .container h1 {
+    font-size: 10vw;
+  }
+
+  .loginForm {
+    width: 100%;
+    border-radius: 0;
+    padding: 20px;
+  }
+
+  .submit {
+    font-size: 24px;
+    padding: 10px 30px;
+  }
 }
