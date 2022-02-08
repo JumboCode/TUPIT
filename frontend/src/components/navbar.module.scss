@@ -1,0 +1,87 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  position: sticky;
+  height: 50px;
+  top: 0px;
+  background-color: #4c8fa5;
+  color: white;
+  padding: 10px;
+}
+
+.navbar-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-link {
+    display: none;
+  }
+}
+
+.navbar-hamburger {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 140%;
+  cursor: pointer;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  width: 150px;
+  font-size: 100%;
+  background-color: #9ec8d6;
+  z-index: 1;
+  box-shadow: lightgray 0px 10px 10px;
+}
+
+.navbar-menu-invisible {
+  display: none;
+}
+
+.navbar-menu-item {
+  color: white;
+  padding: 10px;
+}
