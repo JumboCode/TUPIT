@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
 
-  padding: 40px;
+  padding: 40px 0;
 }
 
 .courseInfo {
@@ -66,10 +66,12 @@
   border: none;
 }
 
-.row > input:hover,
-.row > .select:hover {
-  border: 1px solid #4c8fa5;
-  padding: 19px;
+@media (pointer: fine) {
+  .row > input:hover,
+  .row > .select:hover {
+    border: 1px solid #4c8fa5;
+    padding: 19px;
+  }
 }
 
 .row > input:focus {
@@ -98,8 +100,10 @@
   justify-content: space-between;
 }
 
-.instructorField:hover {
-  outline: 1px solid #4c8fa5;
+@media (pointer: fine) {
+  .instructorField:hover {
+    outline: 1px solid #4c8fa5;
+  }
 }
 
 .instructorField input {
@@ -142,12 +146,14 @@
   margin: 0;
 }
 
-.button:hover {
-  background: #3b7d9a;
-}
+@media (cursor: fine) {
+  .button:hover {
+    background: #3b7d9a;
+  }
 
-.button:active {
-  transform: translateY(2px);
+  .button:active {
+    transform: translateY(2px);
+  }
 }
 
 .prereqField > a {
@@ -155,6 +161,37 @@
   text-decoration: unset;
 }
 
-.prereqField > a:hover {
-  text-decoration: underline;
+@media (pointer: fine) {
+  .prereqField > a:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 800px) {
+  .courseInfo {
+    width: 100vw;
+    border-radius: 0;
+  }
+
+  .courseInfo > .courseTitle {
+    font-size: 24px;
+  }
+
+  .row > p,
+  .row > input,
+  .row > .select,
+  .fieldList,
+  .button {
+    font-size: 16px;
+  }
+
+  .removeButton {
+    font-size: 24px;
+  }
+}
+
+@media (pointer: coarse) {
+  .removeButton {
+    z-index: unset;
+  }
 }
