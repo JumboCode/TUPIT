@@ -4,13 +4,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  align-items: stretch;
   width: 100%;
   position: sticky;
-  height: 50px;
   top: 0px;
   background-color: #4c8fa5;
+  font-size: 24px;
   color: white;
-  padding: 10px;
 }
 
 .navbar-title {
@@ -19,12 +19,25 @@
   font-weight: bold;
   vertical-align: middle;
   cursor: pointer;
+  padding: 24px;
 }
 
 .navbar-link {
   display: flex;
   align-items: center;
-  vertical-align: middle;
+  cursor: pointer;
+  padding: 24px;
+}
+
+.navbar-link:hover {
+  background-color: #3b7d9a;
+}
+
+.navbar-hamburger {
+  display: none;
+  align-items: center;
+  color: white;
+  font-size: 140%;
   cursor: pointer;
 }
 
@@ -32,14 +45,10 @@
   .navbar-link {
     display: none;
   }
-}
 
-.navbar-hamburger {
-  display: flex;
-  align-items: center;
-  color: white;
-  font-size: 140%;
-  cursor: pointer;
+  .navbar-hamburger {
+    display: flex;
+  }
 }
 
 .login-button {
@@ -67,21 +76,38 @@
 .navbar-menu {
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 60px;
-  right: 10px;
-  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
   font-size: 100%;
   background-color: #9ec8d6;
-  z-index: 1;
-  box-shadow: lightgray 0px 10px 10px;
+  transition: all 0.2s ease-in-out;
 }
 
 .navbar-menu-invisible {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  font-size: 100%;
+  background-color: #9ec8d6;
+  transition: all 0.2s ease-in-out;
 }
 
 .navbar-menu-item {
   color: white;
   padding: 10px;
+}
+
+.close-menu-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000025;
+  cursor: pointer;
 }
