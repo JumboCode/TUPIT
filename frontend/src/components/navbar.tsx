@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 
 // Import styles
@@ -19,11 +19,36 @@ export type HamburgerLink = {
   location: string;
 };
 
-const defaultLinks: HamburgerLink[] = [];
-
 const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
   const [menuVisible, setMenuVisible] = React.useState(false);
   const auth = useAuth();
+
+  const defaultLinks: HamburgerLink[] = auth.isLoggedIn
+    ? [
+        {
+          display: 'Classes',
+          location: '/class',
+        },
+        {
+          display: 'Students',
+          location: '/student',
+        },
+        {
+          display: 'Degrees',
+          location: '/degree',
+        },
+        {
+          display: 'Logout',
+          location: '/logout',
+        },
+      ]
+    : [
+        {
+          display: 'Login',
+          location: '/login',
+        },
+      ];
+
   return (
     <>
       {hidden == undefined || !hidden ? (
@@ -32,32 +57,26 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
             <Link href="/">
               <div className={cx('navbar-title')}>TUPIT</div>
             </Link>
-            <Link href="/Classes">
-              <div className={cx('navbar-link')}>Classes</div>
-            </Link>
-            <Link href="/Students">
-              <div className={cx('navbar-link')}>Students</div>
-            </Link>
-
-            {auth.isLoggedIn ? (
-              <span className={cx('navbar-hamburger')} onClick={() => setMenuVisible(!menuVisible)}>
-                <i className={cx('fa fa-bars')}></i>
-              </span>
-            ) : (
-              <button className={cx('login-button')} onClick={() => router.push('/login')}>
-                Log In
-              </button>
-            )}
-          </div>
-          <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
-            {(links == undefined ? defaultLinks : links).map((link, index) => (
+            {defaultLinks.map((link, index) => (
               <Link href={link.location} key={index}>
-                <span className={cx('navbar-menu-item')}>{link.display}</span>
+                <div className={cx('navbar-link')}>{link.display}</div>
               </Link>
             ))}
-            <button className={cx('logout-button')} onClick={() => router.push('/logout')}>
-              Log Out
-            </button>
+
+            <span className={cx('navbar-hamburger')} onClick={() => setMenuVisible(!menuVisible)}>
+              <i className={cx('fa fa-bars')}></i>
+            </span>
+
+            {menuVisible && (
+              <div className={cx('close-menu-area')} onClick={() => setMenuVisible(false)}></div>
+            )}
+            <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
+              {(links == undefined ? defaultLinks : links).map((link, index) => (
+                <Link href={link.location} key={index}>
+                  <span className={cx('navbar-menu-item')}>{link.display}</span>
+                </Link>
+              ))}
+            </div>
           </div>
           {children}
         </>
