@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import styles from './add.module.scss';
 import { useAuth } from '../../components/auth';
+import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
+import { CourseSelector } from '../../components/Selectors/CourseSelector';
 
 interface Course {
   course_title: string;
@@ -19,6 +21,10 @@ export default function AddCourse() {
   const [departments, setDepartments] = useState<Map<string, string> | undefined>(new Map());
   // courses is a map from name -> id
   const [courses, setCourses] = useState<Map<string, string> | undefined>(new Map());
+  const [showInstructorSelector, setShowInstructorSelector] = useState(false);
+  const [instructorsState, setInstructors] = useState([]);
+  const [showCourseSelector, setShowCourseSelector] = useState(false);
+  const [prereqsState, setPrereqs] = useState([]);
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
 
   useEffect(() => {
@@ -65,15 +71,6 @@ export default function AddCourse() {
   const submit = async (event) => {
     event.preventDefault();
 
-    let options = event.target.prereqs.options;
-    let result = [];
-    for (var i = 0, iLen = options.length; i < iLen; i++) {
-      let opt = options[i];
-      if (opt.selected) {
-        result.push(opt.value || opt.text);
-      }
-    }
-
     let newCourse: Course = {} as Course;
 
     newCourse.course_title = event.target.course_title.value;
@@ -82,21 +79,13 @@ export default function AddCourse() {
     newCourse.credits_tufts = event.target.credits_tufts.value;
     newCourse.credits_bhcc = event.target.credits_bhcc.value;
     newCourse.department = departments.get(event.target.department.value);
-    newCourse.prereqs = result;
+    newCourse.prereqs = prereqsState.map(
+      (prereq) => `http://127.0.0.1:8000/api/course/${prereq.id}/`
+    );
     console.log('this is the department', newCourse.department, event.target.department.value);
     console.log('this is the newcourse', newCourse);
-    newCourse.instructors = [event.target.instructors.value];
+    newCourse.instructors = instructorsState;
 
-    const relationships = {
-      prereqs: {
-        data: newCourse.prereqs.map(
-          (course) => 'http://127.0.0.1:8000/api/course/' + courses.get(course) + '/'
-        ),
-        meta: {
-          count: newCourse.prereqs.length,
-        },
-      },
-    };
     const res = await fetch('http://127.0.0.1:8000/api/course/', {
       method: 'POST',
       headers: {
@@ -115,8 +104,8 @@ export default function AddCourse() {
             credits_bhcc: newCourse.credits_bhcc,
             department: newCourse.department,
             instructors: newCourse.instructors,
+            prereqs: newCourse.prereqs,
           },
-          relationships: relationships,
         },
       }),
     }).catch((err) => {
@@ -130,53 +119,115 @@ export default function AddCourse() {
     }
   };
 
-  return (
-    <form onSubmit={submit} className={styles.formContainer}>
-      <span className={styles.title}>Course Form</span>
-      <div>
-        <span>Course Title:</span>
-        <input type="text" id="course_title" />
-      </div>
-      <div>
-        <span>Tufts Course Number:</span>
-        <input type="text" id="course_number_tufts" />
-      </div>
-      <div>
-        <span>BHCC Course Number: </span>
-        <input id="course_number_bhcc" type="text" />
-      </div>
-      <div>
-        <span>Tufts Credits :</span>
-        <input id="credits_tufts" type="text" />
-      </div>
-      <div>
-        <span>BHCC Credits :</span>
-        <input id="credits_bhcc" type="text" />
-      </div>
-      <div>
-        <span>Department : </span>
-        <select name="department" id="department" size={1}>
-          {Array.from(departments.keys()).map((key) => (
-            <option> {key} </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <span>Prereqs : </span>
-        <select name="prereqs" id="prereqs" size={1} multiple>
-          {Array.from(courses.keys()).map((key) => (
-            <option> {key} </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <span>Instructors : </span>
-        <input id="instructors" type="text" />
-      </div>
+  function addInstructor(name) {
+    let newInstructors = [...instructorsState, name];
+    setInstructors(newInstructors);
+  }
 
-      <button className={styles.submit} type="submit">
-        SUBMIT
-      </button>
-    </form>
+  function updateInstructor(event, index) {
+    let newInstructors = [...instructorsState];
+    newInstructors[index] = event.target.value;
+    setInstructors(newInstructors);
+  }
+
+  function removeInstructor(index: number) {
+    let newInstructors = [...instructorsState];
+    newInstructors.splice(index, 1);
+    setInstructors(newInstructors);
+  }
+
+  function addPrereq(course) {
+    setPrereqs([...prereqsState, { title: course.course_title, id: course.id }]);
+  }
+
+  function removePrereq(index: number) {
+    let newPrereqs = [...prereqsState];
+    newPrereqs.splice(index, 1);
+    setPrereqs(newPrereqs);
+  }
+
+  return (
+    <div className={styles.container}>
+      <form onSubmit={submit} className={styles.formContainer}>
+        <span className={styles.title}>Add Course</span>
+        <div className={styles.row}>
+          <span>Course Title</span>
+          <input type="text" id="course_title" />
+        </div>
+        <div className={styles.row}>
+          <span>Tufts Course Number</span>
+          <input type="text" id="course_number_tufts" />
+        </div>
+        <div className={styles.row}>
+          <span>BHCC Course Number</span>
+          <input id="course_number_bhcc" type="text" />
+        </div>
+        <div className={styles.row}>
+          <span>Tufts Credits</span>
+          <input id="credits_tufts" type="text" />
+        </div>
+        <div className={styles.row}>
+          <span>BHCC Credits</span>
+          <input id="credits_bhcc" type="text" />
+        </div>
+        <div className={styles.row}>
+          <span>Department</span>
+          <select name="department" id="department" size={1}>
+            {Array.from(departments.keys()).map((key) => (
+              <option> {key} </option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.row}>
+          <span>Prereqs</span>
+          <div className={styles.fieldList}>
+            {prereqsState.map((course, index) => (
+              <div className={styles.prereqField} key={index}>
+                <a href={course.id}>{course.title}</a>
+                <div className={styles.removeButton} onClick={() => removePrereq(index)}>
+                  &#10005;
+                </div>
+              </div>
+            ))}
+            <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+              +
+            </div>
+          </div>
+        </div>
+        <div className={styles.row}>
+          <span>Instructors</span>
+          <div className={styles.fieldList}>
+            {instructorsState.map((instructor, index) => (
+              <div className={styles.instructorField} key={index}>
+                <input
+                  onChange={(e) => updateInstructor(e, index)}
+                  type="text"
+                  value={instructor}
+                  maxLength={32}
+                  required
+                />
+                <div className={styles.removeButton} onClick={() => removeInstructor(index)}>
+                  &#10005;
+                </div>
+              </div>
+            ))}
+            <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
+              <>+</>
+            </div>
+          </div>
+        </div>
+        <input className={styles.button} type="submit" value="Submit" />
+      </form>
+      <InstructorSelector
+        show={showInstructorSelector}
+        writeFunction={addInstructor}
+        onClose={() => setShowInstructorSelector(false)}
+      />
+      <CourseSelector
+        show={showCourseSelector}
+        writeFunction={addPrereq}
+        onClose={() => setShowCourseSelector(false)}
+      />
+    </div>
   );
 }
