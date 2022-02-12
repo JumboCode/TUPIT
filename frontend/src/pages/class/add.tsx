@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
-import styles from './CourseForm.module.scss';
-import { string } from 'prop-types';
+import styles from './add.module.scss';
+import { useAuth } from '../../components/auth';
 
 interface Course {
   course_title: string;
@@ -14,19 +14,20 @@ interface Course {
   prereqs: string[];
 }
 
-export const CourseForm = memo(function CourseFormFn() {
+export default function AddCourse() {
   // departments is a map from display name -> department abbreviation
   const [departments, setDepartments] = useState<Map<string, string> | undefined>(new Map());
   // courses is a map from name -> id
   const [courses, setCourses] = useState<Map<string, string> | undefined>(new Map());
+  const { isLoggedIn, csrfToken, login, logout } = useAuth();
 
   useEffect(() => {
-    console.log('hello');
-    fetch('http://localhost:8000/api/course/', {
+    fetch('http://127.0.0.1:8000/api/course/', {
       method: 'OPTIONS',
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((res) => {
@@ -35,21 +36,29 @@ export const CourseForm = memo(function CourseFormFn() {
         );
         console.log(departments.keys());
         setDepartments(departments);
+      })
+      .catch((err) => {
+        alert('Error connecting to server');
+        console.log(err);
       });
 
-    fetch('http://localhost:8000/api/course/', {
+    fetch('http://127.0.0.1:8000/api/course/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.data);
         const courses = new Map<string, string>(
           res.data.map((x) => [x.attributes.course_title, x.id])
         );
         setCourses(courses);
+      })
+      .catch((err) => {
+        alert('Error connecting to server');
+        console.log(err);
       });
   }, []);
 
@@ -81,18 +90,20 @@ export const CourseForm = memo(function CourseFormFn() {
     const relationships = {
       prereqs: {
         data: newCourse.prereqs.map(
-          (course) => 'http://localhost:8000/api/course/' + courses.get(course) + '/'
+          (course) => 'http://127.0.0.1:8000/api/course/' + courses.get(course) + '/'
         ),
         meta: {
           count: newCourse.prereqs.length,
         },
       },
     };
-    const res = await fetch('http://localhost:8000/api/course/', {
+    const res = await fetch('http://127.0.0.1:8000/api/course/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
       },
+      credentials: 'include',
       body: JSON.stringify({
         data: {
           type: 'Course',
@@ -108,10 +119,15 @@ export const CourseForm = memo(function CourseFormFn() {
           relationships: relationships,
         },
       }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
     });
 
-    console.log(res);
-    Router.push('');
+    if (res) {
+      const data = await res.json();
+      Router.push('/class/[id]', `/class/${data.data.id}`);
+    }
   };
 
   return (
@@ -139,7 +155,7 @@ export const CourseForm = memo(function CourseFormFn() {
       </div>
       <div>
         <span>Department : </span>
-        <select name="department" id="department" size="1">
+        <select name="department" id="department" size={1}>
           {Array.from(departments.keys()).map((key) => (
             <option> {key} </option>
           ))}
@@ -147,7 +163,7 @@ export const CourseForm = memo(function CourseFormFn() {
       </div>
       <div>
         <span>Prereqs : </span>
-        <select name="prereqs" id="prereqs" size="1" multiple>
+        <select name="prereqs" id="prereqs" size={1} multiple>
           {Array.from(courses.keys()).map((key) => (
             <option> {key} </option>
           ))}
@@ -163,4 +179,4 @@ export const CourseForm = memo(function CourseFormFn() {
       </button>
     </form>
   );
-});
+}
