@@ -5,7 +5,7 @@ import Link from 'next/link';
 import styles from './navbar.module.scss';
 import classNames from 'classnames/bind';
 import { useAuth } from './auth';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 const cx = classNames.bind(styles);
 
 type NavbarProps = {
@@ -22,32 +22,38 @@ export type HamburgerLink = {
 const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
   const [menuVisible, setMenuVisible] = React.useState(false);
   const auth = useAuth();
+  const router = useRouter();
 
   const defaultLinks: HamburgerLink[] = auth.isLoggedIn
     ? [
         {
-          display: 'Classes',
+          display: 'CLASSES',
           location: '/class',
         },
         {
-          display: 'Students',
+          display: 'STUDENTS',
           location: '/student',
         },
         {
-          display: 'Degrees',
+          display: 'DEGREES',
           location: '/degree',
         },
         {
-          display: 'Logout',
+          display: 'LOGOUT',
           location: '/logout',
         },
       ]
     : [
         {
-          display: 'Login',
+          display: 'LOGIN',
           location: '/login',
         },
       ];
+
+  const handleMenuClick = (route) => {
+    setMenuVisible(false);
+    router.push(route);
+  };
 
   return (
     <>
@@ -55,7 +61,9 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
         <>
           <div className={cx('navbar-container')}>
             <Link href="/">
-              <div className={cx('navbar-title')}>TUPIT</div>
+              <div className={cx('title-container')}>
+                <div className={cx('navbar-title')}>TUPIT</div>
+              </div>
             </Link>
             {defaultLinks.map((link, index) => (
               <Link href={link.location} key={index}>
@@ -72,9 +80,13 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
             )}
             <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
               {(links == undefined ? defaultLinks : links).map((link, index) => (
-                <Link href={link.location} key={index}>
-                  <span className={cx('navbar-menu-item')}>{link.display}</span>
-                </Link>
+                <div
+                  className={cx('navbar-menu-item')}
+                  key={index}
+                  onClick={() => handleMenuClick(link.location)}
+                >
+                  {link.display}
+                </div>
               ))}
             </div>
           </div>
