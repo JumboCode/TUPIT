@@ -1,4 +1,5 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap');
 
 .navbar-container {
   display: flex;
@@ -13,13 +14,31 @@
   color: white;
 }
 
-.navbar-title {
+.title-container {
   display: flex;
   align-items: center;
-  font-weight: bold;
-  vertical-align: middle;
+  justify-content: center;
   cursor: pointer;
-  padding: 24px;
+}
+
+.navbar-title {
+  font-family: 'Rubik', 'Verdana bold';
+  font-size: 48px;
+}
+
+.navbar-title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 4px;
+  background-color: white;
+  margin: 0 9px;
+  border-radius: 1px;
+  transition: width 0.3s ease-in-out;
+}
+
+.title-container:hover .navbar-title::after {
+  width: calc(100% - 18px);
 }
 
 .navbar-link {
@@ -27,6 +46,7 @@
   align-items: center;
   cursor: pointer;
   padding: 24px;
+  font-weight: bold;
 }
 
 .navbar-link:hover {
@@ -41,7 +61,7 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 850px) {
   .navbar-link {
     display: none;
   }
@@ -81,6 +101,7 @@
   right: 0;
   width: 100%;
   font-size: 100%;
+  font-weight: bold;
   background-color: #9ec8d6;
   transition: all 0.2s ease-in-out;
 }
@@ -98,8 +119,8 @@
 }
 
 .navbar-menu-item {
-  color: white;
-  padding: 10px;
+  padding: 16px;
+  cursor: pointer;
 }
 
 .close-menu-area {
