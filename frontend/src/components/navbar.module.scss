@@ -12,6 +12,7 @@
   background-color: #4c8fa5;
   font-size: 24px;
   color: white;
+  z-index: 50;
 }
 
 .title-container {
@@ -104,6 +105,7 @@
   font-weight: bold;
   background-color: #9ec8d6;
   transition: all 0.2s ease-in-out;
+  overflow: hidden;
 }
 
 .navbar-menu-invisible {
@@ -116,6 +118,7 @@
   font-size: 100%;
   background-color: #9ec8d6;
   transition: all 0.2s ease-in-out;
+  overflow: hidden;
 }
 
 .navbar-menu-item {
