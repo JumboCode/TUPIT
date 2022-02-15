@@ -108,17 +108,8 @@
   overflow: hidden;
 }
 
-.navbar-menu-invisible {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  right: 0;
+.invisible {
   width: 0;
-  font-size: 100%;
-  background-color: #9ec8d6;
-  transition: all 0.2s ease-in-out;
-  overflow: hidden;
 }
 
 .navbar-menu-item {

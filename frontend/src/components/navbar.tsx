@@ -55,6 +55,11 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
     router.push(route);
   };
 
+  const menuClasses = cx({
+    'navbar-menu': true,
+    invisible: !menuVisible,
+  });
+
   return (
     <>
       {hidden == undefined || !hidden ? (
@@ -78,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, links, hidden }) => {
             {menuVisible && (
               <div className={cx('close-menu-area')} onClick={() => setMenuVisible(false)}></div>
             )}
-            <div className={cx(menuVisible ? 'navbar-menu' : 'navbar-menu-invisible')}>
+            <div className={menuClasses}>
               {(links == undefined ? defaultLinks : links).map((link, index) => (
                 <div
                   className={cx('navbar-menu-item')}
