@@ -61,6 +61,15 @@ class DegreeViewSet(viewsets.ModelViewSet):
             SetDegreeGroupInactive(degree.is_tufts)
 
         return super().update(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        is_tufts = 'is_tufts' in request.data and request.data['is_tufts'] == 'true'
+        is_active = 'active' in request.data and request.data['active'] == 'true'
+        
+        if is_active:
+            SetDegreeGroupInactive(is_tufts)
+            
+        return super().create(request, *args, **kwargs)
         
 import json
 from django.http import JsonResponse
