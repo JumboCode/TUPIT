@@ -1,0 +1,44 @@
+// @import "../../styles/global/base.scss";
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  border: 2px solid #aed6e2;
+  box-sizing: border-box;
+  width: 50%;
+  height: 50%;
+  flex-direction: column;
+  padding: 40px;
+}
+
+.box h3 {
+  color: black;
+}
+
+/* 
+ * TODO - Put new styling into global css
+ */
+.box > input[type='text'] {
+  color: #ababab;
+  border-bottom: 3px solid #ababab;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 26px;
+  line-height: 26px;
+  padding: 5px 0;
+}
+
+.reset {
+  padding: 0 20px;
+  font-size: 30px;
+  border-radius: 3px;
+  height: 60px;
+}
