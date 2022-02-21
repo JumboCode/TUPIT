@@ -19,6 +19,10 @@ export default function LoginForm() {
     );
   }
 
+  function resetPass(e) {
+    router.push('/resetpass');
+  }
+
   return (
     <div className={styles.container}>
       <h1>Welcome to TUPIT!</h1>
@@ -28,6 +32,9 @@ export default function LoginForm() {
         <p>Password: </p>
         <input className={styles.textField} type="password" name="password" />
         <div className={styles.submitContainer}>
+          <a className={styles.reset} onClick={resetPass}>
+            Forgot your password?{' '}
+          </a>
           <input className={styles.submit} type="submit" value="Login" />
         </div>
       </form>
