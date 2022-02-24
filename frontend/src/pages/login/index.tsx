@@ -7,6 +7,8 @@ export default function LoginForm() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
 
+  const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     if (isLoggedIn) router.push('/');
   }, [isLoggedIn]);
@@ -19,16 +21,35 @@ export default function LoginForm() {
     );
   }
 
+  console.log('show password', showPassword);
+
   return (
     <div className={styles.container}>
-      <h1>Welcome to TUPIT!</h1>
       <form className={styles.loginForm} onSubmit={doLogin}>
-        <p>Username: </p>
-        <input className={styles.textField} type="text" name="username" />
-        <p>Password: </p>
-        <input className={styles.textField} type="password" name="password" />
+        <div className={styles.signInTitle}>Sign in</div>
+        <input
+          className={styles.textField}
+          type="text"
+          name="username"
+          placeholder="Enter your username"
+        />
+        <input
+          className={styles.textField}
+          type={showPassword ? 'text' : 'password'}
+          name="password"
+          placeholder="Enter your password"
+        />
+        <div className={styles.showPassword}>
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+          <p className={styles.showPasswordText}>Show Password</p>
+        </div>
         <div className={styles.submitContainer}>
-          <input className={styles.submit} type="submit" value="Login" />
+          <p className={styles.forgotPasswordText}>Forgot password?</p>
+          <input className={styles.btn} type="submit" value="Next" />
         </div>
       </form>
     </div>
