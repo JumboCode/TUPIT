@@ -1,4 +1,4 @@
-// @import "../../styles/global/base.scss";
+// @import "../../styles/global/colors.scss";
 
 .container {
   width: 100%;
@@ -7,7 +7,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  justify-content: center;
 }
 
 .box {
@@ -26,7 +25,7 @@
 /* 
  * TODO - Put new styling into global css
  */
-.box > input[type='text'] {
+.box input[type='text'] {
   color: #ababab;
   border-bottom: 3px solid #ababab;
   font-style: normal;
@@ -41,4 +40,9 @@
   font-size: 30px;
   border-radius: 3px;
   height: 60px;
+}
+
+.buttonReverse {
+    display: flex;
+    flex-direction: row-reverse;
 }
