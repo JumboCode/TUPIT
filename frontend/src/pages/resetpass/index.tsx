@@ -6,7 +6,19 @@ const ExportPassword = () => {
     <div className={styles.container}>
       <div className={styles.box}>
         <h3>Reset Password</h3>
-        <input className={styles.reset} type="text" name="email" placeholder="Enter your email" />
+        <form>
+            <label htmlFor="email">
+                <input id="email" className={styles.reset} type="text" 
+                name="email" placeholder="Enter your email" />
+            </label>
+            <label htmlFor="newpassword">
+                <input id="newpassword" className={styles.reset} type="text" 
+                name="newpassword" placeholder="Enter your new password" />
+            </label>
+        </form> 
+        <div className={styles.buttonReverse}>
+            <button type="button">Next</button>
+        </div>
       </div>
     </div>
   );
