@@ -20,10 +20,13 @@ const FileViewer = (studentData) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!file) return alert('Please select a file to upload before submitting');
+
     let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
     // let { url } = await uploadToS3(file);
     let url = file.name;
 
+    console.log(associated_files);
     associated_files.push(url);
     console.log(associated_files);
     studentData.attributes.associated_files = associated_files;
@@ -43,29 +46,38 @@ const FileViewer = (studentData) => {
       console.log(err);
     });
 
-    console.log(res);
-
     if (res)
       if (res.ok) {
         alert(`Successfully uploading ${file.name}`);
         router.replace(`/student/${studentData.id}`);
       } else {
         alert(`Failed to upload ${file.name}`);
-        // res.json().then((data) => console.log(data));
-        res.json().then((data) => console.log(data));
+        try {
+          res.json().then((data) => console.log(data));
+        } catch {
+          res.text().then((data) => console.log(data));
+        }
       }
   };
 
   return (
     <>
-      <div>{associated_files}</div>
+      <p>Choose a file to upload</p>
       <form className={styles.dropContainer} onSubmit={handleSubmit}>
-        <h1>Choose a file to upload</h1>
         <input className={styles.upload} type="file" title="" onChange={handleFileChange} />
         <div className={styles.submitContainer}>
-          <input className={styles.submit} type="submit" value="Submit" />
+          <button className={styles.submit} type="submit" value="Submit">
+            Submit
+          </button>
         </div>
       </form>
+      {associated_files == undefined || associated_files.length == 0 ? null : (
+        <div className={styles.fileDisplay}>
+          {associated_files.map((file) => (
+            <p>{file}</p>
+          ))}
+        </div>
+      )}
     </>
   );
 };

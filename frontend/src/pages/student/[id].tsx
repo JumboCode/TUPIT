@@ -402,7 +402,10 @@ export default function ViewStudent() {
               +
             </button>
           </div>
-          <FileViewer {...studentData} />
+
+          <div className={styles.row}>
+            <FileViewer {...studentData} />
+          </div>
         </div>
       </div>
       <CourseProgressModifier

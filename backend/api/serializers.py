@@ -12,13 +12,6 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
         fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'cohort', 'years_given', 'years_left', 'associated_files')
-    
-    def validate_associated_files(self, associated_files):
-        existing_associated_files = []
-        if self.instance and self.instance.v:
-            # Patch or Put request
-            existing_associated_files = self.instance.associated_files
-        return existing_associated_files + associated_files
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
