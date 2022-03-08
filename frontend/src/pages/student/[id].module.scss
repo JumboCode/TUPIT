@@ -1,0 +1,229 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+
+.col {
+  padding: 20px;
+}
+
+@media (max-width: 850px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .col {
+    padding: 20px 0;
+  }
+}
+
+.studentInfo {
+  background: #9ec8d6;
+  border-radius: 49px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  color: white;
+  font-weight: 400;
+  font-size: 32px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.row > p {
+  font-weight: bold;
+  padding: 0 12px;
+}
+
+.row input,
+.row textarea {
+  background: white;
+  border: unset;
+  color: #4c8fa5;
+  padding: 20px;
+  font-size: 24px;
+  border-radius: 28px;
+  height: 60px;
+  resize: none;
+}
+
+.row textarea {
+  height: 150px;
+}
+
+.row input:hover,
+.row textarea:hover {
+  border: 1px solid #4c8fa5;
+  padding: 19px;
+}
+
+.row input:focus,
+.row textarea:focus {
+  border: 2px solid #4c8fa5;
+  outline: unset;
+  padding: 18px;
+}
+
+.button {
+  flex: auto;
+  display: flex;
+  justify-content: space-around;
+  column-gap: 12px;
+  border: none;
+  background: #4c8fa5;
+  border-radius: 28px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+  margin: 0;
+}
+
+.button:hover {
+  background: #3b7d9a;
+}
+
+.button:active {
+  transform: translateY(2px);
+}
+
+.expanded {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.condensed {
+  display: none;
+}
+
+.progBar {
+  width: 100%;
+  height: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+}
+
+.compBar,
+.inProgBar {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+  font-size: 16px;
+  color: transparent;
+  background-color: #3b7d9a;
+  width: 0;
+  transition: width 0.4s ease-in-out, color 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.compBar:hover,
+.inProgBar:hover {
+  color: white;
+  width: 100% !important;
+}
+
+.inProgBar {
+  position: relative;
+  background-color: #75b5cc;
+}
+
+// wave effect on .inProgBar
+.inProgBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  animation: wave 3s ease-out infinite;
+}
+
+// wave animation
+@keyframes wave {
+  0% {
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 0;
+  }
+  100% {
+    background-color: #9ec8d600;
+    width: 100%;
+  }
+}
+
+.courseEntries {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 4px;
+  overflow-y: scroll;
+  max-height: 518px;
+}
+
+.courseEntry {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background-color: white;
+  color: #4c8fa5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.courseEntry:hover {
+  border: 1px solid #4c8fa5;
+  padding: 11px;
+}
+
+.courseEntry:active {
+  transform: translateY(2px);
+}
+
+.courseTitle {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 24px;
+  width: 100%;
+  font-weight: bold;
+}
+
+.inProgText {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.7em;
+}
+
+.courseInfo {
+  display: flex;
+  column-gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.7em;
+}

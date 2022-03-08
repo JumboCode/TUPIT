@@ -88,3 +88,106 @@ def ValidateLoggedIn(request):
         return JsonResponse({'is_logged_in': True}, status=200)
     else:
         return JsonResponse({'is_logged_in': False}, status=200)
+
+def ChangePassword(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'info': 'Not authenticated'}, status=401)
+
+    data = json.loads(request.body)
+    username = request.user.username
+    current_password = data.get('old_password')
+    new_password = data.get('new_password')
+    user = authenticate(request, username=username, password=current_password)
+
+    if user is None:
+        return JsonResponse({'info': 'Invalid credentials'}, status=401)
+
+    user.set_password(new_password)
+    user.save()
+    login(request, user)
+    
+    return JsonResponse({'info': 'Successfully changed password'}, status=200)
+
+# Create a progress report comparing a student's course progress to the courses required by the active degree
+@csrf_exempt
+def AuditStudentProgress(request):
+    data = json.loads(request.body)
+    student_id = data.get('student_id')
+    if student_id == '':
+        return JsonResponse({'info': 'Missing student_id'}, status=400)
+
+    ### FETCH STUDENT ###
+    
+    student = Student.objects.get(id=student_id)
+    if student is None:
+        return JsonResponse({'info': 'Invalid student_id'}, status=400)
+
+    # IDs of the courses the student has completed
+    completed_ids = [courseProg.course.id for courseProg in student.courses.all() if not courseProg.in_progress]
+    # Remove duplicates
+    completed_ids = list(set(completed_ids))
+
+    # IDs of the courses the student is currently taking
+    in_progress_ids = [courseProg.course.id for courseProg in student.courses.all() if courseProg.in_progress]
+    # Remove duplicates
+    in_progress_ids = list(set(in_progress_ids))
+    # Remove IDs that are already completed
+    in_progress_ids = [course_id for course_id in in_progress_ids if course_id not in completed_ids]
+
+    ### FETCH DEGREE ###
+    
+    degree = Degree.objects.get(active=True)
+    if degree is None:
+        return JsonResponse({'info': 'No active degree'}, status=400)
+    
+    req_ids = [req.id for req in degree.reqs.all()]
+
+    ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
+    
+    # Degree requirements which the student has completed
+    completed_req_ids = [course for course in req_ids if course in completed_ids]
+
+    # Degree requirements which the student is currently taking
+    in_progress_req_ids = [course for course in req_ids if course in in_progress_ids]
+
+    # Degree requirements which the student has not completed
+    not_completed_req_ids = [course for course in req_ids if (course not in completed_ids and course not in in_progress_ids)]
+
+    ### GENERATE RESPONSE ###
+
+    completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in completed_req_ids]
+    in_progress_course_titles = [Course.objects.get(id=course_id).course_title for course_id in in_progress_req_ids]
+    not_completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in not_completed_req_ids]
+
+    return JsonResponse({
+        'info': 'Successfully generated audit report',
+        'completed': completed_course_titles,
+        'in_progress': in_progress_course_titles,
+        'not_completed': not_completed_course_titles,
+        }, status=200)
+
+# Set the active degree to the degree with the given ID
+# After this, only the degree with the given ID will be active
+# All other degrees will be set to inactive
+def SetActiveDegree(request):
+    data = json.loads(request.body)
+    degree_id = data.get('degree_id')
+    if degree_id == '':
+        return JsonResponse({'info': 'Missing degree_id'}, status=400)
+
+    ### FETCH DEGREE ###
+
+    degree = Degree.objects.get(id=degree_id)
+    if degree is None:
+        return JsonResponse({'info': 'Invalid degree_id'}, status=400)
+
+    ### SET DEGREE TO ACTIVE ###
+
+    # Set all degrees to inactive
+    Degree.objects.all().update(active=False)
+
+    # Set the given degree to active
+    degree.active = True
+    degree.save()
+
+    return JsonResponse({'info': 'Successfully set active degree'}, status=200)

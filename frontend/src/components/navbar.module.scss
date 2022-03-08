@@ -1,0 +1,128 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap');
+
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+  width: 100%;
+  position: sticky;
+  top: 0px;
+  background-color: #4c8fa5;
+  font-size: 24px;
+  color: white;
+  z-index: 50;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.navbar-title {
+  font-family: 'Rubik', 'Verdana bold';
+  font-size: 48px;
+}
+
+.navbar-title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 4px;
+  background-color: white;
+  margin: 0 9px;
+  border-radius: 1px;
+  transition: width 0.3s ease-in-out;
+}
+
+.title-container:hover .navbar-title::after {
+  width: calc(100% - 18px);
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 24px;
+  font-weight: bold;
+}
+
+.navbar-link:hover {
+  background-color: #3b7d9a;
+}
+
+.navbar-hamburger {
+  display: none;
+  align-items: center;
+  color: white;
+  font-size: 140%;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 850px) {
+  .navbar-link {
+    display: none;
+  }
+
+  .navbar-hamburger {
+    display: flex;
+  }
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding-inline: 10px;
+  padding-block: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  font-size: 100%;
+  font-weight: bold;
+  background-color: #9ec8d6;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.invisible {
+  width: 0;
+}
+
+.navbar-menu-item {
+  padding: 16px;
+  cursor: pointer;
+}
+
+.close-menu-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000025;
+  cursor: pointer;
+}
