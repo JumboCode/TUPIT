@@ -78,7 +78,7 @@ export default function SearchClass() {
 
   function classResult(course) {
     return (
-      <div className={styles.result} onClick={() => router.push(`course/${course.id}`)}>
+      <div className={styles.result} onClick={() => router.push(`class/${course.id}`)}>
         <div className={styles.courseTitle}>{`${course.attributes.course_title}`}</div>
         <div className={styles.courseInfo}>
           <span>Tufts: {`${course.attributes.course_number_tufts}`}</span>
