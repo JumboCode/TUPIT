@@ -26,7 +26,7 @@ export default function LoginForm() {
   return (
     <div className={styles.container}>
       <h1>Welcome to TUPIT!</h1>
-      <form className={styles.loginForm} onSubmit={doLogin}>
+      <form className={styles.box} className={styles.loginForm} onSubmit={doLogin}>
         <p>Username: </p>
         <input className={styles.textField} type="text" name="username" />
         <p>Password: </p>
