@@ -1,12 +1,26 @@
 import React from 'react';
 import styles from './index.module.scss';
 
-const ExportPassword = () => {
+const ExportResetPassword = () => {
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const res = await fetch("http://127.0.0.1:8000/reset-password/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: e.target.email.value
+      })
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.box}>
         <h3>Reset Password</h3>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className={styles.wrapper}>
             <div className={styles.row}>
               <label htmlFor="email">
@@ -31,13 +45,13 @@ const ExportPassword = () => {
               </label>
             </div>
           </div>
+          <div className={styles.rowReverse}>
+            <button type="submit">Next</button>
+          </div>
         </form>
-        <div className={styles.rowReverse}>
-          <button type="button">Next</button>
-        </div>
       </div>
     </div>
   );
 };
 
-export default ExportPassword;
+export default ExportResetPassword;

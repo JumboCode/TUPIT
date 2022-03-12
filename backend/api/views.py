@@ -191,3 +191,7 @@ def SetActiveDegree(request):
     degree.save()
 
     return JsonResponse({'info': 'Successfully set active degree'}, status=200)
+
+def ResetPassword(request):
+    data = json.loads(reqest.body)
+    print(data)
