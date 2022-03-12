@@ -91,6 +91,7 @@ export default function SearchClass() {
 
   return (
     <div className={styles.windowContainer}>
+      <div className={styles.pageTitle}>Search class</div>
       <div className={styles.window}>
         <form onSubmit={onSearch} className={styles.filterContainer}>
           <div className={styles.filterFields}>
