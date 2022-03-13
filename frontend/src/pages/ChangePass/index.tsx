@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../components/auth';
 import styles from './index.module.scss';
+import AuthBox from '../../components/authbox';
 
 export default function ChangePass() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
@@ -43,18 +44,34 @@ export default function ChangePass() {
       } else alert('Password was incorrect');
   }
 
+  /* @TODO fix password input styling */
+  const content: JSX.Element[] = [
+    (<label htmlFor='oldPassword'>
+      <input id='oldPassword' type='text' name='old_password' placeholder='Enter your old password' required/>
+    </label>),
+    (<label htmlFor='newPassword'>
+      <input id='newPassword' type='text' name='new_password' placeholder='Enter your new password' required/>
+    </label>)
+  ];
+
   return (
-    <div className={styles.container}>
-      <h1>Change Password</h1>
-      <form className={styles.changePassForm} onSubmit={doChangePass}>
-        <p>Old Password: </p>
-        <input className={styles.textField} type="password" name="old_password" required />
-        <p>New Password: </p>
-        <input className={styles.textField} type="password" name="new_password" required />
-        <p>Confirm Password: </p>
-        <input className={styles.textField} type="password" name="new_password_confirm" required />
-        <input className={styles.button} type="submit" />
-      </form>
-    </div>
+    <AuthBox header={'Change Password'}
+     callback={doChangePass}
+     content={content}
+     navigate={'Next'} />
   );
+  // return (
+  //   <div className={styles.container}>
+  //     <h1>Change Password</h1>
+  //     <form className={styles.changePassForm} onSubmit={doChangePass}>
+  //       <p>Old Password: </p>
+  //       <input className={styles.textField} type="password" name="old_password" required />
+  //       <p>New Password: </p>
+  //       <input className={styles.textField} type="password" name="new_password" required />
+  //       <p>Confirm Password: </p>
+  //       <input className={styles.textField} type="password" name="new_password_confirm" required />
+  //       <input className={styles.button} type="submit" />
+  //     </form>
+  //   </div>
+  // );
 }
