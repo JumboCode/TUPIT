@@ -52,6 +52,7 @@ class Student(Model):
         max_length=32, blank=True)  # validate this number
     parole_status = TextField(max_length=256, blank=True)
     student_status = TextField(max_length=256, blank=True)
+    additional_info = TextField(max_length=512, blank=True)
 
     validate_nonnegative = MinValueValidator(0)
     cohort = IntegerField(validators=[validate_nonnegative], null=True)
@@ -120,6 +121,8 @@ class Course(Model):
         default=empty_array,
     )
 
+    additional_info = TextField(max_length=512, blank=True)
+
     def __str__(self):
 
         model = f'''
@@ -141,10 +144,14 @@ class Degree(Model):
         symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
+    additional_info = TextField(max_length=512, blank=True)
 
 class CourseProgress(Model):
     def default_true():
         return True
+    
+    def default_semester():
+        return 'Fall'
 
     validate_nonnegative = MinValueValidator(0)
 
@@ -152,7 +159,9 @@ class CourseProgress(Model):
     student = ForeignKey(Student, related_name='courses', blank=False, null=True, on_delete=CASCADE)
     grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
     year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    semester_taken = CharField(max_length=32, default=default_semester)
     in_progress = BooleanField(blank=True, default=default_true)
+    additional_info = TextField(max_length=512, blank=True)
 
     def __str__(self):
 

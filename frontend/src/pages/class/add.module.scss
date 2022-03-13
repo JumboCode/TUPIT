@@ -8,7 +8,7 @@
   padding: 40px 0;
 }
 
-.courseInfo {
+.formContainer {
   background: #9ec8d6;
   border-radius: 49px;
   padding: 40px;
@@ -22,62 +22,59 @@
   color: white;
   font-weight: 400;
   font-size: 32px;
-}
 
-.courseInfo > .courseTitle {
-  font-size: 48px;
-  font-weight: bold;
-}
-
-.courseInfo > .courseTitle:hover {
-  outline: 1px solid #3b7d9a;
+  .title {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+  }
 }
 
 .row {
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-}
 
-.row > p {
-  font-weight: bold;
-  padding: 0 12px;
-}
-
-.row > input {
-  background: white;
-  border: unset;
-  color: #4c8fa5;
-  padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
-  height: 60px;
-  resize: none;
-}
-
-.row > .select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: white;
-  color: #4c8fa5;
-  padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
-  border: none;
-}
-
-@media (pointer: fine) {
-  .row > input:hover,
-  .row > .select:hover {
-    border: 1px solid #4c8fa5;
-    padding: 19px;
+  > span {
+    font-weight: bold;
+    padding: 0 12px;
   }
-}
 
-.row > input:focus {
-  border: 2px solid #4c8fa5;
-  outline: unset;
-  padding: 18px;
+  > input {
+    background: white;
+    border: unset;
+    color: #4c8fa5;
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 28px;
+    height: 60px;
+    resize: none;
+  }
+
+  > select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background: white;
+    color: #4c8fa5;
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 28px;
+    border: none;
+  }
+
+  @media (pointer: fine) {
+    > input:hover,
+    > select:hover {
+      border: 1px solid #4c8fa5;
+      padding: 19px;
+    }
+  }
+
+  > input:focus {
+    border: 2px solid #4c8fa5;
+    outline: unset;
+    padding: 18px;
+  }
 }
 
 .fieldList {
@@ -153,45 +150,5 @@
 
   .button:active {
     transform: translateY(2px);
-  }
-}
-
-.prereqField > a {
-  color: #4c8fa5;
-  text-decoration: unset;
-}
-
-@media (pointer: fine) {
-  .prereqField > a:hover {
-    text-decoration: underline;
-  }
-}
-
-@media (max-width: 800px) {
-  .courseInfo {
-    width: 100vw;
-    border-radius: 0;
-  }
-
-  .courseInfo > .courseTitle {
-    font-size: 24px;
-  }
-
-  .row > p,
-  .row > input,
-  .row > .select,
-  .fieldList,
-  .button {
-    font-size: 16px;
-  }
-
-  .removeButton {
-    font-size: 24px;
-  }
-}
-
-@media (pointer: coarse) {
-  .removeButton {
-    z-index: unset;
   }
 }

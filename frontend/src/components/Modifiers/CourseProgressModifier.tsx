@@ -94,6 +94,7 @@ export const CourseProgressModifier: React.FC<CourseProgressModifierProps> = (pr
           attributes: {
             grade: t.grade.value ? t.grade.value : null,
             year_taken: t.year_taken.value ? t.year_taken.value : null,
+            semester_taken: t.semester_taken.value ? t.semester_taken.value : null,
             in_progress: t.in_progress.checked,
             course: `http://127.0.0.1:8000/api/course/${currCourse.id}/`,
           },
@@ -175,6 +176,21 @@ export const CourseProgressModifier: React.FC<CourseProgressModifierProps> = (pr
                 onWheel={(e) => e.currentTarget.blur()}
                 min={0}
               />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldTitle}>
+                Semester Taken
+                <select
+                  name="semester_taken"
+                  className={styles.fieldValue}
+                  defaultValue={progData.attributes.semester_taken}
+                >
+                  <option value="Fall">Fall</option>
+                  <option value="Spring">Spring</option>
+                  <option value="Summer">Summer</option>
+                </select>
+              </label>
             </div>
 
             <div className={styles.field}>
