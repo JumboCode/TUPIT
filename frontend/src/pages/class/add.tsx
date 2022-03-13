@@ -14,6 +14,7 @@ interface Course {
   department: string;
   instructors: string[];
   prereqs: string[];
+  additional_info: string;
 }
 
 export default function AddCourse() {
@@ -85,6 +86,7 @@ export default function AddCourse() {
     console.log('this is the department', newCourse.department, event.target.department.value);
     console.log('this is the newcourse', newCourse);
     newCourse.instructors = instructorsState;
+    newCourse.additional_info = event.target.additional_info.value;
 
     const res = await fetch('http://127.0.0.1:8000/api/course/', {
       method: 'POST',
@@ -105,6 +107,7 @@ export default function AddCourse() {
             department: newCourse.department,
             instructors: newCourse.instructors,
             prereqs: newCourse.prereqs,
+            additional_info: newCourse.additional_info,
           },
         },
       }),
@@ -215,6 +218,10 @@ export default function AddCourse() {
               <>+</>
             </div>
           </div>
+        </div>
+        <div className={styles.row}>
+          <span>Additional Information</span>
+          <textarea id="additional_info" maxLength={512} />
         </div>
         <input className={styles.button} type="submit" value="Submit" />
       </form>
