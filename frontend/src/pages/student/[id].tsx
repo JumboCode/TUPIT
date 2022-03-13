@@ -182,6 +182,7 @@ export default function ViewStudent() {
             student_status: t.student_status.value,
             years_given: parseInt(t.years_given.value),
             years_left: parseInt(t.years_left.value),
+            additional_info: t.additional_info.value,
           },
         },
       }),
@@ -336,6 +337,15 @@ export default function ViewStudent() {
                   defaultValue={studentData.attributes.years_left}
                   onWheel={(e) => e.currentTarget.blur()}
                   min={0}
+                />
+              </div>
+
+              <div className={styles.row}>
+                <p>Additional Information</p>
+                <textarea
+                  name="additional_info"
+                  defaultValue={studentData.attributes.additional_info}
+                  maxLength={512}
                 />
               </div>
 
