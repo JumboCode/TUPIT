@@ -136,6 +136,9 @@ class Degree(Model):
 class CourseProgress(Model):
     def default_true():
         return True
+    
+    def default_semester():
+        return 'Fall'
 
     validate_nonnegative = MinValueValidator(0)
 
@@ -143,6 +146,7 @@ class CourseProgress(Model):
     student = ForeignKey(Student, related_name='courses', blank=False, null=True, on_delete=CASCADE)
     grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
     year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    semester_taken = CharField(max_length=32, default=default_semester)
     in_progress = BooleanField(blank=True, default=default_true)
 
     def __str__(self):

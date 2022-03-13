@@ -387,7 +387,9 @@ export default function ViewStudent() {
                   </div>
                   <div className={styles.courseInfo}>
                     <div>Grade: {course.attributes.grade}</div>
-                    <div>{course.attributes.year_taken}</div>
+                    <div>
+                      {course.attributes.semester_taken} {course.attributes.year_taken}
+                    </div>
                   </div>
                 </div>
               ))}
