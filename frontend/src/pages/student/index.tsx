@@ -7,6 +7,8 @@ export default function SearchStudents() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const [results, setResults] = useState([]);
+  const { cohortInit } = router.query;
+  const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
 
   const firstname = createRef<HTMLInputElement>();
   const lastname = createRef<HTMLInputElement>();
@@ -17,7 +19,11 @@ export default function SearchStudents() {
 
   useEffect(() => {
     async function getStudents() {
-      const res = await fetch('http://127.0.0.1:8000/api/students/?ordering=lastname', {
+      let url = 'http://127.0.0.1:8000/api/students/?ordering=lastname';
+      const query = `&cohort=${cohortInitVal}`;
+      url = cohortInitVal === '' ? url : url + query;
+
+      const res = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +39,10 @@ export default function SearchStudents() {
       }
     }
     getStudents();
-  }, []);
+
+    console.log(`cohortInit val = ${cohortInitVal}`);
+    cohort.current.value = cohortInitVal;
+  }, [cohortInitVal]);
 
   async function onSearch(e) {
     e.preventDefault();

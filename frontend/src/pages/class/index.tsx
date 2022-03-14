@@ -9,6 +9,9 @@ export default function SearchClass() {
   const [results, setResults] = useState([]);
   const [depOpts, setDepOpts] = useState([]);
 
+  const { courseTitleInit } = router.query;
+  const courseTitleInitVal = Array.isArray(courseTitleInit) ? courseTitleInit[0] : courseTitleInit;
+
   const courseTitle = createRef<HTMLInputElement>();
   const tuftsCourseNum = createRef<HTMLInputElement>();
   const bunkerCourseNum = createRef<HTMLInputElement>();
@@ -16,7 +19,11 @@ export default function SearchClass() {
 
   useEffect(() => {
     async function getClasses() {
-      const res = await fetch('http://127.0.0.1:8000/api/course/', {
+      let url = 'http://127.0.0.1:8000/api/course/';
+      const query = `?cohort=${courseTitleInitVal}`;
+      url = courseTitleInitVal === '' ? url : url + query;
+
+      const res = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +60,9 @@ export default function SearchClass() {
 
     getClasses();
     getDepartmentData();
-  }, []);
+
+    courseTitle.current.value = courseTitleInitVal;
+  }, [courseTitleInitVal]);
 
   async function onSearch(e) {
     e.preventDefault();

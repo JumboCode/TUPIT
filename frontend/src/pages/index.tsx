@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../components/auth';
 
@@ -10,6 +10,9 @@ const cx = classNames.bind(styles);
 const Home: React.FC = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
+
+  const cohort = createRef<HTMLInputElement>();
+  const course = createRef<HTMLInputElement>();
 
   return (
     <div className={cx('base')}>
@@ -25,6 +28,14 @@ const Home: React.FC = () => {
       ) : (
         ''
       )}
+      <form onSubmit={() => router.push(`/student/?cohortInit=${cohort.current.value}`)}>
+        <input type="number" ref={cohort} min={0} onWheel={(e) => e.currentTarget.blur()} />
+        <input type="submit" value="Search" />
+      </form>
+      <form onSubmit={() => router.push(`/class/?courseTitleInit=${course.current.value}`)}>
+        <input type="string" ref={course} />
+        <input type="submit" value="Search" />
+      </form>
     </div>
   );
 };
