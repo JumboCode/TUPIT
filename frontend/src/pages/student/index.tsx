@@ -21,7 +21,7 @@ export default function SearchStudents() {
     async function getStudents() {
       let url = 'http://127.0.0.1:8000/api/students/?ordering=lastname';
       const query = `&cohort=${cohortInitVal}`;
-      url = cohortInitVal === '' ? url : url + query;
+      url = cohortInitVal === '' && cohortInitVal != undefined ? url : url + query;
 
       const res = await fetch(url, {
         method: 'GET',
