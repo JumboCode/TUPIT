@@ -1,7 +1,22 @@
+@use 'sass:meta';
 @use './reset';
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');
+
+/* tentative second font */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display\
+            =swap');
+
+/* tentative third font */
+@import url('https://fonts.googleapis.com/css2?family=Overpass+Mono&display\
+             =swap');
+
+$dm-mono: 'DM Mono', monospace;
+$ibm-mono: 'IBM Plex Mono', monospace;
+$overpass-mono: 'Overpass Mono', monospace;
+
 :root {
-  font-family: 'DM Mono', monospace;
+  font-family: #{meta.inspect($dm-mono)};
   font-size: 20px;
 }
 
