@@ -8,6 +8,9 @@ interface AuthBoxInterface {
   navigate: string;
 };
 
+/*
+ * Used for login and password changing page.
+ */
 const AuthBox = (props: AuthBoxInterface) => {
   return (
     <div className={styles.container}>

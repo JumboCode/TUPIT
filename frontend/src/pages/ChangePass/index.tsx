@@ -4,7 +4,7 @@ import { useAuth } from '../../components/auth';
 import styles from './index.module.scss';
 import AuthBox from '../../components/authbox';
 
-export default function ChangePass() {
+const ChangePass = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
 
@@ -47,10 +47,25 @@ export default function ChangePass() {
   /* @TODO fix password input styling */
   const content: JSX.Element[] = [
     (<label htmlFor='oldPassword'>
-      <input id='oldPassword' type='text' name='old_password' placeholder='Enter your old password' required/>
+      <input id='oldPassword'
+       type='password'
+       name='old_password'
+       placeholder='Enter your old password'
+       required/>
     </label>),
     (<label htmlFor='newPassword'>
-      <input id='newPassword' type='text' name='new_password' placeholder='Enter your new password' required/>
+      <input id='newPassword'
+       type='password'
+       name='new_password'
+       placeholder='Enter your new password'
+       required/>
+    </label>),
+    (<label htmlFor='new_password_confirm'>
+      <input id='new_password_confirm'
+       type='password'
+       name='new_password_confirm'
+       placeholder='Confirm your password'
+       required/>
     </label>)
   ];
 
@@ -60,18 +75,6 @@ export default function ChangePass() {
      content={content}
      navigate={'Next'} />
   );
-  // return (
-  //   <div className={styles.container}>
-  //     <h1>Change Password</h1>
-  //     <form className={styles.changePassForm} onSubmit={doChangePass}>
-  //       <p>Old Password: </p>
-  //       <input className={styles.textField} type="password" name="old_password" required />
-  //       <p>New Password: </p>
-  //       <input className={styles.textField} type="password" name="new_password" required />
-  //       <p>Confirm Password: </p>
-  //       <input className={styles.textField} type="password" name="new_password_confirm" required />
-  //       <input className={styles.button} type="submit" />
-  //     </form>
-  //   </div>
-  // );
-}
+};
+
+export default ChangePass;
