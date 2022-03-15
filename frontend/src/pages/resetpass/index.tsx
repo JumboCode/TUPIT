@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthBox from '../../components/authbox';
+import AuthBox from "@/components/authbox";
 
 const ExportResetPassword = () => {
   const callback = (e) => {
