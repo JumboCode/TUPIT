@@ -21,7 +21,7 @@ export default function SearchClass() {
     async function getClasses() {
       let url = 'http://127.0.0.1:8000/api/course/';
       const query = `?cohort=${courseTitleInitVal}`;
-      url = courseTitleInitVal === '' && courseTitleInitVal != undefined ? url : url + query;
+      url = !courseTitleInit ? url : url + query;
 
       const res = await fetch(url, {
         method: 'GET',
