@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import AuthBox from '../../components/authbox';
-import { useAuth } from '../../components/auth';
+import { useAuth } from "@/components/auth";
+import AuthBox from "@/components/authbox";
 import styles from './index.module.scss';
 
 export default function LoginForm() {
@@ -49,23 +49,4 @@ export default function LoginForm() {
      content={content}
      navigate={'Next'}/>
   ); 
-
-  
-  // return (
-  //   <div className={styles.container}>
-  //     <h1>Welcome to TUPIT!</h1>
-  //     <form className={styles.box} className={styles.loginForm} onSubmit={doLogin}>
-  //       <p>Username: </p>
-  //       <input className={styles.textField} type="text" name="username" />
-  //       <p>Password: </p>
-  //       <input className={styles.textField} type="password" name="password" />
-  //       <div className={styles.submitContainer}>
-  //         <a className={styles.reset} onClick={resetPass}>
-  //           Forgot your password?{' '}
-  //         </a>
-  //         <input className={styles.submit} type="submit" value="Login" />
-  //       </div>
-  //     </form>
-  //   </div>
-  // );
 }
