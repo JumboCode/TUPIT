@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
+import { useAuth } from "@/components/auth";
+import AuthBox from '@/components/authbox';
 import styles from './index.module.scss';
-import AuthBox from '../../components/authbox';
 
 const ChangePass = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
