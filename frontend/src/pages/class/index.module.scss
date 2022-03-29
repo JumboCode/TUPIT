@@ -75,6 +75,17 @@
   width: 250px;
 }
 
+.select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: white;
+  color: #4c8fa5;
+  padding: 8px 12px;
+  font-size: 24px;
+  border-radius: 8px;
+  border: none;
+}
+
 .button {
   display: flex;
   justify-content: center;
@@ -135,20 +146,20 @@
   outline: 2px solid #4c8fa5;
 }
 
-.studentName {
+.courseTitle {
   font-size: 24px;
   font-weight: bold;
 }
 
-.studentInfo {
+.courseInfo {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 32px;
   row-gap: 8px;
 }
 
-@media (max-width: 550px) {
-  .studentInfo {
+@media (max-width: 950px) {
+  .courseInfo {
     grid-template-columns: 1fr 1fr;
   }
 }

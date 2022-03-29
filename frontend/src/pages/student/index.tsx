@@ -94,17 +94,19 @@ export default function SearchStudents() {
             <div className={styles.label}>DOC Number</div>
             <input type="text" ref={docNum} />
             <div className={styles.label}>Cohort</div>
-            <input type="number" ref={cohort} min={0} />
+            <input type="number" ref={cohort} min={0} onWheel={(e) => e.currentTarget.blur()} />
           </div>
           <input className={styles.button} type="submit" value="Search" />
         </form>
-        <div className={styles.results}>
-          {results &&
-            (results.length > 0 ? (
-              results.map(studentResult)
-            ) : (
-              <div className={styles.noResults}>No results found</div>
-            ))}
+        <div className={styles.resultsContainer}>
+          <div className={styles.results}>
+            {results &&
+              (results.length > 0 ? (
+                results.map(studentResult)
+              ) : (
+                <div className={styles.noResults}>No results found</div>
+              ))}
+          </div>
           <div className={styles.button} onClick={() => router.push('/student/add')}>
             +
           </div>

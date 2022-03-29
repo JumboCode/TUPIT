@@ -1,1 +1,12 @@
 @use './reset';
+
+:root {
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+}
+
+html,
+body {
+  min-height: 100%;
+  width: 100%;
+}
