@@ -28,6 +28,7 @@ export default function addDegree() {
             degree_name: t.degree_name.value,
             active: t.active.checked,
             reqs: reqState.map((req) => `http://127.0.0.1:8000/api/course/${req.id}/`),
+            is_tufts: t.is_tufts.checked,
             additional_info: t.additional_info.value,
           },
         },
@@ -89,6 +90,13 @@ export default function addDegree() {
           <label className={styles.checkbox}>
             Active
             <input type="checkbox" name="active" />
+          </label>
+        </div>
+
+        <div className={styles.row}>
+          <label className={styles.checkbox}>
+            Is a Tufts Degree
+            <input name="is_tufts" type="checkbox" />
           </label>
         </div>
 
