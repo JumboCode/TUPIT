@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Website for TUPIT",
   "scripts": {
-    "dev": "next",
+    "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start",
     "prepare": "cd .. && husky install frontend/.husky"
