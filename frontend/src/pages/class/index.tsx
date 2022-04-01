@@ -20,7 +20,7 @@ export default function SearchClass() {
   useEffect(() => {
     async function getClasses() {
       let url = 'http://127.0.0.1:8000/api/course/';
-      const query = `?cohort=${courseTitleInitVal}`;
+      const query = `?course_title__icontains=${courseTitleInitVal}`;
       url = !courseTitleInit ? url : url + query;
 
       const res = await fetch(url, {
@@ -61,7 +61,7 @@ export default function SearchClass() {
     getClasses();
     getDepartmentData();
 
-    courseTitle.current.value = courseTitleInitVal;
+    courseTitle.current.value = courseTitleInitVal ? courseTitleInitVal : '';
   }, [courseTitleInitVal]);
 
   async function onSearch(e) {
