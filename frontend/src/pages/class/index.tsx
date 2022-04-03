@@ -92,16 +92,22 @@ export default function SearchClass() {
   return (
     <div className={styles.windowContainer}>
       <div className={styles.pageTitle}>Search class</div>
-      <div className={styles.window}>
-        <form onSubmit={onSearch} className={styles.filterContainer}>
-          <div className={styles.filterFields}>
-            <div className={styles.label}>Course Title</div>
+      <form onSubmit={onSearch} className={styles.filterContainer}>
+        <div className={styles.filterFields}>
+          <div className={styles.formRow}>
+            <div className={styles.label}>Course Title:&nbsp;</div>
             <input type="text" ref={courseTitle} />
-            <div className={styles.label}>Tufts Course Number</div>
+          </div>
+          <div className={styles.formRow}>
+            <div className={styles.label}>Tufts Course Number:&nbsp;</div>
             <input type="text" ref={tuftsCourseNum} />
-            <div className={styles.label}>Bunker Course Number</div>
+          </div>
+          <div className={styles.formRow}>
+            <div className={styles.label}>Bunker Course Number:&nbsp;</div>
             <input type="text" ref={bunkerCourseNum} />
-            <div className={styles.label}>Department</div>
+          </div>
+          <div className={styles.formRow}>
+            <div className={styles.label}>Department:&nbsp;</div>
             <select name="department" className={styles.select} ref={department}>
               <option></option>
               {depOpts.map((dep) => (
@@ -111,22 +117,11 @@ export default function SearchClass() {
               ))}
             </select>
           </div>
-          <input className={styles.button} type="submit" value="Search" />
-        </form>
-        <div className={styles.resultsContainer}>
-          <div className={styles.results}>
-            {results &&
-              (results.length > 0 ? (
-                results.map(classResult)
-              ) : (
-                <div className={styles.noResults}>No results found</div>
-              ))}
-          </div>
-          <div className={styles.button} onClick={() => router.push('/class/add')}>
-            +
-          </div>
         </div>
-      </div>
+        <div className={styles.buttons}>
+          <input className={styles.button} type="submit" value="Search" />
+        </div>
+      </form>
     </div>
   );
 }

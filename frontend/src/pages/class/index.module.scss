@@ -29,32 +29,37 @@
   display: flex;
   flex-direction: column;
   padding: 24px;
-  background: #9ec8d6;
-  border-radius: 48px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   row-gap: 16px;
 }
 
 .filterContainer {
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
   row-gap: 16px;
+  width: 60%;
 }
 
 .label {
-  color: white;
+  color: black;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 400;
   text-align: right;
+  display: table-cell;
+  padding: 10px 10px;
+  width: 40%;
 }
 
 .filterFields {
-  display: grid;
+  display: table;
   grid-template-columns: 0.7fr 1fr 0.7fr 1fr;
   align-items: center;
-  column-gap: 8px;
-  row-gap: 8px;
+  row-gap: 20px;
+}
+
+.formRow {
+  display: table-row;
+  padding: 5px 0px;
+  padding-bottom: 100px;
 }
 
 @media (max-width: 800px) {
@@ -77,9 +82,11 @@
   color: #4c8fa5;
   background: white;
   padding: 8px 12px;
-  border-radius: 8px;
   font-size: 24px;
-  width: 250px;
+  width: 100%;
+  border: 20px solid #0f81a5;
+  border-radius: 5px;
+  display: table-cell;
 }
 
 .select {
@@ -89,25 +96,29 @@
   color: #4c8fa5;
   padding: 8px 12px;
   font-size: 24px;
-  border-radius: 8px;
-  border: none;
+  border-radius: 5px;
+  border: 1px solid #0f81a5;
+  display: table-cell;
+}
+
+.buttons {
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .button {
-  display: flex;
-  justify-content: center;
   border: none;
   background: #4c8fa5;
-  border-radius: 24px;
+  border-radius: 3px;
   color: white;
   font-size: 24px;
-  font-weight: bold;
-  padding: 8px 12px;
   cursor: pointer;
   user-select: none;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-  margin: 0;
+  width: 60%;
 }
 
 .button:hover {
@@ -128,7 +139,7 @@
 .results {
   display: flex;
   flex-direction: column;
-  row-gap: 12px;
+  row-gap: 20px;
   max-height: 500px;
   overflow-y: scroll;
 }
