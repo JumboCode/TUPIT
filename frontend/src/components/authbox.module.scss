@@ -18,65 +18,19 @@
   padding: 40px;
 }
 
-.wrapper h3 {
-  color: $black;
-  font-size: 26px;
-  font-weight: 100;
+@media (max-width: 850px) {
+  .box {
+    width: 60%;
+  }
 }
 
-.wrapper form {
-  display: flex;
-  flex-direction: column;
+@media (max-width: 600px) {
+  .box {
+    width: 80%;
+  }
 }
 
-.wrapper form button {
-  align-self: end;
-  color: white;
-  cursor: pointer;
-  background-color: $dark-blue;
-  border-radius: 3px;
-  padding: 10px 20px;
-}
-
-/* 
- * TODO - Put new styling into global css
- */
-.wrapper input {
-  font-size: 30px;
-  border-radius: 3px;
-  height: 55px;
-  width: 100%;
-}
-
-.wrapper input[type='text'] {
-  color: #ababab;
-  border-bottom: 3px solid $place-holder-text;
-  margin: 20px 0;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 26px;
-}
-
-.wrapper input[type='text']::placeholder {
-  color: #cdcdcd;
-}
-
-.wrapper input[type='password'] {
-  color: #ababab;
-  border-bottom: 3px solid $place-holder-text;
-  margin: 20px 0;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 26px;
-}
-
-.wrapper input[type='password']::placeholder {
-  color: #cdcdcd;
-}
-
-@media (max-width: 800px) {
+@media (max-width: 450px) {
   .box {
     width: 100%;
   }

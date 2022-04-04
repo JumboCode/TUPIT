@@ -16,6 +16,7 @@ const LoginForm = () => {
   } = useForm();
 
   const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     if (isLoggedIn) router.push('/');
   }, [isLoggedIn]);
@@ -43,7 +44,7 @@ const LoginForm = () => {
   return (
     <AuthBox>
       <h3>Login</h3>
-      <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
         <input
           type="text"
           placeholder="Enter your username"
