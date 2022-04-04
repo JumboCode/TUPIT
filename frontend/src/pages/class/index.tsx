@@ -96,15 +96,15 @@ export default function SearchClass() {
         <div className={styles.filterFields}>
           <div className={styles.formRow}>
             <div className={styles.label}>Course Title:&nbsp;</div>
-            <input type="text" ref={courseTitle} />
+            <input type="text" className={styles.filterFieldInput} ref={courseTitle} />
           </div>
           <div className={styles.formRow}>
             <div className={styles.label}>Tufts Course Number:&nbsp;</div>
-            <input type="text" ref={tuftsCourseNum} />
+            <input type="text" className={styles.filterFieldInput} ref={tuftsCourseNum} />
           </div>
           <div className={styles.formRow}>
             <div className={styles.label}>Bunker Course Number:&nbsp;</div>
-            <input type="text" ref={bunkerCourseNum} />
+            <input type="text" className={styles.filterFieldInput} ref={bunkerCourseNum} />
           </div>
           <div className={styles.formRow}>
             <div className={styles.label}>Department:&nbsp;</div>
@@ -120,6 +120,7 @@ export default function SearchClass() {
         </div>
         <div className={styles.buttons}>
           <input className={styles.button} type="submit" value="Search" />
+          <button className={styles.button}>Clear</button>
         </div>
       </form>
     </div>
