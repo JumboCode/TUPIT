@@ -22,10 +22,10 @@
 .loginForm {
   display: flex;
   flex-direction: column;
-
-  background: #9ec8d6;
-  border-radius: 49px;
+  background: white;
+  border: #aed6e2 2px solid;
   padding: 40px;
+  color: black;
 }
 
 .submitContainer > .reset {
@@ -63,6 +63,32 @@
   font-size: 30px;
   padding: 20px 40px;
   cursor: pointer;
+}
+
+.forgotPasswordContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  .showPasswordText {
+    margin-top: 2px;
+    margin-left: 5px;
+  }
+}
+
+.passwordContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .forgotPassword {
+    padding: 10px 0;
+  }
+}
+
+#checkBox {
+  height: 24px;
+  width: 24px;
 }
 
 @media (max-width: 800px) {
