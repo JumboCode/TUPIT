@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createRef } from 'react';
+import React, { useEffect, useState, createRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../components/auth';
 import { CourseProgressModifier } from '../../components/Modifiers/CourseProgressModifier';
@@ -48,6 +48,8 @@ export default function ViewStudent() {
   const compBar = createRef<HTMLDivElement>();
   const inProgBar = createRef<HTMLDivElement>();
 
+  const [isEditable, setIsEditable] = useState(false);
+
   useEffect(() => {
     if (id) {
       fetchStudentInfo();
@@ -56,10 +58,10 @@ export default function ViewStudent() {
   }, [id]);
 
   useEffect(() => {
-    compBar.current.style.width = barWidth.comp.width + '%';
-    compBar.current.innerText = 'Completed: ' + barWidth.comp.num;
-    inProgBar.current.style.width = barWidth.prog.width + '%';
-    inProgBar.current.innerText = 'In Progress: ' + barWidth.prog.num;
+    if (compBar.current) compBar.current.style.width = barWidth.comp.width + '%';
+    if (compBar.current) compBar.current.innerText = 'Completed: ' + barWidth.comp.num;
+    if (inProgBar.current) inProgBar.current.style.width = barWidth.prog.width + '%';
+    if (inProgBar.current) inProgBar.current.innerText = 'In Progress: ' + barWidth.prog.num;
   }, [barWidth]);
 
   async function fetchStudentInfo() {
@@ -235,9 +237,103 @@ export default function ViewStudent() {
     </div>
   );
 
+  const renderCourses = useCallback(
+    (courses) =>
+      courses.map((course) => (
+        <div
+          key={course.id}
+          className={styles.courseEntry}
+          onClick={() => {
+            setEditCourseId(course.id);
+            setEditCourseTitle(course.course_title);
+            setShowCourseModifier(true);
+          }}
+        >
+          <div className={styles.courseLeftInfo}>
+            <div className={styles.courseTitle}>{course.course_title}</div>
+            <div>{course.attributes.year_taken}</div>
+          </div>
+
+          <div className={styles.grade}>
+            <div>Grade:</div>
+            <div>{course.attributes.grade ? course.attributes.grade : 'N/A'}</div>
+          </div>
+        </div>
+      )),
+    []
+  );
+
+  if (!studentData) {
+    return null;
+  }
+
   return (
     <div className={styles.container}>
-      <div className={styles.col}>
+      <div className={styles.name}>
+        {studentData.attributes.firstname} {studentData.attributes.lastname} Progress
+      </div>
+      <div className={styles.columnContainer}>
+        <div className={styles.leftColumn}>
+          <div className={styles.sectionHeader}>Profile</div>
+          <div className={styles.profileInfo}>
+            <div className={styles.profile}>
+              <p className={styles.profileTitle}>Birthday:</p>
+              <p>{studentData.attributes.birthday}</p>
+              <p className={styles.profileTitle}>DOC Number:</p>
+              <p>{studentData.attributes.doc_num}</p>
+              <p className={styles.profileTitle}>Tufts Number:</p>
+              <p>{studentData.attributes.tufts_num}</p>
+              <p className={styles.profileTitle}>BHCC Number:</p>
+              <p>{studentData.attributes.bhcc_num}</p>
+              <p className={styles.profileTitle}>Parole Status:</p>
+              <p>{studentData.attributes.parole_status}</p>
+              <p className={styles.profileTitle}>Student Status:</p>
+              <p>{studentData.attributes.student_status}</p>
+              <p className={styles.profileTitle}>Years Given:</p>
+              <p>{studentData.attributes.years_given}</p>
+              <p className={styles.profileTitle}>Years Left:</p>
+              <p>{studentData.attributes.years_left}</p>
+            </div>
+          </div>
+          <div className={styles.sectionHeader}>Progress</div>
+          <div className={styles.progressContainer}>
+            <p className={styles.progressTitle}>Bunker Hill:</p>
+            <p className={styles.progressTitle}>Tufts:</p>
+          </div>
+        </div>
+
+        <div className={styles.rightColumn}>
+          <div className={styles.sectionHeader}>Completed</div>
+          <div className={styles.completedContainer}>
+            <div className={styles.courseEntries}>
+              {renderCourses(courseProg.filter((course) => !course.attributes.in_progress))}
+            </div>
+          </div>
+
+          <div className={styles.sectionHeader}>Not completed</div>
+          <div className={styles.notCompletedContainer}>
+            <div className={styles.courseEntries}>
+              {/* {renderCourses(courseProg.filter((course) => course.attributes.in_progress))} */}
+            </div>
+          </div>
+          <div className={styles.sectionHeader}>In progress</div>
+          <div className={styles.inProgressContainer}>
+            <div className={styles.courseEntries}>
+              {renderCourses(courseProg.filter((course) => course.attributes.in_progress))}
+            </div>
+          </div>
+          <button
+            className={styles.button}
+            onClick={() => {
+              setShowCourseCreator(true);
+            }}
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      {/* <div className={styles.col}>
         {studentData ? (
           <form className={styles.studentInfo} onSubmit={putStudentInfo}>
             <div className={styles.row}>
@@ -414,7 +510,7 @@ export default function ViewStudent() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
       <CourseProgressModifier
         show={showCourseModifier}
         id={editCourseId}
