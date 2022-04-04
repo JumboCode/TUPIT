@@ -49,7 +49,8 @@ export default function AddStudent() {
         res.json().then((data) => router.push(`/student/${data.data.id}`));
       } else {
         alert('Error creating student');
-        res.json().then(console.log);
+        console.log(res);
+        res.json().then((resp) => console.log(resp));
       }
   }
 
