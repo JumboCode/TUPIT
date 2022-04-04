@@ -12,9 +12,9 @@ const AuthBox = (props: AuthBoxInterface) => {
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        <div className={styles.wrapper}>
-          {props.children}
-        </div>
+        {/* <div className={styles.wrapper}> */}
+        {props.children}
+        {/* </div> */}
       </div>
     </div>
   );
