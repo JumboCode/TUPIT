@@ -1,34 +1,80 @@
 import React, { useEffect, useState, createRef } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useAuth } from "@/components/auth";
 import styles from './index.module.scss';
 
 const SearchClass = () => {
+  const [subject, setSubject] = useState([]);
+  const { register, handleSubmit } = useForm();
+
+  /*
+   * Fetch all available courses in the database.
+   */
+  useEffect(() => {
+    (async function() {
+      const res = await fetch('http://127.0.0.1:8000/api/course', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      }).catch((err) => {
+        alert('Error connecting to server');
+        console.log(err);
+      });
+
+      if (res && res.ok) {
+        const data = await res.json();
+        const set = new Set();
+        data.data.forEach((entry) => {
+          const department = entry.attributes.department;
+          if (department) {
+            set.add(department);
+          }
+        });
+        setSubject(Array.from(set));
+      }
+    })();
+  }, []);
+
+  /*
+   * @todo Handle data submission
+   */
+  const onSubmitSuccess = (data) => {
+
+  };
+
+  /*
+   * @todo What does institution mean in terms of our backend
+   */
   return (
     <div className={styles.container}>
       <div className={styles.searchClassHeader}>
         <h3>Search Class</h3>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmitSuccess)}>
         <div className={styles.filterContainer}>
-          <label>Institution:</label>
-          <input type='text'/>
-          <label>Term:</label>
-          <input type='text'/>
+          <label htmlFor='institution'>Institution:</label>
+          <select id='institution' {...register('institution')}>
+            <option value='' selected></option>
+            <option value='Tufts'>Tufts</option>
+            <option value='BHCC'>BHCC</option>
+          </select>
         </div>
         <div className={styles.precautionText}>
           <p>We recommend you select at least one of the following:</p>
         </div>
         <div className={styles.filterContainer}>
-          <label>Subject:</label>
-          <input type='text'/>
-          <label>Attributes:</label>
-          <input type='text'/>
-          <label>Keywords:</label>
-          <input type='text'/>
+          <label htmlFor='subject'>Subject:</label>
+          <select id='subject' {...register('subject')}>
+            <option value='' selected></option>
+            {subject.map((x) => <option value={x} key={x}>{x}</option>)}
+          </select>
+          <label htmlFor='keyword'>Keywords:</label>
+          <input id='keyword' type='text' {...register('keyword')}/>
           <label>Instructor:</label>
           <input type='text'/>
-
           <div></div>
           <div className={styles.button}>
             <input type='submit' value='Search'/>
