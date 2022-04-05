@@ -1,11 +1,12 @@
 @import '../../styles/global/colors.scss';
 
 .container {
+  color: $form-text;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 56px 0 8rem;
+  margin: 56px 0;
   padding: 0 4rem;
   width: 100%;
 
@@ -15,6 +16,7 @@
     color: $black;
     text-align: left;
     width: 100%;
+    margin-bottom: 3rem;
   }
 
   .filterContainer {
@@ -30,12 +32,19 @@
       text-align: right;
     }
     
-    input {
-      background: #ffffff;
+    select {
+      cursor: pointer;
+    }
+
+    select, input {
+      background: $white;
       border: 1px solid $dark-blue;
       box-sizing: border-box;
       border-radius: 5px;
+      color: $sea-text;
+      font-size: 20px;
       height: 55px;
+      padding-left: 1rem;
     }
   }
 
@@ -49,8 +58,35 @@
   .button {
     display: flex;
     justify-content: space-between;
-    border-radius: 3px;
-    color: $sea-text;
+
+    input {
+      border: none;
+      border-radius: 3px;
+      color: white;
+      height: 2rem;
+      padding: 8px 12px;
+      width: 30%;
+    }
+
+    > :nth-child(1) {
+      background: $sea-text;
+    }
+
+    > :nth-child(2) {
+      background: $gold;
+    }
+
+    @media (max-width: 780px) {
+      input {
+        width: 35%;
+      }
+    }
+
+    @media (max-width: 650px) {
+      input {
+        width: 45%;
+      }
+    }
   }
 }
 // .filterContainer input[type='number'] {
