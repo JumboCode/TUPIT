@@ -29,6 +29,7 @@ export default function AddStudent() {
             doc_num: t.doc_num.value,
             tufts_num: t.tufts_num.value,
             bhcc_num: t.bhcc_num.value,
+            ssn: t.ssn.value,
             cohort: parseInt(t.cohort.value),
             parole_status: t.parole_status.value,
             student_status: t.student_status.value,
@@ -89,6 +90,11 @@ export default function AddStudent() {
         <div className={styles.row}>
           <p>BHCC Number</p>
           <input name="bhcc_num" type="text" maxLength={32} />
+        </div>
+
+        <div className={styles.row}>
+          <p>SSN (last 4 digits)</p>
+          <input name="ssn" type="text" maxLength={4} minLength={4} required />
         </div>
 
         <div className={styles.row}>
