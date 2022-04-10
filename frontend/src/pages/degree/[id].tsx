@@ -91,6 +91,7 @@ export default function ViewDegree() {
             degree_name: t.degree_name.value,
             active: t.active.checked,
             reqs: reqState.map((req) => `http://127.0.0.1:8000/api/course/${req.id}/`),
+            is_tufts: t.is_tufts.checked,
             additional_info: t.additional_info.value,
           },
         },
@@ -167,6 +168,17 @@ export default function ViewDegree() {
             <label className={styles.checkbox}>
               Active
               <input name="active" type="checkbox" defaultChecked={degreeData.attributes.active} />
+            </label>
+          </div>
+
+          <div className={styles.row}>
+            <label className={styles.checkbox}>
+              Is a Tufts Degree
+              <input
+                name="is_tufts"
+                type="checkbox"
+                defaultChecked={degreeData.attributes.is_tufts}
+              />
             </label>
           </div>
 
