@@ -84,14 +84,6 @@
       width: 30%;
     }
 
-    > :nth-child(1) {
-      background: $sea-text;
-    }
-
-    // > :nth-child(2) {
-    //   background: $gold;
-    // }
-
     @media (max-width: 780px) {
       input {
         width: 35%;
