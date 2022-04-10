@@ -51,7 +51,7 @@ class Student(Model):
     bhcc_num = CharField(
         max_length=32, blank=True)  # validate this number
     ssn = CharField(max_length=4, validators=[
-                                 MinLengthValidator(7)], default=ssn_default)
+                                 MinLengthValidator(4)], default=ssn_default, blank=True)
     parole_status = TextField(max_length=256, blank=True)
     student_status = TextField(max_length=256, blank=True)
     additional_info = TextField(max_length=512, blank=True)
