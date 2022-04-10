@@ -1,10 +1,6 @@
 @import '../../styles/global/colors.scss';
 
-.h3 {
-  color: $black;
-  font-size: 26px;
-  font-weight: 100;
-}
+@import '../../styles/global/colors.scss';
 
 .form {
   display: flex;
@@ -28,34 +24,23 @@
     line-height: 26px;
   }
 
-  .passwordContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-
-    .showPasswordText {
-      margin-top: 2px;
-      margin-left: 5px;
-    }
-  }
-
-  .forgotPasswordContainer {
+  .resetPasswordContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
-    .forgotPassword {
-      cursor: pointer;
-      padding: 10px 0;
-    }
-
-    .forgotPassword:hover {
-      text-decoration: underline;
+    h3 {
+      color: $black;
+      padding-right: 15px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
     }
 
     button {
       text-align: center;
       align-self: center;
+      min-width: 80px;
       color: white;
       cursor: pointer;
       background-color: $dark-blue;
@@ -64,9 +49,4 @@
       flex-basis: 25%;
     }
   }
-}
-
-#checkBox {
-  height: 24px;
-  width: 24px;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from "@/components/auth";
+import { useAuth } from '@/components/auth';
 import styles from './index.module.scss';
 
 const SearchClass = () => {
@@ -12,32 +12,32 @@ const SearchClass = () => {
       <form>
         <div className={styles.filterContainer}>
           <label>Institution:</label>
-          <input type='text'/>
+          <input type="text" />
           <label>Term:</label>
-          <input type='text'/>
+          <input type="text" />
         </div>
         <div className={styles.precautionText}>
           <p>We recommend you select at least one of the following:</p>
         </div>
         <div className={styles.filterContainer}>
           <label>Subject:</label>
-          <input type='text'/>
+          <input type="text" />
           <label>Attributes:</label>
-          <input type='text'/>
+          <input type="text" />
           <label>Keywords:</label>
-          <input type='text'/>
+          <input type="text" />
           <label>Instructor:</label>
-          <input type='text'/>
-
-          <div></div>
-          <div className={styles.button}>
-            <input type='submit' value='Search'/>
-            <input type='reset' value='Reset'/>
+          <input type="text" />
+        </div>
+        <div className={styles.filterContainer}>
+          <div className={styles.buttonContainer}>
+            <input className={styles.button} type="submit" value="Search" />
+            <input className={styles.button} type="reset" value="Reset" />
           </div>
         </div>
       </form>
     </div>
-  )
+  );
 };
 
 export default SearchClass;

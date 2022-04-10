@@ -29,7 +29,7 @@
     label {
       text-align: right;
     }
-    
+
     input {
       background: #ffffff;
       border: 1px solid $dark-blue;
@@ -46,11 +46,24 @@
     margin: 5rem 0 3rem;
   }
 
-  .button {
+  .buttonContainer {
     display: flex;
-    justify-content: space-between;
-    border-radius: 3px;
-    color: $sea-text;
+    align-content: center;
+    justify-content: center;
+    column-gap: 5rem;
+    grid-column-start: 2;
+    margin: 20px;
+
+    .button {
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+      background-color: $dark-blue;
+      border-radius: 3px;
+      border: none;
+      padding: 5px;
+      min-width: 100px;
+    }
   }
 }
 // .filterContainer input[type='number'] {
