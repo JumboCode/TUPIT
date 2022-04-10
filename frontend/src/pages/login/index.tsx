@@ -67,7 +67,7 @@ const LoginForm = () => {
           })}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <label className={styles.forgotPasswordContainer}>
+        <label className={styles.passwordContainer}>
           <input
             type="checkbox"
             id={styles.checkBox}
@@ -76,7 +76,7 @@ const LoginForm = () => {
           />
           <div className={styles.showPasswordText}>Show Password</div>
         </label>
-        <div className={styles.passwordContainer}>
+        <div className={styles.forgotPasswordContainer}>
           <a className={styles.forgotPassword} onClick={resetPass}>
             Forgot your password?{' '}
           </a>
