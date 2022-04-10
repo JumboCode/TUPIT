@@ -1,11 +1,12 @@
 @import '../../styles/global/colors.scss';
 
 .container {
+  color: $form-text;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 56px 0 8rem;
+  margin: 56px 0;
   padding: 0 4rem;
   width: 100%;
 
@@ -15,6 +16,7 @@
     color: $black;
     text-align: left;
     width: 100%;
+    margin-bottom: 3rem;
   }
 
   .filterContainer {
@@ -30,12 +32,20 @@
       text-align: right;
     }
 
+    select {
+      cursor: pointer;
+    }
+
+    select,
     input {
-      background: #ffffff;
+      background: $white;
       border: 1px solid $dark-blue;
       box-sizing: border-box;
       border-radius: 5px;
+      color: $sea-text;
+      font-size: 20px;
       height: 55px;
+      padding-left: 1rem;
     }
   }
 
@@ -63,171 +73,35 @@
       border: none;
       padding: 5px;
       min-width: 100px;
+      justify-content: space-between;
+    }
+    input {
+      border: none;
+      border-radius: 3px;
+      color: white;
+      height: 2rem;
+      padding: 8px 12px;
+      width: 30%;
+    }
+
+    > :nth-child(1) {
+      background: $sea-text;
+    }
+
+    // > :nth-child(2) {
+    //   background: $gold;
+    // }
+
+    @media (max-width: 780px) {
+      input {
+        width: 35%;
+      }
+    }
+
+    @media (max-width: 650px) {
+      input {
+        width: 45%;
+      }
     }
   }
 }
-// .filterContainer input[type='number'] {
-//   border: none;
-// }
-// .filterContainer input[type='number']:focus {
-//   outline: none;
-// }
-
-// .windowContainer {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
-//   padding: 40px;
-//   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-//     'Open Sans', 'Helvetica Neue', sans-serif;
-//   color: #4c8fa5;
-// }
-
-// .window {
-//   display: flex;
-//   flex-direction: column;
-//   padding: 24px;
-//   background: #9ec8d6;
-//   border-radius: 48px;
-//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-//   row-gap: 16px;
-// }
-
-// .filterContainer {
-//   border-radius: 8px;
-//   display: flex;
-//   flex-direction: column;
-//   row-gap: 16px;
-// }
-
-// .label {
-//   color: white;
-//   font-size: 24px;
-//   font-weight: bold;
-//   text-align: right;
-// }
-
-// .filterFields {
-//   display: grid;
-//   grid-template-columns: 0.7fr 1fr 0.7fr 1fr;
-//   align-items: center;
-//   column-gap: 8px;
-//   row-gap: 8px;
-// }
-
-// @media (max-width: 800px) {
-//   .filterFields {
-//     grid-template-columns: 0.7fr 1fr;
-//   }
-// }
-
-// @media (max-width: 550px) {
-//   .filterFields {
-//     grid-template-columns: 1fr;
-//   }
-
-//   .label {
-//     text-align: left;
-//   }
-// }
-
-// .filterFields > input {
-//   color: #4c8fa5;
-//   background: white;
-//   padding: 8px 12px;
-//   border-radius: 8px;
-//   font-size: 24px;
-//   width: 250px;
-// }
-
-// .select {
-//   -webkit-appearance: none;
-//   -moz-appearance: none;
-//   background: white;
-//   color: #4c8fa5;
-//   padding: 8px 12px;
-//   font-size: 24px;
-//   border-radius: 8px;
-//   border: none;
-// }
-
-// .button {
-//   display: flex;
-//   justify-content: center;
-//   border: none;
-//   background: #4c8fa5;
-//   border-radius: 24px;
-//   color: white;
-//   font-size: 24px;
-//   font-weight: bold;
-//   padding: 8px 12px;
-//   cursor: pointer;
-//   user-select: none;
-//   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-//   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-//   margin: 0;
-// }
-
-// .button:hover {
-//   background: #3b7d9a;
-// }
-
-// .button:active {
-//   transform: translateY(2px);
-// }
-
-// .resultsContainer {
-//   padding: 12px;
-//   background: white;
-//   border-radius: 24px;
-//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-// }
-
-// .results {
-//   display: flex;
-//   flex-direction: column;
-//   row-gap: 12px;
-//   max-height: 500px;
-//   overflow-y: scroll;
-// }
-
-// .result {
-//   display: flex;
-//   flex-direction: column;
-//   cursor: pointer;
-//   margin: 2px;
-// }
-
-// .noResults {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 12px;
-//   font-size: 24px;
-//   font-weight: bold;
-// }
-
-// .result:hover {
-//   outline: 2px solid #4c8fa5;
-// }
-
-// .courseTitle {
-//   font-size: 24px;
-//   font-weight: bold;
-// }
-
-// .courseInfo {
-//   display: grid;
-//   grid-template-columns: 1fr 1fr 1fr 1fr;
-//   column-gap: 32px;
-//   row-gap: 8px;
-// }
-
-// @media (max-width: 950px) {
-//   .courseInfo {
-//     grid-template-columns: 1fr 1fr;
-//   }
-// }
