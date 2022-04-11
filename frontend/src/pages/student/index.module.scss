@@ -1,197 +1,137 @@
-.filterContainer input[type='number'] {
-  border: none;
-}
-.filterContainer input[type='number']:focus {
-  outline: none;
-}
+@import '../../styles/global/colors.scss';
 
 .windowContainer {
+  color: $form-text;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 40px;
-  // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-  //   'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #1a2737;
+  padding: 4rem;
+  color: $form-text;
 
-  .studentProgress {
-    font-style: normal;
-    font-weight: normal;
+  .studentProgressHeader {
+    color: $black;
     font-size: 36px;
+    font-weight: 400;
     line-height: 47px;
-
-    color: #000000;
     text-align: left;
+    margin-bottom: 1rem;
     width: 100%;
   }
-}
 
-.window {
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  row-gap: 16px;
-  width: 100%;
-}
-
-.filterAndResults {
-  display: flex;
-  flex-direction: row;
-}
-
-.filterContainer {
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
-}
-
-.label {
-  font-size: 24px;
-  text-align: right;
-  margin-right: 10px;
-}
-
-.filterFields {
-  display: grid;
-  grid-template-columns: 0.7fr 1fr;
-  align-items: center;
-  column-gap: 8px;
-  row-gap: 8px;
-
-  .input {
-    background: #ffffff;
-    border: 1px solid #2094b9;
-    box-sizing: border-box;
-    border-radius: 5px;
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    row-gap: 2rem;
   }
-}
 
-@media (max-width: 800px) {
-  .filterFields {
+  .column:nth-of-type(1) {
+    flex: 40%;
+    padding-right: 2rem;
+  }
+
+  .column:nth-of-type(2) {
+    flex: 60%;
+  }
+
+  .filterContainer {
+    display: grid;
     grid-template-columns: 0.7fr 1fr;
-  }
-}
-
-@media (max-width: 550px) {
-  .filterFields {
-    grid-template-columns: 1fr;
-  }
-
-  .label {
-    text-align: left;
-  }
-}
-
-.filterFields > input {
-  color: #4c8fa5;
-  background: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 24px;
-  width: 250px;
-}
-
-.buttonDiv {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.button {
-  display: flex;
-  justify-content: center;
-  border: none;
-  background: #4c8fa5;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 8px 12px;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-  margin: 0;
-}
-
-.button:hover {
-  background: #3b7d9a;
-}
-
-.button:active {
-  transform: translateY(2px);
-}
-
-.resultsContainer {
-  flex: 1;
-  flex-grow: 1;
-  padding: 12px;
-  margin-left: 10px;
-  background: #ffffff;
-  border: 1px solid #2094b9;
-  box-sizing: border-box;
-  border-radius: 10px;
-}
-
-.results {
-  display: flex;
-  flex-direction: column;
-  row-gap: 12px;
-  max-height: 500px;
-  overflow-y: scroll;
-
-  .searchResultsHeader {
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 1rem;
     font-size: 28px;
     line-height: 36px;
+
+    input {
+      background: $white;
+      color: $sea-text;
+      border: 1px solid $dark-blue;
+      box-sizing: border-box;
+      border-radius: 5px;
+      font-size: 20px;
+      height: 55px;
+      padding-left: 1rem;
+    }
+
+    label {
+      text-align: right;
+    }
+
+    .button {
+      display: flex;
+      justify-content: space-between;
+
+      input {
+        border: none;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        padding: 8px 12px;
+      }
+
+      > :nth-child(1) {
+        background: $sea-text;
+      }
+
+      > :nth-child(2) {
+        background: $gold;
+      }
+    }
   }
-}
 
-.result {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  margin: 2px;
-}
+  .resultsWrapper {
+    background: $white;
+    border: 1px solid $sea-text;
+    border-radius: 10px;
+    color: $black;
+    height: 100%;
+    row-gap: 1rem;
 
-.noResults {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  font-size: 24px;
-  font-weight: bold;
-}
+    .resultsContainer {
+      padding: 26px 32px;
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      row-gap: 10px;
+      overflow-y: scroll;
 
-.result:hover {
-  outline: 2px solid #4c8fa5;
-}
+      .searchResultsHeader {
+        font-size: 28px;
+      }
 
-.studentName {
-  font-size: 24px;
-  color: #0f80a5;
-}
+      .resultsField {
+        border-radius: 10px;
+        padding: 9px 14px 5px;
+        background-color: $light-blue;
+      }
 
-.columnNames {
-  padding: 5px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  column-gap: 32px;
-  row-gap: 8px;
-}
+      .resultsView {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
 
-.studentInfo {
-  padding: 5px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  column-gap: 32px;
-  row-gap: 8px;
-  background-color: #ecf7fa;
-}
+      button {
+        border-radius: 3px;
+        color: $white;
+        text-align: center;
+        padding: 4px 20px;
+        background-color: $sea-text;
+        cursor: pointer;
+      }
+    }
 
-@media (max-width: 550px) {
-  .studentInfo {
-    grid-template-columns: 1fr 1fr;
+    .noResults {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 12px;
+      font-size: 24px;
+      font-weight: bold;
+    }
   }
 }
