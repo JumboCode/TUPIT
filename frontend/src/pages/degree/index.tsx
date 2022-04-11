@@ -13,7 +13,7 @@ export default function SearchDegrees() {
 
   useEffect(() => {
     async function fetchDegreeData() {
-      const url = 'http://127.0.0.1:8000/api/degree/?sort=-active';
+      const url = 'http://127.0.0.1:8000/api/degree/?sort=is_tufts';
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -51,9 +51,11 @@ export default function SearchDegrees() {
         onClick={() => router.push(`degree/${degree.id}`)}
         key={degree.id}
       >
-        <div className={styles.degreeName}>{degree.attributes.degree_name}</div>
+        <div className={styles.degreeName}>
+          {degree.attributes.degree_name} {degree.attributes.active ? '(SELECTED)' : null}
+        </div>
         <div className={styles.degreeInfo}>
-          <span>{degree.attributes.active ? 'ACTIVE' : null}</span>
+          <span>{degree.attributes.is_tufts ? 'Tufts' : 'BHCC'}</span>
         </div>
       </div>
     );

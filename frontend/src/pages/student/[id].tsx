@@ -28,16 +28,6 @@ export default function ViewStudent() {
   const [studentData, setStudentData] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [courseProg, setCourseProg] = useState([]);
-  const [barWidth, setBarWidth] = useState({
-    comp: {
-      width: 0,
-      num: 0,
-    },
-    prog: {
-      width: 0,
-      num: 0,
-    },
-  });
   const [editCourseId, setEditCourseId] = useState(null);
   const [editCourseTitle, setEditCourseTitle] = useState(null);
   const [showCourseModifier, setShowCourseModifier] = useState(false);
@@ -45,8 +35,11 @@ export default function ViewStudent() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const { id } = router.query;
-  const compBar = createRef<HTMLDivElement>();
-  const inProgBar = createRef<HTMLDivElement>();
+  const [barStatus, setBarStatus] = useState(null);
+  const compBarTufts = createRef<HTMLDivElement>();
+  const inProgBarTufts = createRef<HTMLDivElement>();
+  const compBarBHCC = createRef<HTMLDivElement>();
+  const inProgBarBHCC = createRef<HTMLDivElement>();
 
   useEffect(() => {
     if (id) {
@@ -56,11 +49,13 @@ export default function ViewStudent() {
   }, [id]);
 
   useEffect(() => {
-    compBar.current.style.width = barWidth.comp.width + '%';
-    compBar.current.innerText = 'Completed: ' + barWidth.comp.num;
-    inProgBar.current.style.width = barWidth.prog.width + '%';
-    inProgBar.current.innerText = 'In Progress: ' + barWidth.prog.num;
-  }, [barWidth]);
+    if (barStatus) {
+      compBarTufts.current.style.width = barStatus.tufts.comp.width + '%';
+      inProgBarTufts.current.style.width = barStatus.tufts.prog.width + '%';
+      compBarBHCC.current.style.width = barStatus.bhcc.comp.width + '%';
+      inProgBarBHCC.current.style.width = barStatus.bhcc.prog.width + '%';
+    }
+  }, [barStatus]);
 
   async function fetchStudentInfo() {
     let url = `http://127.0.0.1:8000/api/students/${id}/`;
@@ -133,23 +128,56 @@ export default function ViewStudent() {
 
     if (res && res.ok) {
       const data = await res.json();
-      // set width of progress bar
-      const completed = data.completed.length;
-      const inProg = data.in_progress.length;
-      const total = completed + inProg + data.not_completed.length;
+      let status = {};
 
-      const inProgWidth = (inProg / total) * 100;
-      const compWidth = (completed / total) * 100;
-      setBarWidth({
-        comp: {
-          width: compWidth,
-          num: completed,
-        },
-        prog: {
-          width: inProgWidth,
-          num: inProg,
-        },
-      });
+      if (data.tufts) {
+        let completed = data.tufts.completed.length;
+        let inProg = data.tufts.in_progress.length;
+        let total = completed + inProg + data.tufts.not_completed.length;
+
+        let inProgWidth = (inProg / total) * 100;
+        let compWidth = (completed / total) * 100;
+
+        status = {
+          tufts: {
+            comp: {
+              width: compWidth,
+              num: completed,
+            },
+            prog: {
+              width: inProgWidth,
+              num: inProg,
+            },
+            remaining: data.tufts.not_completed.length,
+          },
+        };
+      }
+
+      if (data.bhcc) {
+        let completed = data.bhcc.completed.length;
+        let inProg = data.bhcc.in_progress.length;
+        let total = completed + inProg + data.bhcc.not_completed.length;
+
+        let inProgWidth = (inProg / total) * 100;
+        let compWidth = (completed / total) * 100;
+
+        status = {
+          ...status,
+          bhcc: {
+            comp: {
+              width: compWidth,
+              num: completed,
+            },
+            prog: {
+              width: inProgWidth,
+              num: inProg,
+            },
+            remaining: data.bhcc.not_completed.length,
+          },
+        };
+      }
+
+      setBarStatus(status);
     }
   }
 
@@ -177,11 +205,13 @@ export default function ViewStudent() {
             doc_num: t.doc_num.value,
             tufts_num: t.tufts_num.value,
             bhcc_num: t.bhcc_num.value,
+            ssn: t.ssn.value,
             cohort: parseInt(t.cohort.value),
             parole_status: t.parole_status.value,
             student_status: t.student_status.value,
             years_given: parseInt(t.years_given.value),
             years_left: parseInt(t.years_left.value),
+            additional_info: t.additional_info.value,
           },
         },
       }),
@@ -231,6 +261,86 @@ export default function ViewStudent() {
       <span>{isExpanded ? '▲' : '▼'}</span>
       <span>{(isExpanded ? 'Hide' : 'Show') + ' details'}</span>
       <span>{isExpanded ? '▲' : '▼'}</span>
+    </div>
+  );
+
+  const progress_report = (
+    <div className={styles.col}>
+      <div className={styles.studentInfo}>
+        <div className={styles.row}>
+          <p>Progress Towards Tufts Degree</p>
+
+          <div className={styles.progBar}>
+            <div className={styles.compBar} ref={compBarTufts} />
+            <div className={styles.inProgBar} ref={inProgBarTufts} />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <p>Completed: {barStatus && barStatus.tufts.comp.num}</p>
+          <p>In Progress: {barStatus && barStatus.tufts.prog.num}</p>
+          <p>Remaining: {barStatus && barStatus.tufts.remaining}</p>
+        </div>
+
+        <div className={styles.row}>
+          <p>Progress Towards BHCC Degree</p>
+
+          <div className={styles.progBar}>
+            <div className={styles.compBar} ref={compBarBHCC} />
+            <div className={styles.inProgBar} ref={inProgBarBHCC} />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <p>Completed: {barStatus && barStatus.bhcc.comp.num}</p>
+          <p>In Progress: {barStatus && barStatus.bhcc.prog.num}</p>
+          <p>Remaining: {barStatus && barStatus.bhcc.remaining}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const course_history = (
+    <div className={styles.col}>
+      <div className={styles.studentInfo}>
+        <div className={styles.row}>
+          <p>Courses</p>
+          <div className={styles.courseEntries}>
+            {courseProg.map((course) => (
+              <div
+                key={course.id}
+                className={styles.courseEntry}
+                onClick={() => {
+                  setEditCourseId(course.id);
+                  setEditCourseTitle(course.course_title);
+                  setShowCourseModifier(true);
+                }}
+              >
+                <div className={styles.courseTitle}>
+                  {course.course_title}
+                  {course.attributes.in_progress ? (
+                    <div className={styles.inProgText}>in progress</div>
+                  ) : null}
+                </div>
+                <div className={styles.courseInfo}>
+                  <div>Grade: {course.attributes.grade}</div>
+                  <div>
+                    {course.attributes.semester_taken} {course.attributes.year_taken}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            className={styles.button}
+            onClick={() => {
+              setShowCourseCreator(true);
+            }}
+          >
+            +
+          </button>
+        </div>
+      </div>
     </div>
   );
 
@@ -300,6 +410,16 @@ export default function ViewStudent() {
               </div>
 
               <div className={styles.row}>
+                <p>SSN (last 4 digits)</p>
+                <input
+                  name="ssn"
+                  type="text"
+                  defaultValue={studentData.attributes.ssn}
+                  maxLength={4}
+                />
+              </div>
+
+              <div className={styles.row}>
                 <p>Parole Status</p>
                 <textarea
                   name="parole_status"
@@ -339,6 +459,15 @@ export default function ViewStudent() {
                 />
               </div>
 
+              <div className={styles.row}>
+                <p>Additional Information</p>
+                <textarea
+                  name="additional_info"
+                  defaultValue={studentData.attributes.additional_info}
+                  maxLength={512}
+                />
+              </div>
+
               {expandButton}
             </div>
 
@@ -355,54 +484,10 @@ export default function ViewStudent() {
         )}
       </div>
 
-      <div className={styles.col}>
-        <div className={styles.studentInfo}>
-          <div className={styles.row}>
-            <p>Progress Towards Degree</p>
+      {progress_report}
 
-            <div className={styles.progBar}>
-              <div className={styles.compBar} ref={compBar} />
-              <div className={styles.inProgBar} ref={inProgBar} />
-            </div>
-          </div>
+      {course_history}
 
-          <div className={styles.row}>
-            <p>Courses</p>
-            <div className={styles.courseEntries}>
-              {courseProg.map((course) => (
-                <div
-                  key={course.id}
-                  className={styles.courseEntry}
-                  onClick={() => {
-                    setEditCourseId(course.id);
-                    setEditCourseTitle(course.course_title);
-                    setShowCourseModifier(true);
-                  }}
-                >
-                  <div className={styles.courseTitle}>
-                    {course.course_title}
-                    {course.attributes.in_progress ? (
-                      <div className={styles.inProgText}>in progress</div>
-                    ) : null}
-                  </div>
-                  <div className={styles.courseInfo}>
-                    <div>Grade: {course.attributes.grade}</div>
-                    <div>{course.attributes.year_taken}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button
-              className={styles.button}
-              onClick={() => {
-                setShowCourseCreator(true);
-              }}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      </div>
       <CourseProgressModifier
         show={showCourseModifier}
         id={editCourseId}

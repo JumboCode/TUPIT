@@ -30,7 +30,7 @@ router.register(r'degree', views.DegreeViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-	  path('', RedirectView.as_view(url='api/')),
+	path('', RedirectView.as_view(url='api/')),
     path('get-csrf-token/', views.GetCSRFToken),
     path('login/', views.LoginUser),
     path('logout/', views.LogoutUser),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('change-password/', views.ChangePassword),
     path('audit-student/', views.AuditStudentProgress),
     path('set-active-degree/', views.SetActiveDegree),
+    path('reset-password/', views.ResetPassword)
 ]
 
 if settings.DEBUG:

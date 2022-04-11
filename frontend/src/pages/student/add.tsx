@@ -29,11 +29,13 @@ export default function AddStudent() {
             doc_num: t.doc_num.value,
             tufts_num: t.tufts_num.value,
             bhcc_num: t.bhcc_num.value,
+            ssn: t.ssn.value,
             cohort: parseInt(t.cohort.value),
             parole_status: t.parole_status.value,
             student_status: t.student_status.value,
             years_given: parseInt(t.years_given.value),
             years_left: parseInt(t.years_left.value),
+            additional_info: t.additional_info.value,
           },
         },
       }),
@@ -91,6 +93,11 @@ export default function AddStudent() {
         </div>
 
         <div className={styles.row}>
+          <p>SSN (last 4 digits)</p>
+          <input name="ssn" type="text" maxLength={4} minLength={4} required />
+        </div>
+
+        <div className={styles.row}>
           <p>Parole Status</p>
           <textarea name="parole_status" maxLength={256} />
         </div>
@@ -108,6 +115,11 @@ export default function AddStudent() {
         <div className={styles.row}>
           <p>Years Left</p>
           <input name="years_left" type="number" min={0} onWheel={(e) => e.currentTarget.blur()} />
+        </div>
+
+        <div className={styles.row}>
+          <p>Additional Information</p>
+          <textarea name="additional_info" maxLength={512} />
         </div>
 
         <input className={styles.button} type="submit" value="Save" />

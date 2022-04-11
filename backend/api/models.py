@@ -20,6 +20,7 @@ class Student(Model):
         Cohort - {self.cohort}
         Years given - {self.years_given}
         Years left - {self.years_left}
+        SSN - {self.ssn}
         '''    
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
         
@@ -36,6 +37,9 @@ class Student(Model):
 
     def tufts_default():
         return "0000000"
+    
+    def ssn_default():
+        return "0000"
 
     firstname = CharField(max_length=32, blank=True)
     lastname = CharField(max_length=32, blank=True)
@@ -46,8 +50,11 @@ class Student(Model):
                                  MinLengthValidator(7)], default=tufts_default)
     bhcc_num = CharField(
         max_length=32, blank=True)  # validate this number
+    ssn = CharField(max_length=4, validators=[
+                                 MinLengthValidator(4)], default=ssn_default, blank=True)
     parole_status = TextField(max_length=256, blank=True)
     student_status = TextField(max_length=256, blank=True)
+    additional_info = TextField(max_length=512, blank=True)
 
     validate_nonnegative = MinValueValidator(0)
     cohort = IntegerField(validators=[validate_nonnegative], null=True)
@@ -55,7 +62,6 @@ class Student(Model):
         validators=[validate_nonnegative], null=True)
     years_left = IntegerField(
         validators=[validate_nonnegative], null=True)
-
 
 class Course(Model):
     # validators and cleaning
@@ -111,6 +117,8 @@ class Course(Model):
         default=empty_array,
     )
 
+    additional_info = TextField(max_length=512, blank=True)
+
     def __str__(self):
 
         model = f'''
@@ -132,10 +140,15 @@ class Degree(Model):
         symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
+    is_tufts = BooleanField(default=False, blank=False, null=False)
+    additional_info = TextField(max_length=512, blank=True)
 
 class CourseProgress(Model):
     def default_true():
         return True
+    
+    def default_semester():
+        return 'Fall'
 
     validate_nonnegative = MinValueValidator(0)
 
@@ -143,7 +156,9 @@ class CourseProgress(Model):
     student = ForeignKey(Student, related_name='courses', blank=False, null=True, on_delete=CASCADE)
     grade = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
     year_taken = IntegerField(validators=[validate_nonnegative], blank=True, null=True)
+    semester_taken = CharField(max_length=32, default=default_semester)
     in_progress = BooleanField(blank=True, default=default_true)
+    additional_info = TextField(max_length=512, blank=True)
 
     def __str__(self):
 

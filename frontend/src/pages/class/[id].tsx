@@ -144,6 +144,7 @@ export default function ViewClass() {
             department: t.department.value,
             instructors: instructorsState,
             prereqs: prereqsState.map((prereq) => `http://127.0.0.1:8000/api/course/${prereq.id}/`),
+            additional_info: t.additional_info.value,
           },
         },
       }),
@@ -272,6 +273,16 @@ export default function ViewClass() {
                 +
               </div>
             </div>
+          </div>
+
+          <div className={styles.row}>
+            <p>Additional Information</p>
+            <textarea
+              name="additional_info"
+              className={styles.additionalInfo}
+              defaultValue={courseData.attributes.additional_info}
+              maxLength={512}
+            />
           </div>
 
           <input className={styles.button} type="submit" value="Save" />
