@@ -39,14 +39,14 @@ export default function LoginForm() {
           name="password"
           placeholder="Enter your password"
         />
-        <div className={styles.showPassword}>
+        <label className={styles.showPassword}>
           <input
             type="checkbox"
             checked={showPassword}
             onClick={() => setShowPassword(!showPassword)}
           />
-          <p className={styles.showPasswordText}>Show Password</p>
-        </div>
+          <>Show Password</>
+        </label>
         <div className={styles.submitContainer}>
           <p className={styles.forgotPasswordText}>Forgot password?</p>
           <input className={styles.btn} type="submit" value="Next" />
