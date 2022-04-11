@@ -1,11 +1,12 @@
 from rest_framework_json_api import serializers
-from api.models import Student, Course, CourseProgress, Degree
+from api.models import *
 
 __all__ = [
     "StudentSerializer", 
     "CourseSerializer", 
     "CourseProgressSerializer",
-    "DegreeSerializer"
+    "DegreeSerializer",
+    "DegreeRequirementSerializer"
 ]
     
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
@@ -27,3 +28,8 @@ class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Degree 
         fields = ('degree_name', 'reqs', 'active', 'is_tufts', 'additional_info')
+
+class DegreeRequirementSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DegreeRequirement
+        fields = ('title', 'fulfilled_by')
