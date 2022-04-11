@@ -1,4 +1,4 @@
-from api.models import Student, Course, CourseProgress, Degree
+from api.models import *
 from api.serializers import *
 from api.filters import *
 
@@ -70,6 +70,10 @@ class DegreeViewSet(viewsets.ModelViewSet):
             SetDegreeGroupInactive(is_tufts)
             
         return super().create(request, *args, **kwargs)
+
+class DegreeRequirementViewSet(viewsets.ModelViewSet):
+    queryset = DegreeRequirement.objects.all()
+    serializer_class = DegreeRequirementSerializer
         
 import json
 from django.http import JsonResponse
@@ -175,16 +179,24 @@ def AuditStudentProgress(request):
     ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
 
     if tufts_degree:
-        tufts_req_ids = [req.id for req in tufts_degree.reqs.all()]
+        tufts_reqs = tufts_degree.reqs.all()
         
         # Degree requirements which the student has completed
-        tufts_completed_req_ids = [course for course in tufts_req_ids if course in completed_ids]
-        
+        tufts_completed_req_ids = []
+        for completed_id in completed_ids:
+            for req in tufts_reqs:
+                if completed_id in req.fulfilled_by.all().values_list('id', flat=True) and req.id not in tufts_completed_req_ids:
+                    tufts_completed_req_ids.append(req.id)
+            
         # Degree requirements which the student is currently taking
-        tufts_in_progress_req_ids = [course for course in tufts_req_ids if course in in_progress_ids]
+        tufts_in_progress_req_ids = []
+        for in_progress_id in in_progress_ids:
+            for req in tufts_reqs:
+                if in_progress_id in req.fulfilled_by.all().values_list('id', flat=True) and req.id not in tufts_completed_req_ids and req.id not in tufts_in_progress_req_ids:
+                    tufts_in_progress_req_ids.append(req.id)
 
         # Degree requirements which the student has not completed
-        tufts_not_completed_req_ids = [course for course in tufts_req_ids if (course not in completed_ids and course not in in_progress_ids)]
+        tufts_not_completed_req_ids = [req.id for req in tufts_reqs if req.id not in tufts_completed_req_ids and req.id not in tufts_in_progress_req_ids]
 
         # Export names of completed requirements
         response['tufts']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_completed_req_ids]
@@ -192,16 +204,24 @@ def AuditStudentProgress(request):
         response['tufts']['not_completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_not_completed_req_ids]
 
     if bhcc_degree:
-        bhcc_req_ids = [req.id for req in bhcc_degree.reqs.all()]
+        bhcc_req = bhcc_degree.reqs.all()
     
         # Degree requirements which the student has completed
-        bhcc_completed_req_ids = [course for course in bhcc_req_ids if course in completed_ids]
-
+        bhcc_completed_req_ids = []
+        for completed_id in completed_ids:
+            for req in bhcc_req:
+                if completed_id in req.fulfilled_by.all().values_list('id', flat=True) and req.id not in bhcc_completed_req_ids:
+                    bhcc_completed_req_ids.append(req.id)
+        
         # Degree requirements which the student is currently taking
-        bhcc_in_progress_req_ids = [course for course in bhcc_req_ids if course in in_progress_ids]
-
+        bhcc_in_progress_req_ids = []
+        for in_progress_id in in_progress_ids:
+            for req in bhcc_req:
+                if in_progress_id in req.fulfilled_by.all().values_list('id', flat=True) and req.id not in bhcc_completed_req_ids and req.id not in bhcc_in_progress_req_ids:
+                    bhcc_in_progress_req_ids.append(req.id)
+        
         # Degree requirements which the student has not completed
-        bhcc_not_completed_req_ids = [course for course in bhcc_req_ids if (course not in completed_ids and course not in in_progress_ids)]
+        bhcc_not_completed_req_ids = [req.id for req in bhcc_req if req.id not in bhcc_completed_req_ids and req.id not in bhcc_in_progress_req_ids]
 
         # Export names of completed requirements
         response['bhcc']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_completed_req_ids]
