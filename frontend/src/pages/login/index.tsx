@@ -45,7 +45,9 @@ const LoginForm = () => {
     <AuthBox>
       <h3>Login</h3>
       <form className={styles.form} onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
+        <label htmlFor='username'></label>
         <input
+          id='username'
           type="text"
           placeholder="Enter your username"
           {...register('username', {
@@ -56,7 +58,9 @@ const LoginForm = () => {
           })}
         />
         {errors.username && <p>{errors.username.message}</p>}
+        <label htmlFor='password'></label>
         <input
+          id='password'
           type={showPassword ? 'text' : 'password'}
           placeholder="Enter your password"
           {...register('password', {
