@@ -4,6 +4,7 @@ import { useAuth } from '../../components/auth';
 import { CourseProgressModifier } from '../../components/Modifiers/CourseProgressModifier';
 import { CreateCourseProgress } from '../../components/Creators/CreateCourseProgress';
 import styles from './[id].module.scss';
+import FileViewer from 'src/components/FileViewer/FileViewer';
 
 async function fetchCourseName(id) {
   let url = `http://127.0.0.1:8000/api/course/${id}/`;
@@ -487,6 +488,14 @@ export default function ViewStudent() {
       {progress_report}
 
       {course_history}
+
+      <div className={styles.col}>
+        <div className={styles.studentInfo}>
+          <div className={styles.row}>
+            <FileViewer {...studentData} />
+          </div>
+        </div>
+      </div>
 
       <CourseProgressModifier
         show={showCourseModifier}
