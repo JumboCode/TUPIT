@@ -11,7 +11,7 @@ __all__ = [
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
-        fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'additional_info', 'cohort', 'years_given', 'years_left')
+        fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'additional_info', 'cohort', 'years_given', 'years_left', 'ssn')
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -26,4 +26,4 @@ class CourseProgressSerializer(serializers.HyperlinkedModelSerializer):
 class DegreeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Degree 
-        fields = ('degree_name', 'reqs', 'active', 'additional_info')
+        fields = ('degree_name', 'reqs', 'active', 'is_tufts', 'additional_info')

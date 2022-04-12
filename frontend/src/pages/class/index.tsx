@@ -4,26 +4,41 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/components/auth';
 import styles from './index.module.scss';
 
+const ENDPOINT = 'http://127.0.0.1:8000/api/course/';
+
+const getClasses = async (url) => {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  }).catch((err) => {
+    alert('Error connecting to server');
+    console.log(err);
+  });
+
+  return res;
+};
+
 const SearchClass = () => {
+  const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const [subject, setSubject] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  const router = useRouter();
+  const [results, setResults] = useState([]);
+  const [depOpts, setDepOpts] = useState([]);
+
+  const { courseTitleInit } = router.query;
+  const courseTitleInitVal = Array.isArray(courseTitleInit) ? courseTitleInit[0] : courseTitleInit;
 
   /*
    * Fetch all available courses in the database.
    */
   useEffect(() => {
     (async function () {
-      const res = await fetch('http://127.0.0.1:8000/api/course', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }).catch((err) => {
-        alert('Error connecting to server');
-        console.log(err);
-      });
-
+      const query = courseTitleInitVal ? `${ENDPOINT}?course_title__icontains=${courseTitleInitVal}` : ENDPOINT;
+      const res = await getClasses(query);
       if (res && res.ok) {
         const data = await res.json();
         const set = new Set();
@@ -34,9 +49,11 @@ const SearchClass = () => {
           }
         });
         setSubject(Array.from(set));
+        /* TODO - Fix expected */
+        // setValue('')
       }
     })();
-  }, []);
+  }, [courseTitleInitVal]);
 
   /*
    * @todo Handle data submission
