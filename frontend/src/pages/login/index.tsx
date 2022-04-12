@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
+import { useAuth } from '@/components/auth';
+import AuthBox from '@/components/authbox';
 import styles from './index.module.scss';
 
 export default function LoginForm() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) router.push('/');
@@ -19,18 +22,31 @@ export default function LoginForm() {
     );
   }
 
-  return (
-    <div className={styles.container}>
-      <h1>Welcome to TUPIT!</h1>
-      <form className={styles.loginForm} onSubmit={doLogin}>
-        <p>Username: </p>
-        <input className={styles.textField} type="text" name="username" />
-        <p>Password: </p>
-        <input className={styles.textField} type="password" name="password" />
-        <div className={styles.submitContainer}>
-          <input className={styles.submit} type="submit" value="Login" />
-        </div>
-      </form>
-    </div>
-  );
+  function resetPass(e) {
+    router.push('/resetpass');
+  }
+
+  const content = [
+    <label htmlFor="username">
+      <input id="username" type="text" name="username" placeholder="Enter your username" />
+    </label>,
+    <label htmlFor="password">
+      <input
+        id="password"
+        type={showPassword ? 'text' : 'password'}
+        name="password"
+        placeholder="Enter your password"
+      />
+    </label>,
+    <label className={styles.showPassword}>
+      <input
+        type="checkbox"
+        checked={showPassword}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+      <div>Show Password</div>
+    </label>,
+    <a onClick={resetPass}>Forgot your password? </a>,
+  ];
+  return <AuthBox header={'Login'} callback={doLogin} content={content} navigate={'Next'} />;
 }

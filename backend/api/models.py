@@ -24,6 +24,7 @@ class Student(Model):
         Years given - {self.years_given}
         Years left - {self.years_left}
         Associated files - {self.associated_files}
+        SSN - {self.ssn}
         '''    
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
         
@@ -40,6 +41,9 @@ class Student(Model):
 
     def tufts_default():
         return "0000000"
+    
+    def ssn_default():
+        return "0000"
 
     firstname = CharField(max_length=32, blank=True)
     lastname = CharField(max_length=32, blank=True)
@@ -50,6 +54,8 @@ class Student(Model):
                                  MinLengthValidator(7)], default=tufts_default)
     bhcc_num = CharField(
         max_length=32, blank=True)  # validate this number
+    ssn = CharField(max_length=4, validators=[
+                                 MinLengthValidator(4)], default=ssn_default, blank=True)
     parole_status = TextField(max_length=256, blank=True)
     student_status = TextField(max_length=256, blank=True)
     additional_info = TextField(max_length=512, blank=True)
@@ -65,7 +71,6 @@ class Student(Model):
         blank=True,
         default=empty_array,
     )
-
 
 class Course(Model):
     # validators and cleaning
@@ -144,6 +149,7 @@ class Degree(Model):
         symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
+    is_tufts = BooleanField(default=False, blank=False, null=False)
     additional_info = TextField(max_length=512, blank=True)
 
 class CourseProgress(Model):
