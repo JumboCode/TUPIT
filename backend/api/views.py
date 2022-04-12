@@ -45,6 +45,32 @@ class DegreeViewSet(viewsets.ModelViewSet):
     queryset = Degree.objects.all()
     serializer_class = DegreeSerializer
 
+    def update(self, request, *args, **kwargs):
+        data = json.loads(request.body).get('data')
+        degree_id = data.get('id')
+        if not degree_id:
+            return JsonResponse({'info': 'Missing degree_id'}, status=400)
+
+        ### FETCH DEGREE ###
+        degree = Degree.objects.get(id=degree_id)
+        if not degree:
+            return JsonResponse({'info': 'Invalid degree_id'}, status=400)
+
+        is_active = data.get('is_active')
+        if is_active:
+            SetDegreeGroupInactive(degree.is_tufts)
+
+        return super().update(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        is_tufts = 'is_tufts' in request.data and request.data['is_tufts'] == 'true'
+        is_active = 'active' in request.data and request.data['active'] == 'true'
+        
+        if is_active:
+            SetDegreeGroupInactive(is_tufts)
+            
+        return super().create(request, *args, **kwargs)
+        
 import json
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -108,9 +134,15 @@ def ChangePassword(request):
     
     return JsonResponse({'info': 'Successfully changed password'}, status=200)
 
-# Create a progress report comparing a student's course progress to the courses required by the active degree
+# Create a progress report comparing a student's course progress to the courses required by the active degrees
 @csrf_exempt
 def AuditStudentProgress(request):
+    response = {
+        'info': 'Successfully created progress report',
+        'tufts': {},
+        'bhcc': {},
+    }
+
     data = json.loads(request.body)
     student_id = data.get('student_id')
     if student_id == '':
@@ -134,41 +166,59 @@ def AuditStudentProgress(request):
     # Remove IDs that are already completed
     in_progress_ids = [course_id for course_id in in_progress_ids if course_id not in completed_ids]
 
-    ### FETCH DEGREE ###
+    ### FETCH DEGREES ###
     
-    degree = Degree.objects.get(active=True)
-    if degree is None:
-        return JsonResponse({'info': 'No active degree'}, status=400)
-    
-    req_ids = [req.id for req in degree.reqs.all()]
+    tufts_degree = Degree.objects.get(active=True, is_tufts=True)
+
+    bhcc_degree = Degree.objects.get(active=True, is_tufts=False)
 
     ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
+
+    if tufts_degree:
+        tufts_req_ids = [req.id for req in tufts_degree.reqs.all()]
+        
+        # Degree requirements which the student has completed
+        tufts_completed_req_ids = [course for course in tufts_req_ids if course in completed_ids]
+        
+        # Degree requirements which the student is currently taking
+        tufts_in_progress_req_ids = [course for course in tufts_req_ids if course in in_progress_ids]
+
+        # Degree requirements which the student has not completed
+        tufts_not_completed_req_ids = [course for course in tufts_req_ids if (course not in completed_ids and course not in in_progress_ids)]
+
+        # Export names of completed requirements
+        response['tufts']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_completed_req_ids]
+        response['tufts']['in_progress'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_in_progress_req_ids]
+        response['tufts']['not_completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_not_completed_req_ids]
+
+    if bhcc_degree:
+        bhcc_req_ids = [req.id for req in bhcc_degree.reqs.all()]
     
-    # Degree requirements which the student has completed
-    completed_req_ids = [course for course in req_ids if course in completed_ids]
+        # Degree requirements which the student has completed
+        bhcc_completed_req_ids = [course for course in bhcc_req_ids if course in completed_ids]
 
-    # Degree requirements which the student is currently taking
-    in_progress_req_ids = [course for course in req_ids if course in in_progress_ids]
+        # Degree requirements which the student is currently taking
+        bhcc_in_progress_req_ids = [course for course in bhcc_req_ids if course in in_progress_ids]
 
-    # Degree requirements which the student has not completed
-    not_completed_req_ids = [course for course in req_ids if (course not in completed_ids and course not in in_progress_ids)]
+        # Degree requirements which the student has not completed
+        bhcc_not_completed_req_ids = [course for course in bhcc_req_ids if (course not in completed_ids and course not in in_progress_ids)]
 
-    ### GENERATE RESPONSE ###
+        # Export names of completed requirements
+        response['bhcc']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_completed_req_ids]
+        response['bhcc']['in_progress'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_in_progress_req_ids]
+        response['bhcc']['not_completed'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_not_completed_req_ids]
 
-    completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in completed_req_ids]
-    in_progress_course_titles = [Course.objects.get(id=course_id).course_title for course_id in in_progress_req_ids]
-    not_completed_course_titles = [Course.objects.get(id=course_id).course_title for course_id in not_completed_req_ids]
-
-    return JsonResponse({
-        'info': 'Successfully generated audit report',
-        'completed': completed_course_titles,
-        'in_progress': in_progress_course_titles,
-        'not_completed': not_completed_course_titles,
-        }, status=200)
+    return JsonResponse(response, status=200)
 
 # Set the active degree to the degree with the given ID
 # After this, only the degree with the given ID will be active
 # All other degrees will be set to inactive
+def SetDegreeGroupInactive(is_tufts):
+    degree_group = Degree.objects.filter(is_tufts=is_tufts)
+    degree_group.update(active=False)
+
+
+
 def SetActiveDegree(request):
     data = json.loads(request.body)
     degree_id = data.get('degree_id')
@@ -181,12 +231,9 @@ def SetActiveDegree(request):
     if degree is None:
         return JsonResponse({'info': 'Invalid degree_id'}, status=400)
 
+    SetDegreeGroupInactive(degree.is_tufts)
+
     ### SET DEGREE TO ACTIVE ###
-
-    # Set all degrees to inactive
-    Degree.objects.all().update(active=False)
-
-    # Set the given degree to active
     degree.active = True
     degree.save()
 

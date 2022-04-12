@@ -22,22 +22,26 @@ const getData = async (url: string) => {
   });
   
   return res;
-}
+};
 
 const SearchStudents = () => {
   const router = useRouter();
   const [results, setResults] = useState([]); /* Query results */
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  const { cohortInit } = router.query;
+  const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
 
   useEffect(() => {
     (async function() {
-      const res = await getData(`${ENDPOINT}?ordering=lastname`);
+      const query = cohortInitVal ? `${ENDPOINT}&cohort=${cohortInitVal}` :  ENDPOINT;
+      const res = await getData(query);
       if (res && res.ok) {
         const data = await res.json();
         setResults(data.data);
+        setValue('cohort', cohortInitVal);
       }
     })();
-  }, []);
+  }, [cohortInitVal]);
 
   const onSubmitSuccess = (data) => {
     (async function() {
