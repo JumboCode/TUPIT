@@ -4,9 +4,10 @@ from api.filters import *
 
 from django.db.models.base import ModelBase
 from rest_framework import viewsets, filters 
+from rest_framework.mixins import UpdateModelMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
