@@ -12,7 +12,7 @@ __all__ = [
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
-        fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'additional_info', 'cohort', 'years_given', 'years_left')
+        fields = ('firstname', 'lastname', 'birthday', 'doc_num', 'tufts_num', 'bhcc_num', 'parole_status', 'student_status', 'additional_info', 'cohort', 'years_given', 'years_left', 'associated_files', 'ssn')
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

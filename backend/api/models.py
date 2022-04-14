@@ -10,6 +10,9 @@ __all__ = ["Student", "Course", "Degree", "CourseProgress", "DegreeRequirement"]
 
 class Student(Model):
 
+    def empty_array():
+        return []
+
     def __str__(self):
 
         model = f'''
@@ -20,6 +23,8 @@ class Student(Model):
         Cohort - {self.cohort}
         Years given - {self.years_given}
         Years left - {self.years_left}
+        Associated files - {self.associated_files}
+        SSN - {self.ssn}
         '''    
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
         
@@ -36,6 +41,9 @@ class Student(Model):
 
     def tufts_default():
         return "0000000"
+    
+    def ssn_default():
+        return "0000"
 
     firstname = CharField(max_length=32, blank=True)
     lastname = CharField(max_length=32, blank=True)
@@ -46,6 +54,8 @@ class Student(Model):
                                  MinLengthValidator(7)], default=tufts_default)
     bhcc_num = CharField(
         max_length=32, blank=True)  # validate this number
+    ssn = CharField(max_length=4, validators=[
+                                 MinLengthValidator(4)], default=ssn_default, blank=True)
     parole_status = TextField(max_length=256, blank=True)
     student_status = TextField(max_length=256, blank=True)
     additional_info = TextField(max_length=512, blank=True)
@@ -56,7 +66,11 @@ class Student(Model):
         validators=[validate_nonnegative], null=True)
     years_left = IntegerField(
         validators=[validate_nonnegative], null=True)
-
+    associated_files = ArrayField(
+        CharField(max_length=512), # TODO: validate this with specific service
+        blank=True,
+        default=empty_array,
+    )
 
 class Course(Model):
     # validators and cleaning
