@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import CourseSelector from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import ReqSelector from '@/components/Selectors/DegReqSelector';
 import styles from './[id].module.scss';
 
 async function fetchReqTitle(id) {
@@ -27,7 +27,7 @@ export default function ViewDegree() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const [degreeData, setDegreeData] = useState(null);
   const [reqState, setReqState] = useState([]);
-  const [showCourseSelector, setShowCourseSelector] = useState(false);
+  const [showReqSelector, setShowReqSelector] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
@@ -187,13 +187,13 @@ export default function ViewDegree() {
             <div className={styles.fieldList}>
               {reqState.map((req, index) => (
                 <div className={styles.req} key={index}>
-                  <a>{req.title}</a>
+                  <div>{req.title}</div>
                   <div className={styles.removeButton} onClick={() => removeReq(index)}>
                     &#10005;
                   </div>
                 </div>
               ))}
-              <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+              <div className={styles.button} onClick={() => setShowReqSelector(true)}>
                 +
               </div>
             </div>
@@ -220,10 +220,10 @@ export default function ViewDegree() {
       ) : (
         <h1>Loading...</h1>
       )}
-      <CourseSelector
-        show={showCourseSelector}
+      <ReqSelector
+        show={showReqSelector}
         writeFunction={addReq}
-        onClose={() => setShowCourseSelector(false)}
+        onClose={() => setShowReqSelector(false)}
       />
     </div>
   );
