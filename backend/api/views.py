@@ -74,6 +74,9 @@ class DegreeViewSet(viewsets.ModelViewSet):
 class DegreeRequirementViewSet(viewsets.ModelViewSet):
     queryset = DegreeRequirement.objects.all()
     serializer_class = DegreeRequirementSerializer
+
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filterset_class = DegreeReqFilterSet
         
 import json
 from django.http import JsonResponse
