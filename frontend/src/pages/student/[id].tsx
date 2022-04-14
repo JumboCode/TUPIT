@@ -4,6 +4,7 @@ import { useAuth } from '../../components/auth';
 import { CourseProgressModifier } from '../../components/Modifiers/CourseProgressModifier';
 import { CreateCourseProgress } from '../../components/Creators/CreateCourseProgress';
 import styles from './[id].module.scss';
+import FileViewer from 'src/components/FileViewer/FileViewer';
 
 async function fetchCourseName(id) {
   let url = `http://127.0.0.1:8000/api/course/${id}/`;
@@ -205,6 +206,7 @@ export default function ViewStudent() {
             doc_num: t.doc_num.value,
             tufts_num: t.tufts_num.value,
             bhcc_num: t.bhcc_num.value,
+            ssn: t.ssn.value,
             cohort: parseInt(t.cohort.value),
             parole_status: t.parole_status.value,
             student_status: t.student_status.value,
@@ -409,6 +411,16 @@ export default function ViewStudent() {
               </div>
 
               <div className={styles.row}>
+                <p>SSN (last 4 digits)</p>
+                <input
+                  name="ssn"
+                  type="text"
+                  defaultValue={studentData.attributes.ssn}
+                  maxLength={4}
+                />
+              </div>
+
+              <div className={styles.row}>
                 <p>Parole Status</p>
                 <textarea
                   name="parole_status"
@@ -476,6 +488,14 @@ export default function ViewStudent() {
       {progress_report}
 
       {course_history}
+
+      <div className={styles.col}>
+        <div className={styles.studentInfo}>
+          <div className={styles.row}>
+            <FileViewer {...studentData} />
+          </div>
+        </div>
+      </div>
 
       <CourseProgressModifier
         show={showCourseModifier}

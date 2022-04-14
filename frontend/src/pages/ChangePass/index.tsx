@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from "@/components/auth";
+import { useAuth } from '@/components/auth';
 import AuthBox from '@/components/authbox';
 import styles from './index.module.scss';
 
@@ -46,34 +46,42 @@ const ChangePass = () => {
 
   /* @TODO fix password input styling */
   const content: JSX.Element[] = [
-    (<label htmlFor='oldPassword'>
-      <input id='oldPassword'
-       type='password'
-       name='old_password'
-       placeholder='Enter your old password'
-       required/>
-    </label>),
-    (<label htmlFor='newPassword'>
-      <input id='newPassword'
-       type='password'
-       name='new_password'
-       placeholder='Enter your new password'
-       required/>
-    </label>),
-    (<label htmlFor='new_password_confirm'>
-      <input id='new_password_confirm'
-       type='password'
-       name='new_password_confirm'
-       placeholder='Confirm your password'
-       required/>
-    </label>)
+    <label htmlFor="oldPassword">
+      <input
+        id="oldPassword"
+        type="password"
+        name="old_password"
+        placeholder="Enter your old password"
+        required
+      />
+    </label>,
+    <label htmlFor="newPassword">
+      <input
+        id="newPassword"
+        type="password"
+        name="new_password"
+        placeholder="Enter your new password"
+        required
+      />
+    </label>,
+    <label htmlFor="new_password_confirm">
+      <input
+        id="new_password_confirm"
+        type="password"
+        name="new_password_confirm"
+        placeholder="Confirm your password"
+        required
+      />
+    </label>,
   ];
 
   return (
-    <AuthBox header={'Change Password'}
-     callback={doChangePass}
-     content={content}
-     navigate={'Next'} />
+    <AuthBox
+      header={'Change Password'}
+      callback={doChangePass}
+      content={content}
+      navigate={'Next'}
+    />
   );
 };
 
