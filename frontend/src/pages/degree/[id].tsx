@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import ReqSelector from '../../components/Selectors/DegReqSelector';
+import { useAuth } from '@/components/auth';
+import ReqSelector from '@/components/Selectors/DegReqSelector';
 import styles from './[id].module.scss';
 
 async function fetchReqTitle(id) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../components/auth';
+import { useAuth } from '@/components/auth';
 import { CourseSelector } from '../Selectors/CourseSelector';
 import styles from './Modifiers.module.scss';
 
