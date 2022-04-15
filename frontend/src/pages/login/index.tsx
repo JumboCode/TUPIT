@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/components/auth';
-import AuthBox from '@/components/authbox';
+import { useAuth } from '../../components/auth';
+import AuthBox from '../../components/authbox';
 import styles from './index.module.scss';
 
 export default function LoginForm() {
