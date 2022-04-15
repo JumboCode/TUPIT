@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import styles from './add.module.scss';
-import { useAuth } from '../../components/auth';
-import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
-import { CourseSelector } from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
+import { CourseSelector } from '@/components/Selectors/CourseSelector';
 
 interface Course {
   course_title: string;
