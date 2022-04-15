@@ -228,9 +228,9 @@ def AuditStudentProgress(request):
         bhcc_not_completed_req_ids = [req.id for req in bhcc_req if req.id not in bhcc_completed_req_ids and req.id not in bhcc_in_progress_req_ids]
 
         # Export names of completed requirements
-        response['bhcc']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_completed_req_ids]
-        response['bhcc']['in_progress'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_in_progress_req_ids]
-        response['bhcc']['not_completed'] = [Course.objects.get(id=course_id).course_title for course_id in bhcc_not_completed_req_ids]
+        response['bhcc']['completed'] = bhcc_completed_req_ids
+        response['bhcc']['in_progress'] = bhcc_in_progress_req_ids
+        response['bhcc']['not_completed'] = bhcc_not_completed_req_ids
 
     return JsonResponse(response, status=200)
 

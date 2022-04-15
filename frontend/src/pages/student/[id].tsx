@@ -4,7 +4,7 @@ import { useAuth } from '../../components/auth';
 import { CourseProgressModifier } from '../../components/Modifiers/CourseProgressModifier';
 import { CreateCourseProgress } from '../../components/Creators/CreateCourseProgress';
 import styles from './[id].module.scss';
-import FileViewer from 'src/components/FileViewer/FileViewer';
+import FileViewer from '@/components/FileViewer/FileViewer';
 
 async function fetchCourseName(id) {
   let url = `http://127.0.0.1:8000/api/course/${id}/`;
