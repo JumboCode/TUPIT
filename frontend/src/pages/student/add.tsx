@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
+import { useAuth } from '@/components/auth';
 import styles from './add.module.scss';
 
 export default function AddStudent() {

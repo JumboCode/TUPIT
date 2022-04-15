@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../components/auth';
+import { useAuth } from '@/components/auth';
 
 // Import styles
 import styles from './index.module.scss';
