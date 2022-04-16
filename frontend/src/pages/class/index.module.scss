@@ -6,17 +6,35 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 56px 0;
-  padding: 0 4rem;
   width: 100%;
+  padding: 4rem;
+  color: $form-text;
 
-  .searchClassHeader {
-    font-size: 36px;
-    line-height: 47px;
+  .classSearchHeader {
     color: $black;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 47px;
     text-align: left;
+    margin-bottom: 1rem;
     width: 100%;
-    margin-bottom: 3rem;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    row-gap: 2rem;
+  }
+
+  .column:nth-of-type(1) {
+    flex: 40%;
+    padding-right: 2rem;
+  }
+
+  .column:nth-of-type(2) {
+    flex: 60%;
   }
 
   .filterContainer {
@@ -28,72 +46,97 @@
     font-size: 28px;
     line-height: 36px;
 
+    input, select {
+      background: $white;
+      color: $sea-text;
+      border: 1px solid $dark-blue;
+      box-sizing: border-box;
+      border-radius: 5px;
+      font-size: 20px;
+      height: 55px;
+      padding-left: 1em;
+    }
+
+    select:focus {
+      outline: None;
+    }
+
     label {
       text-align: right;
     }
 
-    select {
-      cursor: pointer;
-    }
-
-    select,
-    input {
-      background: $white;
-      border: 1px solid $dark-blue;
-      box-sizing: border-box;
-      border-radius: 5px;
-      color: $sea-text;
-      font-size: 20px;
-      height: 55px;
-      padding-left: 1rem;
-    }
-  }
-
-  .precautionText {
-    color: $sea-text;
-    font-size: 20px;
-    line-height: 26px;
-    margin: 5rem 0 3rem;
-  }
-
-  .buttonContainer {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    column-gap: 5rem;
-    grid-column-start: 2;
-    margin: 20px;
-
     .button {
-      color: white;
-      font-size: 26px;
-      cursor: pointer;
-      background-color: $dark-blue;
-      border-radius: 3px;
-      border: none;
-      padding: 5px;
-      min-width: 100px;
+      display: flex;
       justify-content: space-between;
-    }
-    input {
-      border: none;
-      border-radius: 3px;
-      color: white;
-      height: 2rem;
-      padding: 8px 12px;
-      width: 30%;
-    }
 
-    @media (max-width: 780px) {
       input {
-        width: 35%;
+        border: none;
+        border-radius: 3px;
+        color: white; 
+        cursor: pointer;
+        padding: 8px 12px;
+      }
+
+      > :nth-child(1) {
+        background: $sea-text;
+      }
+
+      > :nth-child(2) {
+        background: $gold;
+      }
+    }
+  }
+
+
+  .resultsWrapper {
+    background: $white;
+    border: 1px solid $sea-text;
+    border-radius: 10px;
+    color: $black;
+    height: 100%;
+    row-gap: 1rem;
+
+    .resultsContainer {
+      padding: 26px 32px;
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      row-gap: 10px;
+      overflow-y: scroll;
+
+      .searchResultsHeader {
+        font-size: 28px;
+      }
+
+      .resultsField {
+        border-radius: 10px;
+        padding: 9px 14px 5px;
+        background-color: $light-blue;
+      }
+
+      .resultsView {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      button {
+        border-radius: 3px;
+        color: $white;
+        text-align: center;
+        padding: 4px 20px;
+        background-color: $sea-text;
+        cursor: pointer;
       }
     }
 
-    @media (max-width: 650px) {
-      input {
-        width: 45%;
-      }
+    .noResults {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 12px;
+      font-size: 24px;
+      font-weight: bold;
     }
   }
 }
