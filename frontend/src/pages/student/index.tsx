@@ -53,7 +53,8 @@ const SearchStudents = () => {
     })();
   };
 
-  const onSubmitSuccess = (data) => {
+  const onSubmitSuccess = (data, e) => {
+    e.preventDefault();
     (async function() {
       const query = `&firstname__icontains=${data.firstName}` + 
                     `&lastname__icontains=${data.lastName}` +
@@ -70,9 +71,9 @@ const SearchStudents = () => {
   };
 
   return (
-    <div className={styles.windowContainer}>
-      <div className={styles.studentProgressHeader}>
-        <h3>Student Progress</h3>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h3>Search Student</h3>
       </div>
       <div className={styles.wrapper}>
         <div className={styles.column}>
