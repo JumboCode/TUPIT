@@ -75,7 +75,8 @@ const SearchClass = () => {
     })();
   };
 
-  const onSubmitSuccess = (data) => {
+  const onSubmitSuccess = (data, e) => {
+    e.preventDefault();
     (async function() {
       const query = `?course_title__icontains=${data.courseTitle}` +
                     `&course_number_tufts__icontains=${data.tuftsNumber}` + 
@@ -91,7 +92,7 @@ const SearchClass = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.classSearchHeader}>
+      <div className={styles.header}>
         <h3>Search Class</h3>
       </div>
       <div className={styles.wrapper}>

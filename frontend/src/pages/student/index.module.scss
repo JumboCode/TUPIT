@@ -1,6 +1,6 @@
 @import '../../styles/global/colors.scss';
 
-.windowContainer {
+.container {
   color: $form-text;
   display: flex;
   flex-direction: column;
@@ -8,9 +8,8 @@
   justify-content: center;
   width: 100%;
   padding: 4rem;
-  color: $form-text;
 
-  .studentProgressHeader {
+  .header {
     color: $black;
     font-size: 36px;
     font-weight: 400;
@@ -68,7 +67,7 @@
       input {
         border: none;
         border-radius: 3px;
-        color: white;
+        color: $white;
         cursor: pointer;
         padding: 8px 12px;
       }
