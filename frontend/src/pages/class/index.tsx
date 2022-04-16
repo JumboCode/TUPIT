@@ -6,7 +6,7 @@ import styles from './index.module.scss';
 
 const ENDPOINT = 'http://127.0.0.1:8000/api/course/';
 
-const getClasses = async (url) => {
+const getData = async (url) => {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -23,209 +23,131 @@ const getClasses = async (url) => {
 
 const SearchClass = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
-  const [subject, setSubject] = useState([]);
-  const { register, handleSubmit, setValue } = useForm();
   const router = useRouter();
   const [results, setResults] = useState([]);
-  const [depOpts, setDepOpts] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const { register, handleSubmit, setValue } = useForm();
+  const { course } = router.query;
+  const courseInitVal = Array.isArray(course) ? course[0] : course;
 
-  const { courseTitleInit } = router.query;
-  const courseTitleInitVal = Array.isArray(courseTitleInit) ? courseTitleInit[0] : courseTitleInit;
-
-  /*
-   * Fetch all available courses in the database.
-   */
+  /* Course results */
   useEffect(() => {
-    (async function () {
-      const query = courseTitleInitVal ? `${ENDPOINT}?course_title__icontains=${courseTitleInitVal}` : ENDPOINT;
-      const res = await getClasses(query);
+    setValue('courseTitle', courseInitVal ? courseInitVal : '');
+    (async function() {
+      const query = courseInitVal ? `${ENDPOINT}?course_title__icontains=${courseInitVal}` : ENDPOINT;
+      const res = await getData(query);
       if (res && res.ok) {
         const data = await res.json();
-        const set = new Set();
-        data.data.forEach((entry) => {
-          const department = entry.attributes.department;
-          if (department) {
-            set.add(department);
-          }
-        });
-        setSubject(Array.from(set));
-        /* TODO - Fix expected */
-        // setValue('')
+        setResults(data.data);
       }
     })();
-  }, [courseTitleInitVal]);
+  }, [courseInitVal]);
 
-  /*
-   * @todo Handle data submission
-   */
-  const onSubmitSuccess = (data) => {};
+  /* Available departments */
+  useEffect(() => {
+    (async function() {
+        fetch(ENDPOINT, {
+        method: 'OPTIONS',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include',
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const deps = [];
+          res.data.actions.POST.department.choices.map((dep) =>
+            deps.push({ name: dep.display_name, value: dep.value })
+          );
+          setDepartments(deps);
+        });
+    })();
+  }, []);
 
-  /*
-   * @todo What does institution mean in terms of our backend
-   */
+  const onReset = () => {
+    (async function() {
+      const res = await getData(ENDPOINT);
+      if (res && res.ok) {
+        const data = await res.json();
+        setResults(data.data);
+      }
+    })();
+  };
+
+  const onSubmitSuccess = (data) => {
+    (async function() {
+      const query = `?course_title__icontains=${data.courseTitle}` +
+                    `&course_number_tufts__icontains=${data.tuftsNumber}` + 
+                    `&course_number_bhcc__icontains=${data.bhccNumber}` + 
+                    `&department=${data.department}`;
+      const res = await getData(`${ENDPOINT}${query}`);
+      if (res && res.ok) {
+        const data = await res.json();
+        setResults(data.data);
+      }
+    })();
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.searchClassHeader}>
+      <div className={styles.classSearchHeader}>
         <h3>Search Class</h3>
       </div>
-      <form onSubmit={handleSubmit(onSubmitSuccess)}>
-        <div className={styles.filterContainer}>
-          <label htmlFor="institution">Institution:</label>
-          <select id="institution" {...register('institution')}>
-            <option value="" selected></option>
-            <option value="Tufts">Tufts</option>
-            <option value="BHCC">BHCC</option>
-          </select>
+      <div className={styles.wrapper}>
+        <div className={styles.column}>
+          <form  onSubmit={handleSubmit(onSubmitSuccess)} onReset={onReset}
+           className={styles.filterContainer}>
+            <label htmlFor='courseTitle'>Course Title:</label>
+            <input id='courseTitle' type='text' {...register('courseTitle')}/>
+            <label htmlFor='tuftsNumber'>Tufts Course Number:</label>
+            <input id='tuftsNumber' type='text' {...register('tuftsNumber')}/>
+            <label htmlFor='bhccNumber'>Bunker Course Number:</label>
+            <input id='bhccNumber' type='text' {...register('bhccNumber')}/>
+            <label htmlFor='department'>Department:</label>
+            <select name='selectDepartment' id='department' {...register('department')}>
+              <option></option>
+              {departments.map((dep) => (
+                <option key={dep.value} value={dep.value}>
+                  {dep.name}
+                </option>
+              ))}
+            </select>
+            <div></div>
+            <div className={styles.button}>
+              <input type='submit' value='Submit'/>
+              <input type='reset' value='Reset'/>
+            </div>
+          </form>
         </div>
-        <div className={styles.precautionText}>
-          <p>We recommend you select at least one of the following:</p>
-        </div>
-        <div className={styles.filterContainer}>
-          <label>Subject:</label>
-          <input type="text" />
-          <label>Attributes:</label>
-          <input type="text" />
-          <label>Keywords:</label>
-          <input type="text" />
-          <label>Instructor:</label>
-          <input type="text" />
-        </div>
-        <div className={styles.filterContainer}>
-          <div className={styles.buttonContainer}>
-            <input className={styles.button} type="submit" value="Search" />
-            <input className={styles.button} type="reset" value="Reset" />
+        <div className={styles.column}>
+          <div className={styles.resultsWrapper}>
+            {results && results.length > 0 ?
+              (<div className={styles.resultsContainer}>
+                <div className={styles.searchResultsHeader}>Search Result:</div>        
+                <div></div>
+                {results.map((course) => (
+                  <React.Fragment key={course.id}>
+                    <span className={styles.resultsField}>
+                      {course.attributes.course_title}
+                    </span>
+                    <div className={styles.resultsView}>
+                      <button onClick={() => router.push(`class/${course.id}`)}>
+                        View
+                      </button>
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>) : (
+              <div className={styles.noResults}>
+                No results found
+              </div>
+            )}
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
 
 export default SearchClass;
-
-// export default function SearchClass() {
-//   const { isLoggedIn, csrfToken, login, logout } = useAuth();
-//   const router = useRouter();
-//   const [results, setResults] = useState([]);
-//   const [depOpts, setDepOpts] = useState([]);
-
-//   const courseTitle = createRef<HTMLInputElement>();
-//   const tuftsCourseNum = createRef<HTMLInputElement>();
-//   const bunkerCourseNum = createRef<HTMLInputElement>();
-//   const department = createRef<HTMLSelectElement>();
-
-//   useEffect(() => {
-//     async function getClasses() {
-//       const res = await fetch('http://127.0.0.1:8000/api/course/', {
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         credentials: 'include',
-//       }).catch((err) => {
-//         alert('Error connecting to server');
-//         console.log(err);
-//       });
-//       if (res && res.ok) {
-//         const data = await res.json();
-//         setResults(data.data);
-//       }
-//     }
-
-//     async function getDepartmentData() {
-//       fetch('http://127.0.0.1:8000/api/course/', {
-//         method: 'OPTIONS',
-//         headers: {
-//           'Content-Type': 'application/vnd.api+json',
-//           'X-CSRFToken': csrfToken,
-//         },
-//         credentials: 'include',
-//       })
-//         .then((res) => res.json())
-//         .then((res) => {
-//           let deps = [];
-//           res.data.actions.POST.department.choices.map((dep) =>
-//             deps.push({ name: dep.display_name, value: dep.value })
-//           );
-//           setDepOpts(deps);
-//         });
-//     }
-
-//     getClasses();
-//     getDepartmentData();
-//   }, []);
-
-//   async function onSearch(e) {
-//     e.preventDefault();
-
-//     const query = `?course_title__icontains=${courseTitle.current.value}&course_number_tufts__icontains=${tuftsCourseNum.current.value}&course_number_bhcc__icontains=${bunkerCourseNum.current.value}&department=${department.current.value}`;
-
-//     const res = await fetch(`http://127.0.0.1:8000/api/course/${query}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       credentials: 'include',
-//     }).catch((err) => {
-//       alert('Error connecting to server');
-//       console.log(err);
-//     });
-//     if (res && res.ok) {
-//       const data = await res.json();
-//       setResults(data.data);
-//     }
-//   }
-
-//   function classResult(course) {
-//     return (
-//       <div className={styles.result} onClick={() => router.push(`class/${course.id}`)}>
-//         <div className={styles.courseTitle}>{`${course.attributes.course_title}`}</div>
-//         <div className={styles.courseInfo}>
-//           <span>Tufts: {`${course.attributes.course_number_tufts}`}</span>
-//           <span>BHCC: {`${course.attributes.course_number_bhcc}`}</span>
-//           <span>Department: {`${course.attributes.department}`}</span>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className={styles.windowContainer}>
-//       <div className={styles.window}>
-//         <form onSubmit={onSearch} className={styles.filterContainer}>
-//           <div className={styles.filterFields}>
-//             <div className={styles.label}>Course Title</div>
-//             <input type="text" ref={courseTitle} />
-//             <div className={styles.label}>Tufts Course Number</div>
-//             <input type="text" ref={tuftsCourseNum} />
-//             <div className={styles.label}>Bunker Course Number</div>
-//             <input type="text" ref={bunkerCourseNum} />
-//             <div className={styles.label}>Department</div>
-//             <select name="department" className={styles.select} ref={department}>
-//               <option></option>
-//               {depOpts.map((dep) => (
-//                 <option key={dep.value} value={dep.value}>
-//                   {dep.name}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//           <input className={styles.button} type="submit" value="Search" />
-//         </form>
-//         <div className={styles.resultsContainer}>
-//           <div className={styles.results}>
-//             {results &&
-//               (results.length > 0 ? (
-//                 results.map(classResult)
-//               ) : (
-//                 <div className={styles.noResults}>No results found</div>
-//               ))}
-//           </div>
-//           <div className={styles.button} onClick={() => router.push('/class/add')}>
-//             +
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
