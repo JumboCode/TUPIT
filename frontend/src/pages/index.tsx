@@ -57,7 +57,7 @@ const Home: React.FC = () => {
               <input
                 className={cx('button')}
                 type="button"
-                onClick={() => router.push('/changepass')}
+                onClick={() => router.push('/resetpass')}
                 value="Change Password"
               />
             </div>
