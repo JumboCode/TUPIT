@@ -1,221 +1,291 @@
+@import '../../styles/global/colors.scss';
+
 .container {
-  width: 100%;
-  height: 100%;
-  padding: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  justify-content: space-evenly;
-}
-
-.title {
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-}
-
-.studentInfo {
-  background: #9ec8d6;
-  border-radius: 49px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 32px;
-
+  color: $form-text;
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
-
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
-  color: white;
-  font-weight: 400;
-  font-size: 32px;
-}
-
-.row {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-}
-
-.row > p {
-  font-weight: bold;
-  padding: 0 12px;
-}
-
-.row input,
-.row textarea {
-  background: white;
-  border: unset;
-  color: #4c8fa5;
-  padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
-  height: 60px;
-  resize: none;
-}
-
-.row textarea {
-  height: 150px;
-}
-
-.row input:hover,
-.row textarea:hover {
-  border: 1px solid #4c8fa5;
-  padding: 19px;
-}
-
-.row input:focus,
-.row textarea:focus {
-  border: 2px solid #4c8fa5;
-  outline: unset;
-  padding: 18px;
-}
-
-.button {
-  flex: auto;
-  display: flex;
-  justify-content: space-around;
-  column-gap: 12px;
-  border: none;
-  background: #4c8fa5;
-  border-radius: 28px;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 8px 12px;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-  margin: 0;
-}
-
-.button:hover {
-  background: #3b7d9a;
-}
-
-.button:active {
-  transform: translateY(2px);
-}
-
-.expanded {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-}
-
-.condensed {
-  display: none;
-}
-
-.submit {
-  background-color: #4c8fa5;
-  color: white;
-  border-radius: 28px;
-  border: none;
-  font-size: 24px;
-  padding: 20px;
-  margin: 0;
-}
-
-.progBar {
-  width: 100%;
-  height: 32px;
-  border-radius: 16px;
-  overflow: hidden;
-  background-color: white;
-  display: flex;
-}
-
-.compBar,
-.inProgBar {
-  height: 100%;
-
-  display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  padding: 4rem;
 
-  white-space: nowrap;
-  font-size: 16px;
-  color: transparent;
-  background-color: #3b7d9a;
-  width: 0;
-  transition: width 0.4s ease-in-out, color 0.4s ease-in-out;
-  cursor: pointer;
-}
-
-.compBar:hover,
-.inProgBar:hover {
-  color: white;
-  width: 100% !important;
-}
-
-.inProgBar {
-  position: relative;
-  background-color: #75b5cc;
-}
-
-// wave effect on .inProgBar
-.inProgBar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  animation: wave 3s ease-out infinite;
-}
-
-// wave animation
-@keyframes wave {
-  0% {
-    background-color: rgba(255, 255, 255, 0.2);
-    width: 0;
-  }
-  100% {
-    background-color: #9ec8d600;
+  .header {
+    color: $black;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 47px;
+    text-align: left;
+    margin-bottom: 1rem;
     width: 100%;
   }
-}
 
-.courseEntries {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  padding: 4px;
-  overflow-y: scroll;
-  max-height: 518px;
-}
+  .row {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    font-size: 28px;
+    line-height: 36px;
 
-.courseEntry {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-  padding: 12px;
-  border-radius: 16px;
-  background-color: white;
-  color: #4c8fa5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
+    input, textarea {
+      background: $white;
+      color: $sea-text;
+      border: 1px solid $dark-blue;
+      border-radius: 3px;
+      box-sizing: border-box;
+      font-size: 20px;
+      height: 55px;
+      padding: 0 1rem;
+    }
 
-.courseTitle {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 24px;
-  width: 100%;
-  font-weight: bold;
-}
+    input:focus {
+      outline: none;
+    }
 
-.inProgText {
-  font-weight: normal;
-  font-style: italic;
-  font-size: 0.7em;
-}
+    textarea {
+      resize: none;
+      padding: 1rem;
+      height: 150px;
+    }
 
-.courseInfo {
-  display: flex;
-  column-gap: 16px;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 0.7em;
+    textarea:focus {
+      outline: None;
+    }
+
+    label {
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .row {
+      grid-template-columns: auto;
+
+      label {
+        text-align: left;
+      }
+    }
+  }
 }
+// .container {
+//   width: 100%;
+//   height: 100%;
+//   padding: 40px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: flex-start;
+//   justify-content: space-evenly;
+// }
+
+// .title {
+//   font-size: 48px;
+//   font-weight: bold;
+//   color: white;
+// }
+
+// .studentInfo {
+//   background: #9ec8d6;
+//   border-radius: 49px;
+//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+//   padding: 32px;
+
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 16px;
+
+//   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+//     'Open Sans', 'Helvetica Neue', sans-serif;
+//   color: white;
+//   font-weight: 400;
+//   font-size: 32px;
+// }
+
+// .row {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
+// }
+
+// .row > p {
+//   font-weight: bold;
+//   padding: 0 12px;
+// }
+
+// .row input,
+// .row textarea {
+//   background: white;
+//   border: unset;
+//   color: #4c8fa5;
+//   padding: 20px;
+//   font-size: 24px;
+//   border-radius: 28px;
+//   height: 60px;
+//   resize: none;
+// }
+
+// .row textarea {
+//   height: 150px;
+// }
+
+// .row input:hover,
+// .row textarea:hover {
+//   border: 1px solid #4c8fa5;
+//   padding: 19px;
+// }
+
+// .row input:focus,
+// .row textarea:focus {
+//   border: 2px solid #4c8fa5;
+//   outline: unset;
+//   padding: 18px;
+// }
+
+// .button {
+//   flex: auto;
+//   display: flex;
+//   justify-content: space-around;
+//   column-gap: 12px;
+//   border: none;
+//   background: #4c8fa5;
+//   border-radius: 28px;
+//   color: white;
+//   font-size: 24px;
+//   font-weight: bold;
+//   padding: 8px 12px;
+//   cursor: pointer;
+//   user-select: none;
+//   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+//   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+//   margin: 0;
+// }
+
+// .button:hover {
+//   background: #3b7d9a;
+// }
+
+// .button:active {
+//   transform: translateY(2px);
+// }
+
+// .expanded {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
+// }
+
+// .condensed {
+//   display: none;
+// }
+
+// .submit {
+//   background-color: #4c8fa5;
+//   color: white;
+//   border-radius: 28px;
+//   border: none;
+//   font-size: 24px;
+//   padding: 20px;
+//   margin: 0;
+// }
+
+// .progBar {
+//   width: 100%;
+//   height: 32px;
+//   border-radius: 16px;
+//   overflow: hidden;
+//   background-color: white;
+//   display: flex;
+// }
+
+// .compBar,
+// .inProgBar {
+//   height: 100%;
+
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   white-space: nowrap;
+//   font-size: 16px;
+//   color: transparent;
+//   background-color: #3b7d9a;
+//   width: 0;
+//   transition: width 0.4s ease-in-out, color 0.4s ease-in-out;
+//   cursor: pointer;
+// }
+
+// .compBar:hover,
+// .inProgBar:hover {
+//   color: white;
+//   width: 100% !important;
+// }
+
+// .inProgBar {
+//   position: relative;
+//   background-color: #75b5cc;
+// }
+
+// // wave effect on .inProgBar
+// .inProgBar::after {
+//   content: '';
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   height: 100%;
+//   animation: wave 3s ease-out infinite;
+// }
+
+// // wave animation
+// @keyframes wave {
+//   0% {
+//     background-color: rgba(255, 255, 255, 0.2);
+//     width: 0;
+//   }
+//   100% {
+//     background-color: #9ec8d600;
+//     width: 100%;
+//   }
+// }
+
+// .courseEntries {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
+//   padding: 4px;
+//   overflow-y: scroll;
+//   max-height: 518px;
+// }
+
+// .courseEntry {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
+//   padding: 12px;
+//   border-radius: 16px;
+//   background-color: white;
+//   color: #4c8fa5;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+//   cursor: pointer;
+// }
+
+// .courseTitle {
+//   display: flex;
+//   justify-content: space-between;
+//   column-gap: 24px;
+//   width: 100%;
+//   font-weight: bold;
+// }
+
+// .inProgText {
+//   font-weight: normal;
+//   font-style: italic;
+//   font-size: 0.7em;
+// }
+
+// .courseInfo {
+//   display: flex;
+//   column-gap: 16px;
+//   justify-content: space-between;
+//   width: 100%;
+//   font-size: 0.7em;
+// }
