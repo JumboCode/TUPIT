@@ -32,9 +32,10 @@ const SearchStudents = () => {
   const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
 
   useEffect(() => {
+    console.log(cohortInitVal); 
     setValue('cohort', cohortInitVal ? cohortInitVal : '');
     (async function() {
-      const query = cohortInitVal ? `${ENDPOINT}?cohort=${cohortInitVal}` : ENDPOINT;
+      const query = cohortInitVal ? `${ENDPOINT}&cohort=${cohortInitVal}` : ENDPOINT;
       const res = await getData(query);
       if (res && res.ok) {
         const data = await res.json();

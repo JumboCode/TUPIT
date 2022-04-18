@@ -1,156 +1,211 @@
+@import '../../styles/global/colors.scss';
+
 .container {
+  color: $form-text;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 100%;
-  padding: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  justify-content: space-evenly;
+  padding: 4rem;
+
+  .header {
+    color: $black;
+    font-size: 36px;
+    line-height: 47px;
+    text-align: left;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .row {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    font-size: 28px;
+    line-height: 36px;
+
+    input, textarea, select {
+      background: $white;
+      color: $sea-text;
+      border: 1px solid $dark-blue;
+      border-radius: 3px;
+      box-sizing: border-box;
+      font-size: 20px;
+      height: 55px;
+      padding: 0 1rem;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      padding: 1rem;
+      height: 150px;
+    }
+
+    label {
+      text-align: right;
+    }
+  }
 }
+// .container {
+//   width: 100%;
+//   height: 100%;
+//   padding: 40px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: flex-start;
+//   justify-content: space-evenly;
+// }
 
-.title {
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-}
+// .title {
+//   font-size: 48px;
+//   font-weight: bold;
+//   color: white;
+// }
 
-.degreeForm {
-  background: #9ec8d6;
-  border-radius: 49px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 32px;
+// .degreeForm {
+//   background: #9ec8d6;
+//   border-radius: 49px;
+//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+//   padding: 32px;
 
-  display: flex;
-  flex-direction: column;
-  row-gap: 16px;
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 16px;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
-  color: white;
-  font-weight: 400;
-  font-size: 32px;
-}
+//   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+//     'Open Sans', 'Helvetica Neue', sans-serif;
+//   color: white;
+//   font-weight: 400;
+//   font-size: 32px;
+// }
 
-.row {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-}
+// .row {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
+// }
 
-.row > p {
-  font-weight: bold;
-  padding: 0 12px;
-}
+// .row > p {
+//   font-weight: bold;
+//   padding: 0 12px;
+// }
 
-.checkbox {
-  font-weight: bold;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  cursor: pointer;
-}
+// .checkbox {
+//   font-weight: bold;
+//   padding: 0 12px;
+//   display: flex;
+//   align-items: center;
+//   column-gap: 8px;
+//   cursor: pointer;
+// }
 
-.row input {
-  background: white;
-  border: unset;
-  color: #4c8fa5;
-  padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
-  height: 60px;
-  resize: none;
-}
+// .row input {
+//   background: white;
+//   border: unset;
+//   color: #4c8fa5;
+//   padding: 20px;
+//   font-size: 24px;
+//   border-radius: 28px;
+//   height: 60px;
+//   resize: none;
+// }
 
-.row input:hover {
-  border: 1px solid #4c8fa5;
-  padding: 19px;
-}
+// .row input:hover {
+//   border: 1px solid #4c8fa5;
+//   padding: 19px;
+// }
 
-.row input:focus {
-  border: 2px solid #4c8fa5;
-  outline: unset;
-  padding: 18px;
-}
+// .row input:focus {
+//   border: 2px solid #4c8fa5;
+//   outline: unset;
+//   padding: 18px;
+// }
 
-.fieldList {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
+// .fieldList {
+//   display: flex;
+//   flex-direction: column;
+//   row-gap: 8px;
 
-  background: white;
-  color: #4c8fa5;
-  padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
-}
+//   background: white;
+//   color: #4c8fa5;
+//   padding: 20px;
+//   font-size: 24px;
+//   border-radius: 28px;
+// }
 
-.req {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
+// .req {
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: space-between;
+// }
 
-.req > a {
-  color: #4c8fa5;
-  text-decoration: unset;
-}
+// .req > a {
+//   color: #4c8fa5;
+//   text-decoration: unset;
+// }
 
-.req > a:hover {
-  text-decoration: underline;
-}
+// .req > a:hover {
+//   text-decoration: underline;
+// }
 
-.removeButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  color: #4c8fa5;
-  cursor: pointer;
-  z-index: -1;
-  font-size: 32px;
-  user-select: none;
-}
+// .removeButton {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   height: 40px;
+//   width: 40px;
+//   color: #4c8fa5;
+//   cursor: pointer;
+//   z-index: -1;
+//   font-size: 32px;
+//   user-select: none;
+// }
 
-.fieldList > div:hover > .removeButton {
-  z-index: unset;
-}
+// .fieldList > div:hover > .removeButton {
+//   z-index: unset;
+// }
 
-.button {
-  flex: auto;
-  display: flex;
-  justify-content: space-around;
-  column-gap: 12px;
-  border: none;
-  background: #4c8fa5;
-  border-radius: 28px;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 8px 12px;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-  margin: 0;
-}
+// .button {
+//   flex: auto;
+//   display: flex;
+//   justify-content: space-around;
+//   column-gap: 12px;
+//   border: none;
+//   background: #4c8fa5;
+//   border-radius: 28px;
+//   color: white;
+//   font-size: 24px;
+//   font-weight: bold;
+//   padding: 8px 12px;
+//   cursor: pointer;
+//   user-select: none;
+//   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+//   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+//   margin: 0;
+// }
 
-.button:hover {
-  background: #3b7d9a;
-}
+// .button:hover {
+//   background: #3b7d9a;
+// }
 
-.button:active {
-  transform: translateY(2px);
-}
+// .button:active {
+//   transform: translateY(2px);
+// }
 
-.submit {
-  background-color: #4c8fa5;
-  color: white;
-  border-radius: 28px;
-  border: none;
-  font-size: 24px;
-  padding: 20px;
-  margin: 0;
-}
+// .submit {
+//   background-color: #4c8fa5;
+//   color: white;
+//   border-radius: 28px;
+//   border: none;
+//   font-size: 24px;
+//   padding: 20px;
+//   margin: 0;
+// }
