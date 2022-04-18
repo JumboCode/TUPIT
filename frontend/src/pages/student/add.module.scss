@@ -27,7 +27,6 @@
     row-gap: 1rem;
     font-size: 28px;
     line-height: 36px;
-    margin-bottom: 4rem;
 
     input, textarea {
       background: $white;
@@ -40,39 +39,22 @@
       padding: 0 1rem;
     }
 
+    input:focus {
+      outline: none;
+    }
+
     textarea {
       resize: none;
       padding: 1rem;
       height: 150px;
     }
 
-    input:focus, textarea:focus {
-      outline: none;
+    textarea:focus {
+      outline: None;
     }
 
     label {
       text-align: right;
-    }
-    
-    .button {
-      display: flex;
-      justify-content: space-between;
-
-      > * {
-        border: none;
-        border-radius: 3px;
-        color: $white;
-        cursor: pointer;
-        padding: 8px 12px;
-      }
-
-      > :nth-child(1) {
-        background: $sea-text;
-      }
-
-      > :nth-child(2) {
-        background: $gold;
-      }
     }
   }
 
