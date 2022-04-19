@@ -1,44 +1,206 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '../../components/auth';
 import styles from './add.module.scss';
 
+const ENDPOINT: string = 'http://127.0.0.1:8000/api/students/';
+
 const addStudent = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const router = useRouter();
+
+  const onSubmitSuccess = (data, e) => {
+    e.preventDefault();
+    (async function() {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          data: {
+            type: 'Student',
+            attributes: {
+              firstname: data.firstName,
+              lastname: data.lastName,
+              birthday: data.birthday,
+              ssn: data.ssn,
+              cohort: data.cohort == NaN ? null : data.cohort,
+              doc_num: data.docNum,
+              tufts_num: data.tuftsNum,
+              bhcc_num: data.bhccNum,
+              years_given: data.yearsGiven,
+              years_left: data.yearsLeft,
+              parole_status: data.paroleStatus,
+              student_status: data.studentStatus,
+              additional_info: data.additionalInformation
+            }
+          }
+        })
+      }).catch((err) => {
+        alert('Error connecting to server');
+        console.log(err);
+      });
+
+      if (res) {
+        if (res.ok) {
+          alert('Student created successfully');
+          res.json().then((data) => router.push(`/student/${data.data.id}`));
+        } else {
+          alert('Error creating student');
+          console.log(res);
+          res.json().then((response) => console.log(response));
+        }
+      }
+    })();
+  };
+
+  const onSubmitFail = (e) => {
+    Object.keys(e).forEach((key) => {
+      console.log(e[key].message);
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        New Student
+        <h3>
+          New Student
+        </h3>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
         <div className={styles.row}>
           <label htmlFor='firstName'>First name:</label> 
-          <input id='firstName' type='text'/>
+          <input id='firstName' type='text'
+           {...register('firstName', {
+            maxLength: {
+              value: 32,
+              message: 'First name can be at most 32 characters long'
+            }
+           })}/>
           <label htmlFor='lastName'>Last name:</label> 
-          <input id='lastName' type='text'/>
-          <label htmlFor='cohort'>Cohort:</label>
-          <input id='cohort' type='text'/>
+          <input id='lastName' type='text'
+           {...register('lastName', {
+            maxLength: {
+              value: 32,
+              message: 'Last name can be at most 32 characters long'
+            }
+           })}/>
           <label htmlFor='birthday'>Birthday:</label>
-          <input id='birthday' type='date'/>
-          <label htmlFor='docNum'>DOC Number:</label>
-          <input id='docNum' type='text'/>
-          <label htmlFor='tuftsNum'>Tufts Number:</label>
-          <input id='tuftsNum' type='text'/>
-          <label htmlFor='bhccNum'>BHCC Number:</label>
-          <input id='bhccNum' type='text'/>
+          <input id='birthday' type='date' {...register('birthday')}/>
           <label htmlFor='ssn'>SSN (last 4 digits):</label>
-          <input id='ssn' type='text'/>
-          <label htmlFor='paroleStatus'>Parole Status:</label>
-          <textarea id='paroleStatus'/>
-          <label htmlFor='studentStatus'>Student Status:</label>
-          <textarea id='studentStatus'/>
+          <input id='ssn' type='text'
+           {...register('ssn', {
+            required: {
+              value: true,
+              message: 'SSN must not be empty'
+            },
+            pattern: {
+              value: /^\d{4}$/,
+              message: 'SSN must be the last 4 digits'
+            }
+           })}/>
+        </div>
+        <div className={styles.row}>
+          <label htmlFor='cohort'>Cohort:</label>
+          <input id='cohort' type='text'
+           {...register('cohort', {
+            valueAsNumber: true,
+            min: {
+              value: 0,
+              message: 'Cohort must be a non-negative integer'
+            }
+           })}/>
+          <label htmlFor='docNum'>DOC Number:</label>
+          <input id='docNum' type='text'
+           {...register('docNum', {
+            required: {
+              value: true,
+              message: 'Document number must not be empty'
+            },
+            maxLength: {
+              value: 32,
+              message: 'Document number can be at most 32 characters long'
+            },
+            pattern: {
+              value: /^W\d+$/,
+              message: 'Document number must start with W and follow with digits'
+            }
+           })}/>
+          <label htmlFor='tuftsNum'>Tufts Number:</label>
+          <input id='tuftsNum' type='text'
+           {...register('tuftsNum', {
+            required: {
+              value: true,
+              message: 'Tufts number must not be empty'
+            },
+            pattern: {
+              value: /^[\w\d]{7}$/,
+              message: 'Tufts number must be 7 characters long'
+            }
+           })
+           }/>
+          <label htmlFor='bhccNum'>BHCC Number:</label>
+          <input id='bhccNum' type='text'
+           {...register('bhccNum', {
+            maxLength: {
+              value: 32,
+              message: 'Bunker Hill number can be at most 32 characters long'
+            }
+           })}/>
           <label htmlFor='yearsGiven'>Years Given:</label>
-          <input id='yearsGiven' type='text'/>
+          <input id='yearsGiven' type='text'
+           {...register('yearsGiven', {
+            valueAsNumber: true,
+            min: {
+              value: 0,
+              message: 'Years given must be a non-negative number'
+            }
+           })}/>
           <label htmlFor='yearsLeft'>Years Left:</label>
-          <input id='yearsLeft' type='text'/>
+          <input id='yearsLeft' type='text'
+           {...register('yearsLeft', {
+            valueAsNumber: true,
+            min: {
+              value: 0,
+              message: 'Years left must be a non-negative number'
+            }
+           })}/>
+        </div>
+        <div className={styles.row}>
+          <label htmlFor='paroleStatus'>Parole Status:</label>
+          <textarea id='paroleStatus'
+           {...register('paroleStatus', {
+            maxLength: {
+              value: 256,
+              message: 'Parole status can be at most 256 characters'
+            }
+           })}/>
+          <label htmlFor='studentStatus'>Student Status:</label>
+          <textarea id='studentStatus'
+           {...register('studentStatus', {
+            maxLength: {
+              value: 256,
+              message: 'Student status can be at most 256 characters'
+            }
+           })}/>
           <label htmlFor='additionalInformation'>Additional Information:</label>
-          <textarea id='additionalInformation'/>
+          <textarea id='additionalInformation'
+           {...register('additionalInformation', {
+            maxLength: {
+              value: 256,
+              message: 'Additional information can be at most 256 characters'
+            }
+           })}/>
+          <div></div> 
+          <div className={styles.button}>
+            <input type='submit' value='Save'/> 
+            <input type='button' value='Cancel' onClick={() => router.push('/student')}/>
+          </div>
         </div>
       </form>
     </div>
@@ -46,131 +208,3 @@ const addStudent = () => {
 };
 
 export default addStudent;
-// export default function AddStudent() {
-//   const { isLoggedIn, csrfToken, login, logout } = useAuth();
-//   const router = useRouter();
-
-//   async function handleSubmit(e) {
-//     e.preventDefault();
-
-//     const t = e.target;
-//     const url = 'http://127.0.0.1:8000/api/students/';
-//     const res = await fetch(url, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/vnd.api+json',
-//         'X-CSRFToken': csrfToken,
-//       },
-//       credentials: 'include',
-//       body: JSON.stringify({
-//         data: {
-//           type: 'Student',
-//           attributes: {
-//             firstname: t.firstname.value,
-//             lastname: t.lastname.value,
-//             birthday: t.birthday.value ? t.birthday.value : null,
-//             doc_num: t.doc_num.value,
-//             tufts_num: t.tufts_num.value,
-//             bhcc_num: t.bhcc_num.value,
-//             ssn: t.ssn.value,
-//             cohort: parseInt(t.cohort.value),
-//             parole_status: t.parole_status.value,
-//             student_status: t.student_status.value,
-//             years_given: parseInt(t.years_given.value),
-//             years_left: parseInt(t.years_left.value),
-//             additional_info: t.additional_info.value,
-//           },
-//         },
-//       }),
-//     }).catch((err) => {
-//       alert('Error connecting to server');
-//       console.log(err);
-//     });
-
-//     if (res)
-//       if (res.ok) {
-//         alert('Student created successfully');
-//         res.json().then((data) => router.push(`/student/${data.data.id}`));
-//       } else {
-//         alert('Error creating student');
-//         console.log(res);
-//         res.json().then((resp) => console.log(resp));
-//       }
-//   }
-
-//   return (
-//     <div className={styles.container}>
-//       <form className={styles.studentInfo} onSubmit={handleSubmit}>
-//         <div className={styles.title}>New Student</div>
-
-//         <div className={styles.row}>
-//           <p>Name</p>
-//           <div>
-//             <input name="firstname" placeholder="First Name" />
-//             <input name="lastname" placeholder="Last Name" />
-//           </div>
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Cohort</p>
-//           <input name="cohort" type="number" onWheel={(e) => e.currentTarget.blur()} min={0} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Birthday</p>
-//           <input name="birthday" type="date" />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>DOC Number</p>
-//           <input name="doc_num" type="text" pattern="W\d+" required />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Tufts Number</p>
-//           <input name="tufts_num" type="text" maxLength={7} minLength={7} required />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>BHCC Number</p>
-//           <input name="bhcc_num" type="text" maxLength={32} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>SSN (last 4 digits)</p>
-//           <input name="ssn" type="text" maxLength={4} minLength={4} required />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Parole Status</p>
-//           <textarea name="parole_status" maxLength={256} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Student Status</p>
-//           <textarea name="student_status" maxLength={256} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Years Given</p>
-//           <input name="years_given" type="number" min={0} onWheel={(e) => e.currentTarget.blur()} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Years Left</p>
-//           <input name="years_left" type="number" min={0} onWheel={(e) => e.currentTarget.blur()} />
-//         </div>
-
-//         <div className={styles.row}>
-//           <p>Additional Information</p>
-//           <textarea name="additional_info" maxLength={512} />
-//         </div>
-
-//         <input className={styles.button} type="submit" value="Save" />
-//         <button className={styles.button} onClick={() => router.push('/student')} type="button">
-//           Cancel
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
