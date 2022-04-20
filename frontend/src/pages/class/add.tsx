@@ -151,37 +151,37 @@ export default function AddCourse() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={submit} className={styles.formContainer}>
-        <span className={styles.title}>Add Course</span>
-        <div className={styles.row}>
+      <form onSubmit={submit}>
+        <div className={styles.header}>Add Course</div>
+        <div className={styles.column}>
           <span>Course Title</span>
           <input type="text" id="course_title" />
-        </div>
-        <div className={styles.row}>
+
           <span>Tufts Course Number</span>
           <input type="text" id="course_number_tufts" />
-        </div>
-        <div className={styles.row}>
+
           <span>BHCC Course Number</span>
           <input id="course_number_bhcc" type="text" />
-        </div>
-        <div className={styles.row}>
+
           <span>Tufts Credits</span>
           <input id="credits_tufts" type="text" />
-        </div>
-        <div className={styles.row}>
+
           <span>BHCC Credits</span>
           <input id="credits_bhcc" type="text" />
-        </div>
-        <div className={styles.row}>
+
           <span>Department</span>
-          <select name="department" id="department" size={1}>
+          <select
+            className={styles.select}
+            name="department"
+            id="department"
+            value="Select a Department"
+            size={1}
+          >
             {Array.from(departments.keys()).map((key) => (
               <option> {key} </option>
             ))}
           </select>
-        </div>
-        <div className={styles.row}>
+
           <span>Prereqs</span>
           <div className={styles.fieldList}>
             {prereqsState.map((course, index) => (
@@ -193,11 +193,11 @@ export default function AddCourse() {
               </div>
             ))}
             <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
-              +
+              {' '}
+              Add Prerequisite
             </div>
           </div>
-        </div>
-        <div className={styles.row}>
+
           <span>Instructors</span>
           <div className={styles.fieldList}>
             {instructorsState.map((instructor, index) => (
@@ -215,22 +215,26 @@ export default function AddCourse() {
               </div>
             ))}
             <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
-              <>+</>
+              <> Add Instructor </>
             </div>
           </div>
-        </div>
-        <div className={styles.row}>
+
           <span>Additional Information</span>
           <textarea id="additional_info" maxLength={512} />
+
+          <div className={styles.buttonBox}>
+            <input className={styles.button} type="submit" value="Submit" />
+          </div>
         </div>
-        <input className={styles.button} type="submit" value="Submit" />
       </form>
       <InstructorSelector
+        style={styles.instructPopUp}
         show={showInstructorSelector}
         writeFunction={addInstructor}
         onClose={() => setShowInstructorSelector(false)}
       />
       <CourseSelector
+        style={styles.prereqPopUp}
         show={showCourseSelector}
         writeFunction={addPrereq}
         onClose={() => setShowCourseSelector(false)}

@@ -156,7 +156,8 @@ export default function ViewClass() {
     if (res)
       if (res.ok) {
         alert('Successfully updated course info');
-        router.push(id.toString());
+        router.push('/class');
+        // router.push(id.toString());
       } else {
         alert('Error updating class info');
         console.log(res);
@@ -166,17 +167,17 @@ export default function ViewClass() {
   return (
     <div className={styles.container}>
       {courseData ? (
-        <form className={styles.courseInfo} onSubmit={putClassInfo}>
-          <input
-            name="course_title"
-            className={styles.courseTitle}
-            defaultValue={courseData.attributes.course_title}
-            size={25}
-            maxLength={32}
-            required
-          />
+        <form onSubmit={putClassInfo}>
+          <div className={styles.courseTitle}>
+            <input
+              name="course_title"
+              defaultValue={courseData.attributes.course_title}
+              maxLength={32}
+              required
+            />
+          </div>
 
-          <div className={styles.row}>
+          <div className={styles.courseInfo}>
             <p>Tufts Course Number</p>
             <input
               name="course_number_tufts"
@@ -184,9 +185,7 @@ export default function ViewClass() {
               defaultValue={courseData.attributes.course_number_tufts}
               maxLength={32}
             ></input>
-          </div>
 
-          <div className={styles.row}>
             <p>BHCC Course Number</p>
             <input
               name="course_number_bhcc"
@@ -194,9 +193,7 @@ export default function ViewClass() {
               defaultValue={courseData.attributes.course_number_bhcc}
               maxLength={32}
             ></input>
-          </div>
 
-          <div className={styles.row}>
             <p>Tufts Credits</p>
             <input
               name="credits_tufts"
@@ -206,9 +203,7 @@ export default function ViewClass() {
               max={2147483647}
               onWheel={(e) => e.currentTarget.blur()}
             ></input>
-          </div>
 
-          <div className={styles.row}>
             <p>BHCC Credits</p>
             <input
               name="credits_bhcc"
@@ -218,9 +213,7 @@ export default function ViewClass() {
               max={2147483647}
               onWheel={(e) => e.currentTarget.blur()}
             ></input>
-          </div>
 
-          <div className={styles.row}>
             <p>Department</p>
             <select
               name="department"
@@ -233,9 +226,7 @@ export default function ViewClass() {
                 </option>
               ))}
             </select>
-          </div>
 
-          <div className={styles.row}>
             <p>Instructors</p>
             <div className={styles.fieldList}>
               {instructorsState.map((instructor, index) => (
@@ -253,12 +244,10 @@ export default function ViewClass() {
                 </div>
               ))}
               <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
-                <>+</>
+                Add Instructors
               </div>
             </div>
-          </div>
 
-          <div className={styles.row}>
             <p>Prerequisites</p>
             <div className={styles.fieldList}>
               {prereqsState.map((course, index) => (
@@ -270,12 +259,10 @@ export default function ViewClass() {
                 </div>
               ))}
               <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
-                +
+                Add Prerequisties
               </div>
             </div>
-          </div>
 
-          <div className={styles.row}>
             <p>Additional Information</p>
             <textarea
               name="additional_info"
@@ -283,9 +270,11 @@ export default function ViewClass() {
               defaultValue={courseData.attributes.additional_info}
               maxLength={512}
             />
-          </div>
 
-          <input className={styles.button} type="submit" value="Save" />
+            <div className={styles.buttonBox}>
+              <input className={styles.button} type="submit" value="Save" />
+            </div>
+          </div>
         </form>
       ) : (
         <h1>Loading...</h1>

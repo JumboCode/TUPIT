@@ -10,9 +10,9 @@ const getData = async (url) => {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    credentials: 'include'
+    credentials: 'include',
   }).catch((err) => {
     alert('Error connecting to server');
     console.log(err);
@@ -33,8 +33,10 @@ const SearchClass = () => {
   /* Course results */
   useEffect(() => {
     setValue('courseTitle', courseInitVal ? courseInitVal : '');
-    (async function() {
-      const query = courseInitVal ? `${ENDPOINT}?course_title__icontains=${courseInitVal}` : ENDPOINT;
+    (async function () {
+      const query = courseInitVal
+        ? `${ENDPOINT}?course_title__icontains=${courseInitVal}`
+        : ENDPOINT;
       const res = await getData(query);
       if (res && res.ok) {
         const data = await res.json();
@@ -45,8 +47,8 @@ const SearchClass = () => {
 
   /* Available departments */
   useEffect(() => {
-    (async function() {
-        fetch(ENDPOINT, {
+    (async function () {
+      fetch(ENDPOINT, {
         method: 'OPTIONS',
         headers: {
           'Content-Type': 'application/vnd.api+json',
@@ -66,7 +68,7 @@ const SearchClass = () => {
   }, []);
 
   const onReset = () => {
-    (async function() {
+    (async function () {
       const res = await getData(ENDPOINT);
       if (res && res.ok) {
         const data = await res.json();
@@ -77,11 +79,12 @@ const SearchClass = () => {
 
   const onSubmitSuccess = (data, e) => {
     e.preventDefault();
-    (async function() {
-      const query = `?course_title__icontains=${data.courseTitle}` +
-                    `&course_number_tufts__icontains=${data.tuftsNumber}` + 
-                    `&course_number_bhcc__icontains=${data.bhccNumber}` + 
-                    `&department=${data.department}`;
+    (async function () {
+      const query =
+        `?course_title__icontains=${data.courseTitle}` +
+        `&course_number_tufts__icontains=${data.tuftsNumber}` +
+        `&course_number_bhcc__icontains=${data.bhccNumber}` +
+        `&department=${data.department}`;
       const res = await getData(`${ENDPOINT}${query}`);
       if (res && res.ok) {
         const data = await res.json();
@@ -97,16 +100,19 @@ const SearchClass = () => {
       </div>
       <div className={styles.wrapper}>
         <div className={styles.column}>
-          <form  onSubmit={handleSubmit(onSubmitSuccess)} onReset={onReset}
-           className={styles.filterContainer}>
-            <label htmlFor='courseTitle'>Course Title:</label>
-            <input id='courseTitle' type='text' {...register('courseTitle')}/>
-            <label htmlFor='tuftsNumber'>Tufts Course Number:</label>
-            <input id='tuftsNumber' type='text' {...register('tuftsNumber')}/>
-            <label htmlFor='bhccNumber'>Bunker Course Number:</label>
-            <input id='bhccNumber' type='text' {...register('bhccNumber')}/>
-            <label htmlFor='department'>Department:</label>
-            <select name='selectDepartment' id='department' {...register('department')}>
+          <form
+            onSubmit={handleSubmit(onSubmitSuccess)}
+            onReset={onReset}
+            className={styles.filterContainer}
+          >
+            <label htmlFor="courseTitle">Course Title:</label>
+            <input id="courseTitle" type="text" {...register('courseTitle')} />
+            <label htmlFor="tuftsNumber">Tufts Course Number:</label>
+            <input id="tuftsNumber" type="text" {...register('tuftsNumber')} />
+            <label htmlFor="bhccNumber">Bunker Course Number:</label>
+            <input id="bhccNumber" type="text" {...register('bhccNumber')} />
+            <label htmlFor="department">Department:</label>
+            <select name="selectDepartment" id="department" {...register('department')}>
               <option></option>
               {departments.map((dep) => (
                 <option key={dep.value} value={dep.value}>
@@ -115,34 +121,32 @@ const SearchClass = () => {
               ))}
             </select>
             <div></div>
-            <div className={styles.button}>
-              <input type='submit' value='Submit'/>
-              <input type='reset' value='Reset'/>
+            <div className={styles.buttonBox}>
+              <input className={styles.button} type="submit" value="Submit" />
+              <input className={styles.button} type="reset" value="Reset" />
             </div>
           </form>
         </div>
         <div className={styles.column}>
           <div className={styles.resultsWrapper}>
-            {results && results.length > 0 ?
-              (<div className={styles.resultsContainer}>
-                <div className={styles.searchResultsHeader}>Search Result:</div>        
+            {results && results.length > 0 ? (
+              <div className={styles.resultsContainer}>
+                <span className={styles.searchResultsHeader}>Search Results:</span>
                 <div></div>
                 {results.map((course) => (
                   <React.Fragment key={course.id}>
-                    <span className={styles.resultsField}>
-                      {course.attributes.course_title}
-                    </span>
-                    <div className={styles.resultsView}>
-                      <button onClick={() => router.push(`class/${course.id}`)}>
-                        View
-                      </button>
-                    </div>
+                    <button
+                      className={styles.resultsField}
+                      onClick={() => router.push(`class/${course.id}`)}
+                    >
+                      <span>{course.attributes.course_title}</span>
+                      <span>View</span>
+                    </button>
                   </React.Fragment>
                 ))}
-              </div>) : (
-              <div className={styles.noResults}>
-                No results found
               </div>
+            ) : (
+              <div className={styles.noResults}>No results found</div>
             )}
           </div>
         </div>

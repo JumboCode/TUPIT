@@ -9,6 +9,15 @@
   width: 100%;
   padding: 4rem;
 
+  .button {
+    border-radius: 3px;
+    color: $white;
+    text-align: center;
+    padding: 4px 20px;
+    background-color: $sea-text;
+    cursor: pointer;
+  }
+
   .header {
     color: $black;
     font-size: 36px;
@@ -45,7 +54,8 @@
     font-size: 28px;
     line-height: 36px;
 
-    input, select {
+    input,
+    select {
       background: $white;
       color: $sea-text;
       border: 1px solid $dark-blue;
@@ -64,14 +74,14 @@
       text-align: right;
     }
 
-    .button {
+    .buttonBox {
       display: flex;
       justify-content: space-between;
 
       input {
         border: none;
         border-radius: 3px;
-        color: white; 
+        color: white;
         cursor: pointer;
         padding: 8px 12px;
       }
@@ -86,7 +96,6 @@
     }
   }
 
-
   .resultsWrapper {
     background: $white;
     border: 1px solid $sea-text;
@@ -98,7 +107,7 @@
     .resultsContainer {
       padding: 26px 32px;
       display: grid;
-      grid-template-columns: 1fr 0.8fr;
+      grid-template-columns: 1fr;
       row-gap: 10px;
       overflow-y: scroll;
 
@@ -107,24 +116,17 @@
       }
 
       .resultsField {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         border-radius: 10px;
-        padding: 9px 14px 5px;
+        padding: 10px 16px;
         background-color: $light-blue;
       }
-
-      .resultsView {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-      }
-
-      button {
-        border-radius: 3px;
-        color: $white;
-        text-align: center;
-        padding: 4px 20px;
-        background-color: $sea-text;
-        cursor: pointer;
+      @media (pointer: fine) {
+        .resultsField:hover {
+          border: 1px solid $dark-blue;
+        }
       }
     }
 
