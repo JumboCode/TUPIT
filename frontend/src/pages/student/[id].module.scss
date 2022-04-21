@@ -20,8 +20,10 @@
 }
 
 .studentInfo {
-  background: #9ec8d6;
-  border-radius: 49px;
+  //background: #9ec8d6;
+  background-color: white;
+  border-radius: 5px;
+  border: 3px solid #4c8fa5;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 32px;
 
@@ -31,9 +33,12 @@
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
     'Open Sans', 'Helvetica Neue', sans-serif;
-  color: white;
+  //color: white;
+  color: #4c8fa5;
   font-weight: 400;
   font-size: 32px;
+
+  font-family: 'DM Mono';
 }
 
 .row {
@@ -49,12 +54,13 @@
 
 .row input,
 .row textarea {
-  background: white;
+  background: #ecf7fa;
+  margin-bottom: 20px;
   border: unset;
   color: #4c8fa5;
   padding: 20px;
   font-size: 24px;
-  border-radius: 28px;
+  border-radius: 5px;
   height: 60px;
   resize: none;
 }
@@ -83,7 +89,7 @@
   column-gap: 12px;
   border: none;
   background: #4c8fa5;
-  border-radius: 28px;
+  border-radius: 5px;
   color: white;
   font-size: 24px;
   font-weight: bold;
@@ -93,6 +99,7 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
   margin: 0;
+  font-family: 'DM Mono';
 }
 
 .button:hover {
@@ -116,9 +123,9 @@
 .progBar {
   width: 100%;
   height: 32px;
-  border-radius: 16px;
+  border-radius: 5px;
   overflow: hidden;
-  background-color: white;
+  background-color: #c7e3ec;
   display: flex;
 }
 
@@ -171,7 +178,8 @@
   flex-direction: column;
   row-gap: 8px;
   padding: 12px;
-  border-radius: 16px;
+  border: 1px solid #4c8fa5;
+  border-radius: 5px;
   background-color: white;
   color: #4c8fa5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -180,7 +188,7 @@
 }
 
 .courseEntry:hover {
-  border: 1px solid #4c8fa5;
+  border: 2px solid #4c8fa5;
   padding: 11px;
 }
 
