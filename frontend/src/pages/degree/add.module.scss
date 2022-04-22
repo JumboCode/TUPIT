@@ -38,6 +38,27 @@
       padding: 0 1rem;
     }
 
+    .checkbox {
+      -webkit-appearance: none;
+      background: $white;
+      border: 1px solid $dark-blue;
+      border-radius: 3px;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      width: 50px;
+      height: 50px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checkbox:checked:after {
+      content: '\2714';
+      font-size: 28px;
+      margin: auto;
+      padding: 0;
+    }
+
     input:focus, textarea:focus, select:focus {
       outline: none;
     }
@@ -51,8 +72,104 @@
     label {
       text-align: right;
     }
+
+    .button {
+      border: none;
+      background: #4c8fa5;
+      border-radius: 3px;
+      color: white;
+      font-size: 20px;
+      padding: 8px 12px;
+      text-align: center;
+    
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+      margin: 0;
+    }
+
+    .fieldList > .prereqField {
+      background: white;
+      border: unset;
+      color: #4c8fa5;
+      padding: 20px;
+      font-size: 24px;
+      border-radius: 3px;
+      height: 60px;
+      border: 1px solid #4c8fa5;
+    }
+
+    .fieldList > .prereqField {
+      background: white;
+      border: unset;
+      color: #4c8fa5;
+      padding: 20px;
+      font-size: 24px;
+      border-radius: 3px;
+      height: 60px;
+      border: 1px solid #4c8fa5;
+    }
+
+    .prereqField {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 10px;
+      padding: 10px 16px;
+      background-color: $light-blue;
+      margin-bottom: 8px;
+    }
+
+    .prereqfield > a {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: $dark-blue;
+      font-size: 24px;
+    }
+
+    .removeButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      color: #4c8fa5;
+      cursor: pointer;
+      font-size: 32px;
+      user-select: none;
+    }
+
+    .removeButton:hover {
+      font-size: 46px;
+    }
+  }
+
+
+  // @TODO - Media-query
+  @media (max-width: 800px) {
+    .row {
+      grid-template-columns: auto;
+      label {
+        text-align: left;
+      }
+    }
+  }
+
+  @media (pointer: fine) {
+    .button:hover {
+      background: #3b7d9a;
+    }
+
+    .button:active {
+      transform: translateY(2px);
+    }
   }
 }
+
 // .container {
 //   width: 100%;
 //   height: 100%;

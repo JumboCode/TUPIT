@@ -72,7 +72,7 @@
 }
 
 .courseInfo > input,
-.field > .prereqField {
+.fieldList > .prereqField {
   background: white;
   border: unset;
   color: #4c8fa5;
@@ -106,7 +106,7 @@
 }
 
 .instructorField > a,
-.prereqField > a {
+.prereqfield > a {
   display: flex;
   flex-direction: row;
   align-items: center;
