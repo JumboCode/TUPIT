@@ -122,3 +122,6 @@ db.sqlite3
 
 # Vscode
 .vscode/
+
+# NextJS environment variables
+frontend/.env.local
