@@ -23,12 +23,14 @@ const FileViewer = (studentData) => {
     if (!file) return alert('Please select a file to upload before submitting');
 
     let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
-    // let { url } = await uploadToS3(file);
-    let url = file.name;
+    let url = await fetch(`/api/s3`)
+      .then((response) => response.json())
+      .then((response) => response.payload)
+      .catch((err) => console.log(err));
+    //let url = file.name;
+    console.log(url);
 
-    console.log(associated_files);
     associated_files.push(url);
-    console.log(associated_files);
     studentData.attributes.associated_files = associated_files;
 
     const res = await fetch(backendUrl, {
