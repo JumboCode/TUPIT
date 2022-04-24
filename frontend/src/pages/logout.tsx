@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../components/auth';
+import { useAuth } from '@/components/auth';
 
 export default function LogoutForm() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
