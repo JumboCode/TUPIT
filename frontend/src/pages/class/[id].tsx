@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
-import { CourseSelector } from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
+import { CourseSelector } from '@/components/Selectors/CourseSelector';
 import styles from './[id].module.scss';
 
 async function fetchCourseName(id) {

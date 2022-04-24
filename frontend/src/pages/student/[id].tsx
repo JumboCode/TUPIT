@@ -1,10 +1,10 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import { CourseProgressModifier } from '../../components/Modifiers/CourseProgressModifier';
-import { CreateCourseProgress } from '../../components/Creators/CreateCourseProgress';
+import { useAuth } from '@/components/auth';
+import { CourseProgressModifier } from '@/components/Modifiers/CourseProgressModifier';
+import { CreateCourseProgress } from '@/components/Creators/CreateCourseProgress';
 import styles from './[id].module.scss';
-import FileViewer from '../../components/FileViewer/FileViewer';
+import FileViewer from '@/components/FileViewer/FileViewer';
 
 async function fetchCourseName(id) {
   let url = `http://127.0.0.1:8000/api/course/${id}/`;
