@@ -7,22 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-
-  .select {
-    background: white;
-    background-image: none;
-    box-shadow: 0px;
-    color: $dark-blue;
-    border: 1px solid $dark-blue;
-    border-radius: 3px;
-    height: 55px;
-    padding: 0 1rem;
-
-    text-align: center;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-  }
+  width: 100%;
 
   .header {
     color: $black;
@@ -34,21 +19,118 @@
     width: 100%;
   }
 
-  .button {
-    border: none;
-    background: #4c8fa5;
-    border-radius: 3px;
-    color: white;
-    font-size: 20px;
-    padding: 8px 12px;
-    height: 40px;
-    text-align: center;
+  .row {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    font-size: 28px;
+    align-items: center;
+    line-height: 36px;
 
-    cursor: pointer;
-    user-select: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
-    margin: 0;
+    label {
+      text-align: right;
+    }
+
+    input, textarea, select {
+      color: $dark-blue;
+      border: 1px solid $dark-blue;
+      border-radius: 3px;
+      box-sizing: border-box;
+      font-size: 20px;
+      height: 55px;
+      padding: 0 1rem;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      padding: 1rem;
+      height: 150px;
+    }
+
+    textarea:focus {
+      outline: None;
+    }
+
+    .button {
+      border: none;
+      background: #4c8fa5;
+      border-radius: 3px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      padding: 8px 12px;
+      height: 40px;
+
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+      margin: 0;
+    }
+
+    .prereqField {
+      background-color: $white;
+      border: 1px solid #4c8fa5;
+      color: #4c8fa5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      height: 55px;
+
+      input {
+        border-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        font-size: 20px;
+      }
+    }
+
+    .buttonBox {
+      margin-top: 1rem;
+      grid-column: 2;
+      .button {
+        width: 100%;
+      }
+    }
+
+    .removeButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      color: #4c8fa5;
+      cursor: pointer;
+      font-size: 32px;
+      user-select: none;
+    }
+
+    .removeButton:hover {
+      font-size: 46px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .row {
+      grid-template-columns: auto;
+
+      label {
+        text-align: left;
+      }
+    }
   }
 
   @media (pointer: fine) {
@@ -59,52 +141,5 @@
     .button:active {
       transform: translateY(2px);
     }
-  }
-
-  .column {
-    display: grid;
-    grid-template-columns: 0.7fr 1fr;
-    row-gap: 1rem;
-    column-gap: 1rem;
-
-    span {
-      text-align: right;
-      float: left;
-      margin-right: 10px;
-      font-size: 24px;
-    }
-  }
-
-  .buttonBox {
-    margin-top: 1rem;
-    grid-column: 2;
-    .button {
-      width: 100%;
-    }
-  }
-
-  input,
-  textarea {
-    color: $dark-blue;
-    border: 1px solid $dark-blue;
-    border-radius: 3px;
-    box-sizing: border-box;
-    font-size: 20px;
-    height: 55px;
-    padding: 0 1rem;
-  }
-
-  input:focus {
-    outline: none;
-  }
-
-  textarea {
-    resize: none;
-    padding: 1rem;
-    height: 150px;
-  }
-
-  textarea:focus {
-    outline: None;
   }
 }

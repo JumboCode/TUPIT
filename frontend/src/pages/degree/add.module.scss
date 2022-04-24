@@ -7,11 +7,12 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 4rem;
+  padding: 3rem;
 
   .header {
     color: $black;
     font-size: 36px;
+    font-weight: 400;
     line-height: 47px;
     text-align: left;
     margin-bottom: 1rem;
@@ -78,9 +79,12 @@
       background: #4c8fa5;
       border-radius: 3px;
       color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 20px;
       padding: 8px 12px;
-      text-align: center;
+      height: 40px;
     
       cursor: pointer;
       user-select: none;
@@ -122,15 +126,6 @@
       margin-bottom: 8px;
     }
 
-    .prereqfield > a {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      color: $dark-blue;
-      font-size: 24px;
-    }
-
     .removeButton {
       display: flex;
       align-items: center;
@@ -148,11 +143,11 @@
     }
   }
 
-
   // @TODO - Media-query
   @media (max-width: 800px) {
     .row {
       grid-template-columns: auto;
+
       label {
         text-align: left;
       }
