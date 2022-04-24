@@ -62,8 +62,8 @@ const FileViewer = (studentData) => {
 
   return (
     <>
-      <p>Choose a file to upload</p>
       <form className={styles.dropContainer} onSubmit={handleSubmit}>
+        <p>Choose a file to upload</p>
         <input className={styles.upload} type="file" title="" onChange={handleFileChange} />
         <div className={styles.submitContainer}>
           <button className={styles.submit} type="submit" value="Submit">
