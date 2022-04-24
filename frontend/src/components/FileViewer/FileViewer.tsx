@@ -1,13 +1,13 @@
 import router from 'next/router';
 import { useAuth } from '../auth';
-import { useS3Upload } from 'next-s3-upload';
 import styles from './FileViewer.module.scss';
 import { useState } from 'react';
+import { useS3Upload } from 'next-s3-upload';
 
 const FileViewer = (studentData) => {
   const [file, setFile] = useState(null);
-  const { csrfToken } = useAuth();
   const { uploadToS3 } = useS3Upload();
+  const { csrfToken } = useAuth();
 
   let associated_files =
     studentData.attributes == undefined ? null : studentData.attributes.associated_files;
@@ -22,17 +22,18 @@ const FileViewer = (studentData) => {
 
     if (!file) return alert('Please select a file to upload before submitting');
 
-    let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
-    let url = await fetch(`/api/s3`)
-      .then((response) => response.json())
-      .then((response) => response.payload)
-      .catch((err) => console.log(err));
-    //let url = file.name;
-    console.log(url);
+    let resp = await uploadToS3(file).catch((err) => {
+      alert('Error uploading file.');
+      console.log(err);
+    });
+    if (resp == undefined) {
+      return;
+    }
 
-    associated_files.push(url);
+    associated_files.push(resp.url);
     studentData.attributes.associated_files = associated_files;
 
+    let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
     const res = await fetch(backendUrl, {
       method: 'PUT',
       headers: {
@@ -76,7 +77,10 @@ const FileViewer = (studentData) => {
       {associated_files == undefined || associated_files.length == 0 ? null : (
         <div className={styles.fileDisplay}>
           {associated_files.map((file) => (
-            <p>{file}</p>
+            <a href={file}>
+              {file}
+              <br />
+            </a>
           ))}
         </div>
       )}
