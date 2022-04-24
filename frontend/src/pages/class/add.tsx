@@ -45,7 +45,6 @@ export default function AddCourse() {
         const departments = new Map<string, string>(
           res.data.actions.POST.department.choices.map((x) => [x.display_name, x.value])
         );
-        console.log(departments.keys());
         setDepartments(departments);
       })
       .catch((err) => {
@@ -93,7 +92,7 @@ export default function AddCourse() {
             credits_bhcc: data.credits_bhcc,
             department: departments.get(data.department),
             instructors: instructorsState,
-            prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}`),
+            prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}/`),
             additional_info: data.additional_info
           },
         },
