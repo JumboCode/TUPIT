@@ -2,6 +2,7 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/components/auth';
 import CourseSelector from '../../../components/Selectors/CourseSelector';
+import styles from './index.module.scss';
 
 export default function EditDegreeReqs() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
@@ -79,6 +80,10 @@ export default function EditDegreeReqs() {
         alert('Error connecting to server');
         console.log(err);
       });
+
+    selectedReq.req.attributes.title = e.target.title.value;
+
+    setSelectedReq(selectedReq);
   }
 
   function deleteSelectedReq() {
@@ -187,45 +192,85 @@ export default function EditDegreeReqs() {
 
   function reqEntry(req) {
     return (
-      <div
-        onClick={() => {
-          setSelectedReqData(req);
-        }}
-        key={req.id}
-      >
-        <div>{req.attributes.title}</div>
+      <div>
+        <div
+          className={styles.reqEntry}
+          onClick={() => {
+            setSelectedReqData(req);
+          }}
+          key={req.id}
+        >
+          {req.attributes.title}
+        </div>
       </div>
     );
   }
 
   function fulfilledByEntry(course) {
     return (
-      <div key={course.id}>
-        <div>{course.course_title}</div>
-        <div onClick={() => removeReqCourse(course)}>X</div>
+      <div className={styles.row} key={course.id}>
+        <div></div>
+        <div className={styles.classReq}>
+          <div className={styles.button} onClick={() => removeReqCourse(course)}>
+            X
+          </div>
+          {course.course_title}
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <input type="text" placeholder="Search by Title" onChange={onSearch} />
-      <div>{results.length > 0 ? results.map(reqEntry) : <div>No results found</div>}</div>
-      <div onClick={newDegreeReq}>New</div>
-      <br />
-      <br />
-      <div>
-        {selectedReq ? (
-          <form onSubmit={saveSelectedReq}>
-            <div key={selectedReq.req.attributes.title}>
-              <input type="text" name="title" defaultValue={selectedReq.req.attributes.title} />
+    <div className={styles.container}>
+      <div className={styles.box}>
+        <h1 className={styles.header}>Degree Requirements</h1>
+        <div className={styles.row}>
+          <input
+            type="text"
+            name="Requriement search"
+            placeholder="Search by Title"
+            onChange={onSearch}
+          />
+          <button className={styles.button} onClick={newDegreeReq}>
+            New Requirement
+          </button>
+        </div>
+
+        <div>
+          <div className={styles.header}>
+            <h2>Requirement Sets</h2>
+          </div>
+          {results.length > 0 ? results.map(reqEntry) : <div>No results found</div>}
+        </div>
+        <div>
+          {selectedReq ? (
+            <div>
+              <div className={styles.header}>
+                <h2>Modify requirements for {selectedReq.req.attributes.title}</h2>
+              </div>
+              <form className={styles.modify} onSubmit={saveSelectedReq}>
+                <div className={styles.row} key={selectedReq.req.attributes.title}>
+                  <input type="text" name="title" defaultValue={selectedReq.req.attributes.title} />
+                  <div
+                    className={styles.button}
+                    tabIndex={0}
+                    onClick={() => setShowCourseSelector(true)}
+                  >
+                    Add Class
+                  </div>
+                </div>
+                <div className={styles.modify}>{selectedReq.courses.map(fulfilledByEntry)}</div>
+
+                <div className={styles.row}>
+                  <div className={styles.button} onClick={deleteSelectedReq}>
+                    Delete
+                  </div>
+                  <input className={styles.button} name="Save" type="submit" value="Save" />
+                </div>
+              </form>
             </div>
-            {selectedReq.courses.map(fulfilledByEntry)}
-            <div onClick={() => setShowCourseSelector(true)}>+</div>
-            <div onClick={deleteSelectedReq}>Delete</div>
-            <input type="submit" value="Save" />
-          </form>
-        ) : null}
+          ) : null}
+        </div>
       </div>
 
       <CourseSelector

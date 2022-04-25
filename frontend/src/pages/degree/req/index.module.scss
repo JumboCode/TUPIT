@@ -1,0 +1,279 @@
+@import '../../../styles/global/colors.scss';
+
+.container {
+  // color: $form-text;
+  color: #1a2737;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  width: 100%;
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .header > h2 {
+    color: $black;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 35px;
+    text-align: center;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .header {
+    color: $black;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 47px;
+    text-align: center;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .modify {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    font-size: 20px;
+    align-items: center;
+    line-height: 36px;
+
+    label {
+      text-align: right;
+    }
+
+    input,
+    textarea,
+    select {
+      color: $dark-blue;
+      border: 1px solid $dark-blue;
+      border-radius: 3px;
+      box-sizing: border-box;
+      font-size: 20px;
+      height: 55px;
+      padding: 0 1rem;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      padding: 1rem;
+      height: 150px;
+    }
+
+    textarea:focus {
+      outline: None;
+    }
+
+    .button {
+      border: none;
+      background: #4c8fa5;
+      border-radius: 3px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      padding: 8px 12px;
+      height: 40px;
+
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
+      margin: 0;
+    }
+
+    .prereqField {
+      background-color: $white;
+      border: 1px solid #4c8fa5;
+      color: #4c8fa5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      height: 55px;
+
+      input {
+        border-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        font-size: 20px;
+      }
+    }
+
+    .buttonBox {
+      margin-top: 1rem;
+      grid-column: 2;
+      .button {
+        width: 100%;
+      }
+    }
+
+    .removeButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      color: #4c8fa5;
+      cursor: pointer;
+      font-size: 32px;
+      user-select: none;
+    }
+
+    .removeButton:hover {
+      font-size: 46px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .row {
+      grid-template-columns: auto;
+
+      label {
+        text-align: left;
+      }
+    }
+  }
+
+  @media (pointer: fine) {
+    .button:hover {
+      background: #3b7d9a;
+    }
+
+    .button:active {
+      transform: translateY(2px);
+    }
+  }
+
+  .classReq {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .reqEntry {
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      text-decoration: $dark-blue underline;
+    }
+  }
+}
+
+// @import '../../../styles/global/colors.scss';
+
+// .container {
+//     width: 100%;
+//     height: 100%;
+//     display: flex;
+//     // flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+
+//     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+//         'Open Sans', 'Helvetica Neue', sans-serif;
+//     // color: white;
+//     font-size: 20px;
+// }
+
+// .box {
+//     border: 2px solid $mid-blue;
+//     box-sizing: border-box;
+//     margin-top: 10vh;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 20px;
+//     width: 50%;
+//     height: auto;
+//     padding: 40px;
+// }
+
+// .box h1 {
+//     color: $black;
+//     font-size: 32px;
+//     font-weight: 500;
+// }
+
+// .box h2 {
+//     color: $black;
+//     font-size: 26px;
+//     font-weight: 400;
+// }
+
+// .wrapper {
+//     align-items: stretch;
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: wrap;
+//     width: 100%;
+// }
+
+// .row {
+//     flex: 0 0 100%;
+// }
+
+// .box input[type='text'] {
+//     color: #555;
+//     border-bottom: 3px solid $place-holder-text;
+//     margin: 20px 0;
+//     font-style: normal;
+//     font-weight: normal;
+//     font-size: 20px;
+//     line-height: 26px;
+// }
+
+// .box input[type='text']::placeholder {
+//     color: #cdcdcd;
+// }
+
+// .button {
+//     padding: 5px;
+//     font-size: 20px;
+//     border-radius: 3px;
+//     background-color: lightgray;
+//     border: #888 2px solid;
+
+//     &:focus {
+//         border: $dark-blue 2px solid !important;
+//     }
+// }
+
+// .row {
+//     display: flex;
+//     flex-direction: row;
+//     // justify-content: space-between;
+//     gap: 10px;
+//     align-items: center;
+// }
+
+// .reqEntry:focus {
+//     text-decoration: $dark-blue underline;
+// }
+
+// .modify {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 10px;
+// }
