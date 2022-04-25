@@ -61,6 +61,7 @@ const FileViewer = (studentData) => {
 
       if (res && res.ok) {
         alert('Successfully deleted the file.');
+        router.replace(`/student/${studentData.id}`);
       }
     };
   };
