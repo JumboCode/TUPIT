@@ -83,7 +83,6 @@ export default function ViewStudent() {
   }
 
   async function fetchGPA() {
-    console.log('in here');
     return new Promise((resolve, reject) => {
       fetch('http://127.0.0.1:8000/calculate-gpa/', {
         method: 'POST',
@@ -99,6 +98,8 @@ export default function ViewStudent() {
           if (res.status === 200 && res.ok) {
             // succeeded
             res.json().then((data) => {
+              data.gpa_bhcc = data.gpa_bhcc.toFixed(2);
+              data.gpa_tufts = data.gpa_tufts.toFixed(2);
               setBHCCGPA(data.gpa_bhcc);
               setTuftsGPA(data.gpa_tufts);
             });
