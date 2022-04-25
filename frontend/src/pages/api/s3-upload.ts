@@ -30,7 +30,7 @@ const getUploadUrl = async (name: string, type: string) => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Allow only POST method (for now)
-  if (req.method != 'POST') {
+  if (req.method !== 'POST' && req.method !== 'DELETE') {
     res.status(405).json({ message: 'Method not allowed' });
     return;
   }
@@ -42,6 +42,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       console.log(url);
 
       res.status(200).json({ url: url });
+    } else if (req.method == 'DELETE') {
+      let { key } = JSON.parse(req.body);
+
+      const params: S3.DeleteObjectRequest = {
+        Bucket: process.env.S3_UPLOAD_BUCKET,
+        Key: key,
+      };
+
+      s3.deleteObject(params, (err, data) => {
+        if (err) {
+          res.status(400).json({ message: err });
+        } else if (data) {
+          res.status(200).end();
+        }
+      });
     }
   } catch (err) {
     console.log(err);

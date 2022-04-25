@@ -18,11 +18,51 @@ const FileViewer = (studentData) => {
   const { csrfToken } = useAuth();
 
   let associated_files =
-    studentData.attributes == undefined ? null : studentData.attributes.associated_files;
+    studentData.attributes == undefined ? [] : studentData.attributes.associated_files;
 
   const handleFileChange = async (event) => {
     let currFile = event.target.files[0];
     setFile(currFile);
+  };
+
+  const deleteFile = (index: number) => {
+    return async (event) => {
+      event.preventDefault();
+      let url = associated_files[index];
+
+      await fetch('/api/s3-upload', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          key: getFileName(url),
+        }),
+      }).catch((err) => {
+        alert('Error deleting file.');
+        console.log(err);
+      });
+
+      associated_files.splice(index, 1);
+      studentData.attributes.associated_files = associated_files;
+
+      let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
+      const res = await fetch(backendUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          data: studentData,
+        }),
+      }).catch((err) => {
+        alert('Error connecting to server.');
+        console.log(err);
+      });
+
+      if (res && res.ok) {
+        alert('Successfully deleted the file.');
+      }
+    };
   };
 
   const handleSubmit = async (event) => {
@@ -102,11 +142,16 @@ const FileViewer = (studentData) => {
       </form>
       {associated_files == undefined || associated_files.length == 0 ? null : (
         <div className={styles.fileDisplay}>
-          {associated_files.map((file: string) => (
-            <a href={file} target="_blank">
-              {getFileName(file)}
-              <br />
-            </a>
+          {associated_files.map((file: string, index: number) => (
+            <div>
+              <a href={file} target="_blank">
+                {getFileName(file)}
+                <br />
+              </a>
+              <button value="Delete" onClick={deleteFile(index)}>
+                Delete
+              </button>
+            </div>
           ))}
         </div>
       )}
