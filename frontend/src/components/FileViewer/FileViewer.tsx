@@ -2,11 +2,19 @@ import router from 'next/router';
 import { useAuth } from '../auth';
 import styles from './FileViewer.module.scss';
 import { useState } from 'react';
-import { useS3Upload } from 'next-s3-upload';
+
+const getFileName = (url: string) => {
+  const lastSlashLoc = url.lastIndexOf('/');
+
+  return url.slice(lastSlashLoc + 1);
+};
+
+const getFileUrl = (name: string) => {
+  return `https://tupit.s3.amazonaws.com/${name}`;
+};
 
 const FileViewer = (studentData) => {
   const [file, setFile] = useState(null);
-  const { uploadToS3 } = useS3Upload();
   const { csrfToken } = useAuth();
 
   let associated_files =
@@ -22,15 +30,33 @@ const FileViewer = (studentData) => {
 
     if (!file) return alert('Please select a file to upload before submitting');
 
-    let resp = await uploadToS3(file).catch((err) => {
-      alert('Error uploading file.');
-      console.log(err);
-    });
+    let resp = await fetch('/api/s3-upload', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: file.name,
+        type: file.type,
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => {
+        alert('Error uploading file.');
+        console.log(err);
+      });
     if (resp == undefined) {
       return;
     }
 
-    associated_files.push(resp.url);
+    let { url } = resp;
+    await fetch(url, {
+      method: 'PUT',
+      body: file,
+    }).catch((err) => {
+      alert('Error uploading file.');
+      console.log(err);
+    });
+
+    url = getFileUrl(file.name);
+    associated_files.push(url);
     studentData.attributes.associated_files = associated_files;
 
     let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
@@ -76,9 +102,9 @@ const FileViewer = (studentData) => {
       </form>
       {associated_files == undefined || associated_files.length == 0 ? null : (
         <div className={styles.fileDisplay}>
-          {associated_files.map((file) => (
-            <a href={file}>
-              {file}
+          {associated_files.map((file: string) => (
+            <a href={file} target="_blank">
+              {getFileName(file)}
               <br />
             </a>
           ))}
