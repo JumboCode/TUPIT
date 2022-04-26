@@ -240,7 +240,9 @@ export default function EditDegreeReqs() {
           <div className={styles.header}>
             <h2>Requirement Sets</h2>
           </div>
-          {results.length > 0 ? results.map(reqEntry) : <div>No results found</div>}
+          <div className={styles.twoColumn}>
+            {results.length > 0 ? results.map(reqEntry) : <div>No results found</div>}
+          </div>
         </div>
         <div>
           {selectedReq ? (
@@ -256,9 +258,16 @@ export default function EditDegreeReqs() {
                     tabIndex={0}
                     onClick={() => setShowCourseSelector(true)}
                   >
-                    Add Class
+                    Add Course
                   </div>
                 </div>
+                <div className={styles.row}>
+                  <div></div>
+                  <div className={styles.header}>
+                    <h3>Required Courses</h3>
+                  </div>
+                </div>
+
                 <div className={styles.modify}>{selectedReq.courses.map(fulfilledByEntry)}</div>
 
                 <div className={styles.row}>
