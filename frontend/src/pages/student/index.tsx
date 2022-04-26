@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
+import { useAuth } from '@/components/auth';
 import styles from './index.module.scss';
 
 const ENDPOINT: string = `http://127.0.0.1:8000/api/students/?ordering=lastname`;
@@ -32,7 +32,6 @@ const SearchStudents = () => {
   const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
 
   useEffect(() => {
-    console.log(cohortInitVal);
     setValue('cohort', cohortInitVal ? cohortInitVal : '');
     (async function () {
       const query = cohortInitVal ? `${ENDPOINT}&cohort=${cohortInitVal}` : ENDPOINT;

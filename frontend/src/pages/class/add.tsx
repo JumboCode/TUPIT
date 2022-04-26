@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import styles from './add.module.scss';
-import { useAuth } from '../../components/auth';
-import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
-import { CourseSelector } from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
+import { CourseSelector } from '@/components/Selectors/CourseSelector';
 
 const ENDPOINT: string = 'http://127.0.0.1:8000/api/course/';
 

@@ -13,6 +13,7 @@
     "url": "git+https://github.com/jumbocode/tupit.git"
   },
   "dependencies": {
+    "aws-sdk": "^2.1120.0",
     "classnames": "^2.3.1",
     "next": "^12.1.5",
     "prop-types": "^15.7.2",

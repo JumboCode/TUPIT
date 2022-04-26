@@ -8,13 +8,7 @@ import styles from './index.module.scss';
 const LoginForm = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
