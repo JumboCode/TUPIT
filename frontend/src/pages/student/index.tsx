@@ -13,14 +13,14 @@ const getData = async (url: string) => {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    credentials: 'include'
+    credentials: 'include',
   }).catch((err) => {
     alert('Error connecting to server');
     console.log(err);
   });
-  
+
   return res;
 };
 
@@ -32,9 +32,9 @@ const SearchStudents = () => {
   const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
 
   useEffect(() => {
-    console.log(cohortInitVal); 
+    console.log(cohortInitVal);
     setValue('cohort', cohortInitVal ? cohortInitVal : '');
-    (async function() {
+    (async function () {
       const query = cohortInitVal ? `${ENDPOINT}&cohort=${cohortInitVal}` : ENDPOINT;
       const res = await getData(query);
       if (res && res.ok) {
@@ -45,7 +45,7 @@ const SearchStudents = () => {
   }, [cohortInitVal]);
 
   const onReset = () => {
-    (async function() {
+    (async function () {
       const res = await getData(ENDPOINT);
       if (res && res.ok) {
         const data = await res.json();
@@ -56,13 +56,14 @@ const SearchStudents = () => {
 
   const onSubmitSuccess = (data, e) => {
     e.preventDefault();
-    (async function() {
-      const query = `&firstname__icontains=${data.firstName}` + 
-                    `&lastname__icontains=${data.lastName}` +
-                    `&tufts_num=${data.tuftsNum}` + 
-                    `&bhcc_num=${data.bhccNum}` + 
-                    `&cohort=${data.cohort}` +
-                    `&doc_num=${data.docNum}`;
+    (async function () {
+      const query =
+        `&firstname__icontains=${data.firstName}` +
+        `&lastname__icontains=${data.lastName}` +
+        `&tufts_num=${data.tuftsNum}` +
+        `&bhcc_num=${data.bhccNum}` +
+        `&cohort=${data.cohort}` +
+        `&doc_num=${data.docNum}`;
       const res = await getData(`${ENDPOINT}${query}`);
       if (res && res.ok) {
         const data = await res.json();
@@ -78,50 +79,53 @@ const SearchStudents = () => {
       </div>
       <div className={styles.wrapper}>
         <div className={styles.column}>
-          <form onSubmit={handleSubmit(onSubmitSuccess)} onReset={onReset}
-           className={styles.filterContainer}>
-            <label htmlFor='firstName'>First Name:</label>
-            <input id='firstName' type='text' {...register('firstName')}/>
-            <label htmlFor='lastName'>Last Name:</label>
-            <input id='lastName' type='text' {...register('lastName')}/>
-            <label htmlFor='tuftsNum'>Tufts Number:</label>
-            <input id='tuftsNum' type='text' {...register('tuftsNum')}/>
-            <label htmlFor='bhccNum'>BHCC Number:</label>
-            <input id='bhccNum' type='text' {...register('bhccNum')}/>
-            <label htmlFor='docNum'>DOC Number:</label>
-            <input id='docNum' type='text' {...register('docNum')}/>
-            <label htmlFor='cohort'>Cohort:</label>
-            <input id='cohort' type='text' {...register('cohort')}/>
+          <form
+            onSubmit={handleSubmit(onSubmitSuccess)}
+            onReset={onReset}
+            className={styles.filterContainer}
+          >
+            <label htmlFor="firstName">First Name:</label>
+            <input id="firstName" type="text" {...register('firstName')} />
+            <label htmlFor="lastName">Last Name:</label>
+            <input id="lastName" type="text" {...register('lastName')} />
+            <label htmlFor="tuftsNum">Tufts Number:</label>
+            <input id="tuftsNum" type="text" {...register('tuftsNum')} />
+            <label htmlFor="bhccNum">BHCC Number:</label>
+            <input id="bhccNum" type="text" {...register('bhccNum')} />
+            <label htmlFor="docNum">DOC Number:</label>
+            <input id="docNum" type="text" {...register('docNum')} />
+            <label htmlFor="cohort">Cohort:</label>
+            <input id="cohort" type="text" {...register('cohort')} />
             <div></div>
             <div className={styles.button}>
-              <input type='submit' value='Submit'/>
-              <input type='reset' value='Reset'/>
+              <input type="submit" value="Submit" />
+              <input type="reset" value="Reset" />
             </div>
           </form>
         </div>
         <div className={styles.column}>
           <div className={styles.resultsWrapper}>
-            {results && results.length > 0 ? 
-              (<div className={styles.resultsContainer}>
+            {results && results.length > 0 ? (
+              <div className={styles.resultsContainer}>
                 <div className={styles.searchResultsHeader}>Search Result:</div>
                 <div></div>
                 {results.map((student) => {
-                  const key = `${student.attributes.firstname} ${student.attributes.lastname}`
+                  const key = `${student.attributes.firstname} ${student.attributes.lastname}`;
                   return (
                     <React.Fragment key={key}>
-                      <div className={styles.resultsField}>
+                      <button
+                        className={styles.resultsField}
+                        onClick={() => router.push(`student/${student.id}`)}
+                      >
                         <span>{key}</span>
-                      </div>
-                      <div className={styles.resultsView}>
-                        <button onClick={() => router.push(`student/${student.id}`)}>View</button>
-                      </div>
+                        <span>View</span>
+                      </button>
                     </React.Fragment>
                   );
                 })}
-              </div>) : (
-              <div className={styles.noResults}>
-                No results found
               </div>
+            ) : (
+              <div className={styles.noResults}>No results found</div>
             )}
           </div>
         </div>

@@ -256,128 +256,101 @@ export default function ViewStudent() {
     }
   }
 
-  const expandButton = (
-    <div className={styles.button} onClick={() => setIsExpanded(!isExpanded)}>
-      <span>{isExpanded ? '▲' : '▼'}</span>
-      <span>{(isExpanded ? 'Hide' : 'Show') + ' details'}</span>
-      <span>{isExpanded ? '▲' : '▼'}</span>
-    </div>
-  );
-
   const progress_report = (
-    <div className={styles.col}>
-      <div className={styles.studentInfo}>
-        <div className={styles.row}>
-          <p>Progress Towards Tufts Degree</p>
-
-          <div className={styles.progBar}>
-            <div className={styles.compBar} ref={compBarTufts} />
-            <div className={styles.inProgBar} ref={inProgBarTufts} />
-          </div>
-        </div>
-
-        <div className={styles.row}>
-          <p>Completed: {barStatus && barStatus.tufts.comp.num}</p>
-          <p>In Progress: {barStatus && barStatus.tufts.prog.num}</p>
-          <p>Remaining: {barStatus && barStatus.tufts.remaining}</p>
-        </div>
-
-        <div className={styles.row}>
-          <p>Progress Towards BHCC Degree</p>
-
-          <div className={styles.progBar}>
-            <div className={styles.compBar} ref={compBarBHCC} />
-            <div className={styles.inProgBar} ref={inProgBarBHCC} />
-          </div>
-        </div>
-
-        <div className={styles.row}>
-          <p>Completed: {barStatus && barStatus.bhcc.comp.num}</p>
-          <p>In Progress: {barStatus && barStatus.bhcc.prog.num}</p>
-          <p>Remaining: {barStatus && barStatus.bhcc.remaining}</p>
-        </div>
+    <div className={styles.innerColumn}>
+      <div className={styles.progBar}>
+        <label>Progress Towards Tufts Degree</label>
+        <div className={styles.compBar} ref={compBarTufts} />
+        <div className={styles.inProgBar} ref={inProgBarTufts} />
       </div>
+
+      <label>Completed: {barStatus && barStatus.tufts.comp.num}</label>
+      <label>In Progress: {barStatus && barStatus.tufts.prog.num}</label>
+      <label>Remaining: {barStatus && barStatus.tufts.remaining}</label>
+
+      <div className={styles.progBar}>
+        <label>Progress Towards BHCC Degree</label>
+        <div className={styles.compBar} ref={compBarBHCC} />
+        <div className={styles.inProgBar} ref={inProgBarBHCC} />
+      </div>
+
+      <label>Completed: {barStatus && barStatus.bhcc.comp.num}</label>
+      <label>In Progress: {barStatus && barStatus.bhcc.prog.num}</label>
+      <label>Remaining: {barStatus && barStatus.bhcc.remaining}</label>
     </div>
   );
 
   const course_history = (
-    <div className={styles.col}>
+    <div className={styles.column}>
       <div className={styles.studentInfo}>
-        <div className={styles.row}>
-          <p>Courses</p>
-          <div className={styles.courseEntries}>
-            {courseProg.map((course) => (
-              <div
-                key={course.id}
-                className={styles.courseEntry}
-                onClick={() => {
-                  setEditCourseId(course.id);
-                  setEditCourseTitle(course.course_title);
-                  setShowCourseModifier(true);
-                }}
-              >
-                <div className={styles.courseTitle}>
-                  {course.course_title}
-                  {course.attributes.in_progress ? (
-                    <div className={styles.inProgText}>in progress</div>
-                  ) : null}
-                </div>
-                <div className={styles.courseInfo}>
-                  <div>Grade: {course.attributes.grade}</div>
-                  <div>
-                    {course.attributes.semester_taken} {course.attributes.year_taken}
-                  </div>
+        <label>Courses</label>
+        <div className={styles.courseEntries}>
+          {courseProg.map((course) => (
+            <div
+              key={course.id}
+              className={styles.courseEntry}
+              onClick={() => {
+                setEditCourseId(course.id);
+                setEditCourseTitle(course.course_title);
+                setShowCourseModifier(true);
+              }}
+            >
+              <div className={styles.courseTitle}>
+                {course.course_title}
+                {course.attributes.in_progress ? (
+                  <div className={styles.inProgText}>in progress</div>
+                ) : null}
+              </div>
+              <div className={styles.courseInfo}>
+                <div>Grade: {course.attributes.grade}</div>
+                <div>
+                  {course.attributes.semester_taken} {course.attributes.year_taken}
                 </div>
               </div>
-            ))}
-          </div>
-          <button
-            className={styles.button}
-            onClick={() => {
-              setShowCourseCreator(true);
-            }}
-          >
-            +
-          </button>
+            </div>
+          ))}
         </div>
+        <button
+          className={styles.button}
+          onClick={() => {
+            setShowCourseCreator(true);
+          }}
+        >
+          +
+        </button>
       </div>
     </div>
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.col}>
-        {studentData ? (
-          <form className={styles.studentInfo} onSubmit={putStudentInfo}>
-            <div className={styles.row}>
-              <p>Name</p>
-              <div>
-                <input name="firstname" defaultValue={studentData.attributes.firstname} />
-                <input name="lastname" defaultValue={studentData.attributes.lastname} />
-              </div>
-            </div>
+    <div>
+      {studentData ? (
+        <>
+          <div className={styles.header}>
+            {studentData.attributes.firstname} {studentData.attributes.lastname}
+          </div>
+          <div className={styles.container}>
+            <form onSubmit={putStudentInfo}>
+              <div className={styles.innerColumn}>
+                <label> Name: </label>
+                <div className={styles.nameRow}>
+                  <input name="firstname" defaultValue={studentData.attributes.firstname} />
+                  <input name="lastname" defaultValue={studentData.attributes.lastname} />
+                </div>
 
-            <div className={styles.row}>
-              <p>Cohort</p>
-              <input
-                name="cohort"
-                type="number"
-                defaultValue={studentData.attributes.cohort}
-                onWheel={(e) => e.currentTarget.blur()}
-                min={0}
-              />
-            </div>
+                <label>Cohort: </label>
+                <input
+                  name="cohort"
+                  type="number"
+                  defaultValue={studentData.attributes.cohort}
+                  onWheel={(e) => e.currentTarget.blur()}
+                  min={0}
+                />
 
-            {expandButton}
-
-            <div className={isExpanded ? styles.expanded : styles.condensed}>
-              <div className={styles.row}>
-                <p>Birthday</p>
+                <label>Birthday: </label>
                 <input name="birthday" type="date" defaultValue={studentData.attributes.birthday} />
-              </div>
 
-              <div className={styles.row}>
-                <p>DOC Number</p>
+                <label>DOC Number: </label>
                 <input
                   name="doc_num"
                   type="text"
@@ -385,10 +358,8 @@ export default function ViewStudent() {
                   pattern="W\d+"
                   required
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Tufts Number</p>
+                <label>Tufts Number: </label>
                 <input
                   name="tufts_num"
                   type="text"
@@ -397,48 +368,38 @@ export default function ViewStudent() {
                   minLength={7}
                   required
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>BHCC Number</p>
+                <label>BHCC Number: </label>
                 <input
                   name="bhcc_num"
                   type="text"
                   defaultValue={studentData.attributes.bhcc_num}
                   maxLength={32}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>SSN (last 4 digits)</p>
+                <label>SSN (last 4 digits): </label>
                 <input
                   name="ssn"
                   type="text"
                   defaultValue={studentData.attributes.ssn}
                   maxLength={4}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Parole Status</p>
+                <label>Parole Status: </label>
                 <textarea
                   name="parole_status"
                   defaultValue={studentData.attributes.parole_status}
                   maxLength={256}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Student Status</p>
+                <label>Student Status: </label>
                 <textarea
                   name="student_status"
                   defaultValue={studentData.attributes.student_status}
                   maxLength={256}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Years Given</p>
+                <label>Years Given: </label>
                 <input
                   name="years_given"
                   type="number"
@@ -446,10 +407,8 @@ export default function ViewStudent() {
                   onWheel={(e) => e.currentTarget.blur()}
                   min={0}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Years Left</p>
+                <label>Years Left: </label>
                 <input
                   name="years_left"
                   type="number"
@@ -457,55 +416,58 @@ export default function ViewStudent() {
                   onWheel={(e) => e.currentTarget.blur()}
                   min={0}
                 />
-              </div>
 
-              <div className={styles.row}>
-                <p>Additional Information</p>
+                <label>Additional Information: </label>
                 <textarea
                   name="additional_info"
                   defaultValue={studentData.attributes.additional_info}
                   maxLength={512}
                 />
+
+                <div className={styles.doubleRow}>
+                  <input className={styles.button} type="submit" value="Save" />
+                  <button
+                    className={styles.button}
+                    onClick={() => router.push('/student')}
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button className={styles.button} onClick={deleteStudent} type="button">
+                    Delete
+                  </button>
+                </div>
               </div>
+            </form>
+            <div className={styles.innerColumn}>
+              {/*progress_report*/}
 
-              {expandButton}
+              {course_history}
+
+              <CourseProgressModifier
+                show={showCourseModifier}
+                id={editCourseId}
+                courseTitle={editCourseTitle}
+                onClose={() => {
+                  setShowCourseModifier(false);
+                  fetchCourseProgress();
+                  setEditCourseId(null);
+                }}
+              />
+              <CreateCourseProgress
+                show={showCourseCreator}
+                studentId={id}
+                onClose={() => {
+                  setShowCourseCreator(false);
+                  fetchCourseProgress();
+                }}
+              />
             </div>
-
-            <input className={styles.button} type="submit" value="Save" />
-            <button className={styles.button} onClick={() => router.push('/student')} type="button">
-              Cancel
-            </button>
-            <button className={styles.button} onClick={deleteStudent} type="button">
-              Delete
-            </button>
-          </form>
-        ) : (
-          <h1>Loading...</h1>
-        )}
-      </div>
-
-      {progress_report}
-
-      {course_history}
-
-      <CourseProgressModifier
-        show={showCourseModifier}
-        id={editCourseId}
-        courseTitle={editCourseTitle}
-        onClose={() => {
-          setShowCourseModifier(false);
-          fetchCourseProgress();
-          setEditCourseId(null);
-        }}
-      />
-      <CreateCourseProgress
-        show={showCourseCreator}
-        studentId={id}
-        onClose={() => {
-          setShowCourseCreator(false);
-          fetchCourseProgress();
-        }}
-      />
+          </div>
+        </>
+      ) : (
+        <h1> Loading... </h1>
+      )}
     </div>
   );
 }

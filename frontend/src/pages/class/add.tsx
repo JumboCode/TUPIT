@@ -6,7 +6,7 @@ import { useAuth } from '../../components/auth';
 import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
 import { CourseSelector } from '../../components/Selectors/CourseSelector';
 
-const ENDPOINT: string = 'http://127.0.0.1:8000/api/course/'
+const ENDPOINT: string = 'http://127.0.0.1:8000/api/course/';
 
 interface Course {
   course_title: string;
@@ -30,7 +30,7 @@ export default function AddCourse() {
   const [showCourseSelector, setShowCourseSelector] = useState(false);
   const [prereqsState, setPrereqs] = useState([]);
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     fetch(ENDPOINT, {
@@ -93,7 +93,7 @@ export default function AddCourse() {
             department: departments.get(data.department),
             instructors: instructorsState,
             prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}/`),
-            additional_info: data.additional_info
+            additional_info: data.additional_info,
           },
         },
       }),
@@ -113,6 +113,7 @@ export default function AddCourse() {
     Object.keys(e).forEach((key) => {
       console.log(e[key].message);
     });
+    reset({ course_title: 'Hi' });
   };
 
   function addInstructor(name) {
@@ -147,66 +148,81 @@ export default function AddCourse() {
       <div className={styles.header}>Add Course</div>
       <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
         <div className={styles.row}>
-          <label htmlFor='course_title'>Course Title:</label>
-          <input type='text' id='course_title'
-           {...register('course_title', {
-            required: {
-              value: true,
-              message: 'Course title cannot be empty'
-            },
-            maxLength: {
-              value: 32,
-              message: 'Course title can be at most 32 characters'
-            }
-          })}/>
+          <label htmlFor="course_title">Course Title:</label>
+          <input
+            type="text"
+            id="course_title"
+            {...register('course_title', {
+              required: {
+                value: true,
+                message: 'Course title cannot be empty',
+              },
+              maxLength: {
+                value: 32,
+                message: 'Course title can be at most 32 characters',
+              },
+            })}
+          />
 
-          <label htmlFor='course_num_tufts'>Tufts Course Number:</label>
-          <input type='text' id='course_num_tufts'
-           {...register('course_num_tufts', {
-             maxLength: {
-               value: 32,
-               message: 'Tufts course number can be at most 32 characters'
-             }
-           })}/>
+          <label htmlFor="course_num_tufts">Tufts Course Number:</label>
+          <input
+            type="text"
+            id="course_num_tufts"
+            {...register('course_num_tufts', {
+              maxLength: {
+                value: 32,
+                message: 'Tufts course number can be at most 32 characters',
+              },
+            })}
+          />
 
-          <label htmlFor='course_num_bhcc'>BHCC Course Number:</label>
-          <input id='course_num_bhcc' type='text'
-           {...register('course_num_bhcc', {
-             maxLength: {
-               value: 32,
-               message: 'BHCC course number can be at most 32 characters'
-             }
-           })}/>
+          <label htmlFor="course_num_bhcc">BHCC Course Number:</label>
+          <input
+            id="course_num_bhcc"
+            type="text"
+            {...register('course_num_bhcc', {
+              maxLength: {
+                value: 32,
+                message: 'BHCC course number can be at most 32 characters',
+              },
+            })}
+          />
 
-          <label htmlFor='credits_tufts'>Tufts Credits:</label>
-          <input id='credits_tufts' type='text'
-           {...register('credit_tufts', {
-             pattern: {
-               value: /^\d+$/,
-               message: 'Tufts credit must be a non-negative integer'
-             },
-           })}/>
+          <label htmlFor="credits_tufts">Tufts Credits:</label>
+          <input
+            id="credits_tufts"
+            type="text"
+            {...register('credit_tufts', {
+              pattern: {
+                value: /^\d+$/,
+                message: 'Tufts credit must be a non-negative integer',
+              },
+            })}
+          />
 
-          <label htmlFor='credits_bhcc'>BHCC Credits:</label>
-          <input id='credits_bhcc' type='text'
-           {...register('credits_bhcc', {
-             pattern: {
-               value: /^\d+$/,
-               message: 'BHCC credit must be a non-negative integer'
-             },
-           })}/>
+          <label htmlFor="credits_bhcc">BHCC Credits:</label>
+          <input
+            id="credits_bhcc"
+            type="text"
+            {...register('credits_bhcc', {
+              pattern: {
+                value: /^\d+$/,
+                message: 'BHCC credit must be a non-negative integer',
+              },
+            })}
+          />
 
-          <label htmlFor='department'>Department</label>
-          <select name='department' id='department' {...register('department')}>
+          <label htmlFor="department">Department</label>
+          <select name="department" id="department" {...register('department')}>
             <option></option>
             {Array.from(departments.keys()).map((key) => (
               <option key={key}>{key}</option>
             ))}
           </select>
 
-          <label htmlFor='pre_req'>Prerequisites:</label>
+          <label htmlFor="pre_req">Prerequisites:</label>
           <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
-            <span>Add Prerequisite</span>
+            <span>Add Prereq</span>
           </div>
           <div></div>
           <div>
@@ -220,7 +236,7 @@ export default function AddCourse() {
             ))}
           </div>
 
-          <label htmlFor='instructors'>Instructors:</label>
+          <label htmlFor="instructors">Instructors:</label>
           <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
             <span>Add Instructor</span>
           </div>
@@ -228,12 +244,13 @@ export default function AddCourse() {
           <div>
             {instructorsState.map((instructor, index) => (
               <div className={styles.prereqField} key={index}>
-                <input 
-                 type='text'
-                 value={instructor}
-                 maxLength={32}
-                 onChange={(e) => updateInstructor(e, index)}
-                 required/>
+                <input
+                  type="text"
+                  value={instructor}
+                  maxLength={32}
+                  onChange={(e) => updateInstructor(e, index)}
+                  required
+                />
                 <div className={styles.removeButton} onClick={(e) => removeInstructor(index)}>
                   &#10005;
                 </div>
@@ -241,27 +258,28 @@ export default function AddCourse() {
             ))}
           </div>
 
-          <label htmlFor='additional_info'>Additional Information:</label>
-          <textarea id='additional_info' {...register('additional_info', {
-           maxLength: {
-             value: 512,
-             message: 'Additional information can be at most 512 characters'
-           }
-          })}/>
+          <label htmlFor="additional_info">Additional Information:</label>
+          <textarea
+            id="additional_info"
+            {...register('additional_info', {
+              maxLength: {
+                value: 512,
+                message: 'Additional information can be at most 512 characters',
+              },
+            })}
+          />
 
           <div className={styles.buttonBox}>
-            <input className={styles.button} type='submit' value='Submit'/>
+            <input className={styles.button} type="submit" value="Submit" />
           </div>
         </div>
       </form>
       <InstructorSelector
-        // style={styles.instructPopUp}
         show={showInstructorSelector}
         writeFunction={addInstructor}
         onClose={() => setShowInstructorSelector(false)}
       />
       <CourseSelector
-        // style={styles.prereqPopUp}
         show={showCourseSelector}
         writeFunction={addPrereq}
         onClose={() => setShowCourseSelector(false)}

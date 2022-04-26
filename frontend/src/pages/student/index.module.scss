@@ -92,8 +92,8 @@
 
     .resultsContainer {
       padding: 26px 32px;
-      display: grid;
-      grid-template-columns: 1fr 0.8fr;
+      display: flex;
+      flex-direction: column;
       row-gap: 10px;
       overflow-y: scroll;
 
@@ -102,9 +102,18 @@
       }
 
       .resultsField {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         border-radius: 10px;
-        padding: 9px 14px 5px;
+        padding: 10px 16px;
+        width: 100%;
         background-color: $light-blue;
+      }
+      @media (pointer: fine) {
+        .resultsField:hover {
+          border: 1px solid $dark-blue;
+        }
       }
 
       .resultsView {
@@ -113,7 +122,7 @@
         align-items: center;
       }
 
-      button {
+      .button {
         border-radius: 3px;
         color: $white;
         text-align: center;

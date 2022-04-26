@@ -32,7 +32,9 @@
       text-align: right;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       color: $dark-blue;
       border: 1px solid $dark-blue;
       border-radius: 3px;
@@ -130,6 +132,9 @@
       label {
         text-align: left;
       }
+    }
+    .button {
+      height: 50px;
     }
   }
 
