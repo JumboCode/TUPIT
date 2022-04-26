@@ -25,9 +25,13 @@ const getData = async (url) => {
 const addDegree = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [showCourseSelector, setShowCourseSelector] = useState(false);
   const [prereqsState, setPrereqs] = useState([]);
+
+  /* Placeholder */
+  const [degreeName, setDegreeName] = useState(null);
+  const [additionalInformation, setAdditionalInformation] = useState(null);
 
   const addPrereq = (course) => {
     setPrereqs(
@@ -98,7 +102,11 @@ const addDegree = () => {
   const onSubmitFail = (e) => {
     Object.keys(e).forEach((key) => {
       console.log(e[key].message);
+      setValue(key, '');
     });
+
+    if (e.degreeName) setDegreeName(e.degreeName.message);
+    if (e.additionalInformation) setAdditionalInformation(e.additionalInformation.message); 
   };
 
   return (
@@ -109,7 +117,7 @@ const addDegree = () => {
       <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
         <div className={styles.row}>
           <label htmlFor='degreeName'>Degree:</label>
-          <input type='text' {...register('degreeName', {
+          <input type='text' placeholder={degreeName} {...register('degreeName', {
             required: {
               value: true,
               message: 'Degree name cannot be empty'
@@ -123,13 +131,12 @@ const addDegree = () => {
           <input id='active' className={styles.checkbox} type='checkbox'
            {...register('active')}/>
           <label htmlFor='university'>University:</label>
-          <select id='university' {...register('university', {
+          <select id='university' defaultValue={'Tufts'} {...register('university', {
             required: {
               value: true,
               message: "Degree's university provider must not be empty"
             }
           })}>
-            <option></option>
             <option value='Tufts'>Tufts</option>
             <option value='Bunker Hill'>Bunker Hill</option>
           </select>
@@ -149,7 +156,7 @@ const addDegree = () => {
             ))}
           </div>
           <label htmlFor='additionalInformation'>Additional Information:</label>
-          <textarea id='additionalInformation'
+          <textarea id='additionalInformation' placeholder={additionalInformation}
            {...register('additionalInformation', {
              maxLength: {
                value: 512,

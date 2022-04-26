@@ -35,6 +35,14 @@ export default function ViewClass() {
   const { id } = router.query;
   const { register, handleSubmit, setValue } = useForm();
 
+  /* Set placeholder */
+  const [courseTitle, setCourseTitle] = useState(null);
+  const [courseNumTufts, setCourseNumTufts] = useState(null);
+  const [courseNumBHCC, setCourseNumBHCC] = useState(null);
+  const [creditTufts, setCreditTufts] = useState(null); 
+  const [creditBHCC, setCreditBHCC] = useState(null);
+  const [additionalInformation, setAdditionalInformation] = useState(null);
+
   /*
    * Fetch data associated with the course id. This also include prerequisites
    * and instructors
@@ -166,7 +174,15 @@ export default function ViewClass() {
   const onSubmitFail = (e) => {
     Object.keys(e).forEach((key) => {
       console.log(e[key].message);
+      setValue(key, '');
     });
+
+    if (e.course_title) setCourseTitle(e.course_title.message);
+    if (e.course_num_tufts) setCourseNumTufts('Can be at most 32 characters');
+    if (e.course_num_bhcc) setCourseNumBHCC('Can be at most 32 characters');
+    if (e.credit_tufts) setCreditTufts('Must be non-negative');
+    if (e.credit_bhcc) setCreditBHCC('Must be non-negative');
+    if (e.additional_info) setAdditionalInformation('Can be at most 512 characters');
   };
 
   return (
@@ -175,7 +191,7 @@ export default function ViewClass() {
       <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
         <div className={styles.row}>
           <label htmlFor='course_title'>Course Title:</label>
-          <input type='text' id='course_title'
+          <input type='text' id='course_title' placeholder={courseTitle}
            {...register('course_title', {
             required: {
               value: true,
@@ -188,7 +204,7 @@ export default function ViewClass() {
           })}/>
 
           <label htmlFor='course_num_tufts'>Tufts Course Number:</label>
-          <input type='text' id='course_num_tufts'
+          <input type='text' id='course_num_tufts' placeholder={courseNumTufts}
            {...register('course_num_tufts', {
              maxLength: {
                value: 32,
@@ -197,7 +213,7 @@ export default function ViewClass() {
            })}/>
 
           <label htmlFor='course_num_bhcc'>BHCC Course Number:</label>
-          <input id='course_num_bhcc' type='text'
+          <input id='course_num_bhcc' type='text' placeholder={courseNumBHCC}
            {...register('course_num_bhcc', {
              maxLength: {
                value: 32,
@@ -206,7 +222,7 @@ export default function ViewClass() {
            })}/>
 
           <label htmlFor='credits_tufts'>Tufts Credits:</label>
-          <input id='credits_tufts' type='text'
+          <input id='credits_tufts' type='text' placeholder={creditTufts}
            {...register('credit_tufts', {
              pattern: {
                value: /^\d+$/,
@@ -215,7 +231,7 @@ export default function ViewClass() {
            })}/>
 
           <label htmlFor='credits_bhcc'>BHCC Credits:</label>
-          <input id='credits_bhcc' type='text'
+          <input id='credits_bhcc' type='text' placeholder={creditBHCC}
            {...register('credits_bhcc', {
              pattern: {
                value: /^\d+$/,
@@ -269,11 +285,12 @@ export default function ViewClass() {
           </div>
 
           <label htmlFor='additional_info'>Additional Information:</label>
-          <textarea id='additional_info' {...register('additional_info', {
-           maxLength: {
-             value: 512,
-             message: 'Additional information can be at most 512 characters'
-           }
+          <textarea id='additional_info' placeholder={additionalInformation}
+           {...register('additional_info', {
+            maxLength: {
+              value: 512,
+              message: 'Additional information can be at most 512 characters'
+            }
           })}/>
 
           <div className={styles.buttonBox}>
