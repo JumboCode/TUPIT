@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import styles from './add.module.scss';
-import { useAuth } from '../../components/auth';
-import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
-import { CourseSelector } from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
+import { CourseSelector } from '@/components/Selectors/CourseSelector';
 
 interface Course {
   course_title: string;
@@ -77,14 +77,16 @@ export default function AddCourse() {
     newCourse.course_title = event.target.course_title.value;
     newCourse.course_number_tufts = event.target.course_number_tufts.value;
     newCourse.course_number_bhcc = event.target.course_number_bhcc.value;
-    newCourse.credits_tufts = event.target.credits_tufts.value;
-    newCourse.credits_bhcc = event.target.credits_bhcc.value;
+    newCourse.credits_tufts = event.target.credits_tufts.value
+      ? event.target.credits_tufts.value
+      : 0;
+    newCourse.credits_bhcc = event.target.credits_bhcc.value ? event.target.credits_bhcc.value : 0;
     newCourse.department = departments.get(event.target.department.value);
     newCourse.prereqs = prereqsState.map(
       (prereq) => `http://127.0.0.1:8000/api/course/${prereq.id}/`
     );
-    console.log('this is the department', newCourse.department, event.target.department.value);
-    console.log('this is the newcourse', newCourse);
+    // console.log('this is the department', newCourse.department, event.target.department.value);
+    // console.log('this is the newcourse', newCourse);
     newCourse.instructors = instructorsState;
     newCourse.additional_info = event.target.additional_info.value;
 
@@ -167,11 +169,11 @@ export default function AddCourse() {
         </div>
         <div className={styles.row}>
           <span>Tufts Credits</span>
-          <input id="credits_tufts" type="text" />
+          <input id="credits_tufts" type="number" onWheel={(e) => e.currentTarget.blur()} />
         </div>
         <div className={styles.row}>
           <span>BHCC Credits</span>
-          <input id="credits_bhcc" type="text" />
+          <input id="credits_bhcc" type="number" onWheel={(e) => e.currentTarget.blur()} />
         </div>
         <div className={styles.row}>
           <span>Department</span>

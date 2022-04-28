@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import { InstructorSelector } from '../../components/Selectors/InstructorSelector';
-import { CourseSelector } from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
+import { CourseSelector } from '@/components/Selectors/CourseSelector';
 import styles from './[id].module.scss';
 
 async function fetchCourseName(id) {
@@ -139,8 +139,8 @@ export default function ViewClass() {
             course_title: t.course_title.value,
             course_number_tufts: t.course_number_tufts.value,
             course_number_bhcc: t.course_number_bhcc.value,
-            credits_tufts: t.credits_tufts.value,
-            credits_bhcc: t.credits_bhcc.value,
+            credits_tufts: t.credits_tufts.value ? t.credits_tufts.value : 0,
+            credits_bhcc: t.credits_bhcc.value ? t.credits_bhcc.value : 0,
             department: t.department.value,
             instructors: instructorsState,
             prereqs: prereqsState.map((prereq) => `http://127.0.0.1:8000/api/course/${prereq.id}/`),
