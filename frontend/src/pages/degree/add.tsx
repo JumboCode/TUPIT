@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../components/auth';
-import CourseSelector from '../../components/Selectors/CourseSelector';
+import { useAuth } from '@/components/auth';
+import CourseSelector from '@/components/Selectors/CourseSelector';
 import styles from './add.module.scss';
 
 export default function addDegree() {
