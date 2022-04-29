@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/components/auth';
+import { useAuth } from '../../components/auth';
 import styles from './index.module.scss';
 
 export default function SearchClass() {
