@@ -187,6 +187,20 @@ export default function ViewStudent() {
             remaining: data.tufts.not_completed.length,
           },
         };
+      } else {
+        status = {
+          tufts: {
+            comp: {
+              width: 0,
+              num: 0,
+            },
+            prog: {
+              width: 0,
+              num: 0,
+            },
+            remaining: 0,
+          },
+        };
       }
 
       if (data.bhcc) {
@@ -209,6 +223,21 @@ export default function ViewStudent() {
               num: inProg,
             },
             remaining: data.bhcc.not_completed.length,
+          },
+        };
+      } else {
+        status = {
+          ...status,
+          bhcc: {
+            comp: {
+              width: 0,
+              num: 0,
+            },
+            prog: {
+              width: 0,
+              num: 0,
+            },
+            remaining: 0,
           },
         };
       }
