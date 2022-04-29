@@ -5,11 +5,11 @@ Resources
 * Filtering ArrayField: https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/fields/
 '''
 
-from api.models import Course, Student, CourseProgress
+from api.models import *
 
 import django_filters
 
-__all__ = ['CourseFilterSet', 'StudentFilterSet', 'CourseProgressFilterSet']
+__all__ = ['CourseFilterSet', 'StudentFilterSet', 'CourseProgressFilterSet', 'DegreeReqFilterSet']
 
 
 class CourseFilterSet(django_filters.FilterSet):
@@ -84,3 +84,11 @@ class CourseProgressFilterSet(django_filters.FilterSet):
         return queryset.filter(
             **{f'{name}__pk': value}
         )
+
+class DegreeReqFilterSet(django_filters.FilterSet):
+
+    class Meta:
+        model = DegreeRequirement
+        fields = {
+            'title': ['exact', 'icontains'],
+        }

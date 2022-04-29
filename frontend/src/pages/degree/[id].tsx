@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/components/auth';
-import CourseSelector from '@/components/Selectors/CourseSelector';
+import ReqSelector from '@/components/Selectors/DegReqSelector';
 import styles from './[id].module.scss';
 
-async function fetchCourseName(id) {
-  let url = 'http://127.0.0.1:8000/api/course/' + id + '/';
+async function fetchReqTitle(id) {
+  let url = 'http://127.0.0.1:8000/api/degreerequirement/' + id + '/';
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -17,8 +17,8 @@ async function fetchCourseName(id) {
     console.log(err);
   });
   if (res) {
-    const course_name = await res.json().then((data) => data.data.attributes.course_title);
-    return course_name;
+    const title = await res.json().then((data) => data.data.attributes.title);
+    return title;
   }
   return null;
 }
@@ -27,7 +27,7 @@ export default function ViewDegree() {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const [degreeData, setDegreeData] = useState(null);
   const [reqState, setReqState] = useState([]);
-  const [showCourseSelector, setShowCourseSelector] = useState(false);
+  const [showReqSelector, setShowReqSelector] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
@@ -52,7 +52,7 @@ export default function ViewDegree() {
         for (let req of data.data.relationships.reqs.data) {
           reqs.push({
             id: req.id,
-            course_title: await fetchCourseName(req.id),
+            title: await fetchReqTitle(req.id),
           });
         }
         setReqState(reqs);
@@ -90,7 +90,7 @@ export default function ViewDegree() {
           attributes: {
             degree_name: t.degree_name.value,
             active: t.active.checked,
-            reqs: reqState.map((req) => `http://127.0.0.1:8000/api/course/${req.id}/`),
+            reqs: reqState.map((req) => `http://127.0.0.1:8000/api/degreerequirement/${req.id}/`),
             is_tufts: t.is_tufts.checked,
             additional_info: t.additional_info.value,
           },
@@ -185,15 +185,15 @@ export default function ViewDegree() {
           <div className={styles.row}>
             <p>Requirements:</p>
             <div className={styles.fieldList}>
-              {reqState.map((course, index) => (
+              {reqState.map((req, index) => (
                 <div className={styles.req} key={index}>
-                  <a href={`/class/${course.id}`}>{course.course_title}</a>
+                  <div>{req.title}</div>
                   <div className={styles.removeButton} onClick={() => removeReq(index)}>
                     &#10005;
                   </div>
                 </div>
               ))}
-              <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+              <div className={styles.button} onClick={() => setShowReqSelector(true)}>
                 +
               </div>
             </div>
@@ -220,10 +220,10 @@ export default function ViewDegree() {
       ) : (
         <h1>Loading...</h1>
       )}
-      <CourseSelector
-        show={showCourseSelector}
+      <ReqSelector
+        show={showReqSelector}
         writeFunction={addReq}
-        onClose={() => setShowCourseSelector(false)}
+        onClose={() => setShowReqSelector(false)}
       />
     </div>
   );
