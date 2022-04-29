@@ -17,6 +17,7 @@ export const config = {
 };
 
 const getUploadUrl = async (name: string, type: string) => {
+  // Get a signed url to upload this file to
   const fileParams = {
     Bucket: process.env.S3_UPLOAD_BUCKET,
     Key: name,
@@ -29,7 +30,7 @@ const getUploadUrl = async (name: string, type: string) => {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // Allow only POST method (for now)
+  // Allow only POST and DELETE methods
   if (req.method !== 'POST' && req.method !== 'DELETE') {
     res.status(405).json({ message: 'Method not allowed' });
     return;
@@ -39,7 +40,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == 'POST') {
       let { name, type } = JSON.parse(req.body);
       let url = await getUploadUrl(name, type);
-      console.log(url);
 
       res.status(200).json({ url: url });
     } else if (req.method == 'DELETE') {
@@ -50,13 +50,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         Key: key,
       };
 
-      s3.deleteObject(params, (err, data) => {
+      s3.deleteObject(params, (err) => {
         if (err) {
+          console.log(err);
           res.status(400).json({ message: err });
-        } else if (data) {
-          res.status(200).end();
         }
       });
+
+      res.status(200).end();
     }
   } catch (err) {
     console.log(err);
