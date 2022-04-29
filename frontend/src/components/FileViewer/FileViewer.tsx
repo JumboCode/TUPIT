@@ -2,11 +2,13 @@ import router from 'next/router';
 import { useAuth } from '../auth';
 import styles from './FileViewer.module.scss';
 import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 const getFileName = (url: string) => {
   const lastSlashLoc = url.lastIndexOf('/');
+  const lastDotLoc = url.lastIndexOf('.');
 
-  return url.slice(lastSlashLoc + 1);
+  return url.slice(lastSlashLoc + 1, lastDotLoc);
 };
 
 const getFileUrl = (name: string) => {
@@ -71,10 +73,11 @@ const FileViewer = (studentData) => {
 
     if (!file) return alert('Please select a file to upload before submitting');
 
+    const fileName = `${file.name}.${uuid()}`;
     let resp = await fetch('/api/s3-upload', {
       method: 'POST',
       body: JSON.stringify({
-        name: file.name,
+        name: fileName,
         type: file.type,
       }),
     })
@@ -96,7 +99,7 @@ const FileViewer = (studentData) => {
       console.log(err);
     });
 
-    url = getFileUrl(file.name);
+    url = getFileUrl(fileName);
     associated_files.push(url);
     studentData.attributes.associated_files = associated_files;
 
