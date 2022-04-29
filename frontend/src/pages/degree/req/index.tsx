@@ -248,7 +248,7 @@ export default function EditDegreeReqs() {
           {selectedReq ? (
             <div>
               <div className={styles.header}>
-                <h2>Modify requirements for {selectedReq.req.attributes.title}</h2>
+                <h2>Modify the requirement {selectedReq.req.attributes.title}</h2>
               </div>
               <form className={styles.modify} onSubmit={saveSelectedReq}>
                 <div className={styles.row} key={selectedReq.req.attributes.title}>
@@ -264,7 +264,7 @@ export default function EditDegreeReqs() {
                 <div className={styles.row}>
                   <div></div>
                   <div className={styles.header}>
-                    <h3>Required Courses</h3>
+                    <h3>Can be Fulfilled by:</h3>
                   </div>
                 </div>
 
