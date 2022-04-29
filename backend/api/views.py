@@ -266,3 +266,61 @@ def SetActiveDegree(request):
 def ResetPassword(request):
     data = json.loads(reqest.body)
     print(data)
+
+
+@csrf_exempt
+def CalculateGpa(request):
+    data = json.loads(request.body)
+
+    ## somehow get the student id from request body
+    student_id = data.get('student_id')
+
+    # get all of the courses + course progress that a student took
+    # IDs of the courses the student has completed
+    student = Student.objects.get(id=student_id)
+    if student is None:
+        return JsonResponse({'info': 'Invalid student_id'}, status=400)
+    courseProgresses = [courseProg for courseProg in student.courses.all() if not courseProg.in_progress]
+
+    # scale each of the grades to like a letter grade (A - 4.0, A -3.66, ...)
+    ranges = [
+                [97, 4.0], 
+                [93, 4.0], 
+                [90, 3.66],
+                [87, 3.33],
+                [83, 3.0],
+                [80, 2.66],
+                [77, 2.33],
+                [73, 2.0],
+                [70, 1.66],
+                [67, 1.33],
+                [65, 1.0],
+                [0, 0.0]
+    ]
+
+    total_credits_tufts = 0
+    gpa_sum_tufts = 0.0
+    total_credits_bhcc = 0
+    gpa_sum_bhcc = 0
+    for courseProgress in courseProgresses:
+        for r in ranges:
+            if (r[0] <= courseProgress.grade):
+                gpa_sum_tufts += r[1] * courseProgress.course.credits_tufts
+                total_credits_tufts += courseProgress.course.credits_tufts
+                
+                gpa_sum_bhcc += r[1] * courseProgress.course.credits_bhcc
+                total_credits_bhcc += courseProgress.course.credits_bhcc
+                break
+
+    gpa_tufts = gpa_sum_tufts / total_credits_tufts
+    gpa_bhcc = gpa_sum_bhcc / total_credits_bhcc
+    # calculate a weighted average using ^ letter grade conversion and course credit
+
+    # return 2 GPAs, one is tufts, is BHCC
+    response = {
+        'info': 'Successfully calculated GPA',
+        'gpa_tufts': gpa_tufts,
+        'gpa_bhcc': gpa_bhcc,
+    }
+
+    return JsonResponse(response, status=200)

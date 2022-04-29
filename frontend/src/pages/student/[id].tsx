@@ -33,6 +33,8 @@ export default function ViewStudent() {
   const [editCourseTitle, setEditCourseTitle] = useState(null);
   const [showCourseModifier, setShowCourseModifier] = useState(false);
   const [showCourseCreator, setShowCourseCreator] = useState(false);
+  const [tuftsGPA, setTuftsGPA] = useState<number>(undefined);
+  const [bhccGPA, setBHCCGPA] = useState<number>(undefined);
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const { id } = router.query;
@@ -46,6 +48,7 @@ export default function ViewStudent() {
     if (id) {
       fetchStudentInfo();
       fetchCourseProgress();
+      fetchGPA();
     }
   }, [id]);
 
@@ -77,6 +80,38 @@ export default function ViewStudent() {
         alert('Student not found');
         router.push('/student');
       }
+  }
+
+  async function fetchGPA() {
+    return new Promise((resolve, reject) => {
+      fetch('http://127.0.0.1:8000/calculate-gpa/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          student_id: id,
+        }),
+      })
+        .then((res) => {
+          if (res.status === 200 && res.ok) {
+            // succeeded
+            res.json().then((data) => {
+              data.gpa_bhcc = data.gpa_bhcc.toFixed(2);
+              data.gpa_tufts = data.gpa_tufts.toFixed(2);
+              setBHCCGPA(data.gpa_bhcc);
+              setTuftsGPA(data.gpa_tufts);
+            });
+          } else {
+            // failed
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject('Error connecting to server');
+        });
+    });
   }
 
   async function fetchCourseProgress() {
@@ -352,6 +387,11 @@ export default function ViewStudent() {
           <form className={styles.studentInfo} onSubmit={putStudentInfo}>
             <div className={styles.row}>
               <p>Name</p>
+              {tuftsGPA && (
+                <p>
+                  GPA: {tuftsGPA} and {bhccGPA}
+                </p>
+              )}
               <div>
                 <input name="firstname" defaultValue={studentData.attributes.firstname} />
                 <input name="lastname" defaultValue={studentData.attributes.lastname} />
