@@ -176,13 +176,14 @@ def AuditStudentProgress(request):
 
     ### FETCH DEGREES ###
     
-    tufts_degree = Degree.objects.get(active=True, is_tufts=True)
+    tufts_degree = Degree.objects.filter(is_tufts=True, active=True)
 
-    bhcc_degree = Degree.objects.get(active=True, is_tufts=False)
+    bhcc_degree = Degree.objects.filter(is_tufts=False, active=True)
 
     ### COMPARE STUDENT PROGRESS AND REQUIREMENTS ###
 
     if tufts_degree:
+        tufts_degree = tufts_degree[0]
         tufts_reqs = tufts_degree.reqs.all()
         
         # Degree requirements which the student has completed
@@ -206,8 +207,11 @@ def AuditStudentProgress(request):
         response['tufts']['completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_completed_req_ids]
         response['tufts']['in_progress'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_in_progress_req_ids]
         response['tufts']['not_completed'] = [Course.objects.get(id=course_id).course_title for course_id in tufts_not_completed_req_ids]
+    else:
+        response['tufts'] = None
 
     if bhcc_degree:
+        bhcc_degree = bhcc_degree[0]
         bhcc_req = bhcc_degree.reqs.all()
     
         # Degree requirements which the student has completed
@@ -231,6 +235,8 @@ def AuditStudentProgress(request):
         response['bhcc']['completed'] = bhcc_completed_req_ids
         response['bhcc']['in_progress'] = bhcc_in_progress_req_ids
         response['bhcc']['not_completed'] = bhcc_not_completed_req_ids
+    else:
+        response['bhcc'] = None
 
     return JsonResponse(response, status=200)
 
