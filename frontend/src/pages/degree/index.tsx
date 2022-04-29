@@ -44,6 +44,37 @@ export default function SearchDegrees() {
     setResults(filteredResults);
   }
 
+  async function newDegree() {
+    const url = 'http://127.0.0.1:8000/api/degree/';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        data: {
+          type: 'Degree',
+          attributes: {
+            degree_name: 'New Degree',
+          },
+        },
+      }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
+    });
+
+    if (res && res.ok) {
+      res.json().then((data) => {
+        router.push(`/degree/${data.data.id}`);
+      });
+    } else {
+      alert('Error creating new degree');
+    }
+  }
+
   function degreeResult(degree) {
     return (
       <div
@@ -77,7 +108,7 @@ export default function SearchDegrees() {
           ) : (
             <div className={styles.noResults}>No results found</div>
           )}
-          <div className={styles.button} onClick={() => router.push('/degree/add')}>
+          <div className={styles.button} onClick={newDegree}>
             +
           </div>
         </div>
