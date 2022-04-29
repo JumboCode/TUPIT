@@ -94,6 +94,10 @@ export default function SearchDegrees() {
 
   return (
     <div className={styles.windowContainer}>
+      <div className={styles.result} onClick={() => router.push('/degree/req')}>
+        Go to Degree Requirements
+      </div>
+      <br />
       <div className={styles.window}>
         <form onSubmit={onSearch} className={styles.filterContainer}>
           <div className={styles.filterFields}>
