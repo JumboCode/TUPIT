@@ -71,6 +71,37 @@ export default function SearchStudents() {
     }
   }
 
+  async function newStudent() {
+    const url = 'http://127.0.0.1:8000/api/students/';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        data: {
+          type: 'Student',
+          attributes: {
+            firstname: 'First Name',
+            lastname: 'Last Name',
+          },
+        },
+      }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
+    });
+
+    if (res)
+      if (res.ok) {
+        res.json().then((data) => router.push(`/student/${data.data.id}`));
+      } else {
+        alert('Error creating student');
+      }
+  }
+
   function studentResult(student) {
     return (
       <div className={styles.result} onClick={() => router.push(`student/${student.id}`)}>
@@ -116,7 +147,7 @@ export default function SearchStudents() {
                 <div className={styles.noResults}>No results found</div>
               ))}
           </div>
-          <div className={styles.button} onClick={() => router.push('/student/add')}>
+          <div className={styles.button} onClick={newStudent}>
             +
           </div>
         </div>
