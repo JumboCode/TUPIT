@@ -183,7 +183,7 @@ export default function ViewDegree() {
           </div>
 
           <div className={styles.row}>
-            <p>Requirements</p>
+            <p>Requirements:</p>
             <div className={styles.fieldList}>
               {reqState.map((course, index) => (
                 <div className={styles.req} key={index}>
