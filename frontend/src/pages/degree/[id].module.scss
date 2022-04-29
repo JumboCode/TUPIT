@@ -4,22 +4,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f6f5f1;
 
   padding: 40px;
 }
 
 .degreeInfo {
-  background: #9ec8d6;
-  border-radius: 49px;
+  background: white;
+  border-radius: 5px;
   padding: 40px;
+  resize: none;
+  max-width: 80%;
+  //border: 1px solid #4c8fa5;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 
   display: flex;
   flex-direction: column;
   row-gap: 20px;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-    'Open Sans', 'Helvetica Neue', sans-serif;
-  color: white;
+  font-family: 'DM Mono';
+  color: #4c8fa5;
   font-weight: 400;
   font-size: 32px;
 }
@@ -27,6 +31,7 @@
 .degreeInfo > .degreeName {
   font-size: 48px;
   font-weight: bold;
+  background: #ecf7fa;
 }
 
 .degreeInfo > .degreeName:hover {
@@ -59,7 +64,7 @@
   color: #4c8fa5;
   padding: 20px;
   font-size: 24px;
-  border-radius: 28px;
+  border-radius: 5px;
   height: 60px;
   resize: none;
 }
@@ -80,11 +85,11 @@
   flex-direction: column;
   row-gap: 8px;
 
-  background: white;
+  background: #ecf7fa;
   color: #4c8fa5;
   padding: 20px;
-  font-size: 24px;
-  border-radius: 28px;
+  font-size: 30px;
+  border-radius: 5px;
 }
 
 .req {
@@ -103,7 +108,7 @@
   color: #4c8fa5;
   cursor: pointer;
   z-index: -1;
-  font-size: 32px;
+  font-size: 24px;
   user-select: none;
 }
 
@@ -118,7 +123,7 @@
   column-gap: 12px;
   border: none;
   background: #4c8fa5;
-  border-radius: 28px;
+  border-radius: 5px;
   color: white;
   font-size: 24px;
   font-weight: bold;
@@ -128,6 +133,7 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background 0.1s ease-in-out, transform 0.1s ease-in-out;
   margin: 0;
+  font-family: 'DM Mono';
 }
 
 .button:hover {
@@ -145,4 +151,11 @@
 
 .req > a:hover {
   text-decoration: underline;
+}
+
+.additionalInfo {
+  min-height: 100px;
+  min-width: 100%;
+  max-width: 100%;
+  border: 1px solid #0f81a5;
 }
