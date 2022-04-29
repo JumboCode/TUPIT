@@ -1,20 +1,71 @@
 import router from 'next/router';
 import { useAuth } from '../auth';
-import { useS3Upload } from 'next-s3-upload';
 import styles from './FileViewer.module.scss';
 import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
+
+const getFileName = (url: string) => {
+  const lastSlashLoc = url.lastIndexOf('/');
+  const lastDotLoc = url.lastIndexOf('.');
+
+  return url.slice(lastSlashLoc + 1, lastDotLoc);
+};
+
+const getFileUrl = (name: string) => {
+  return `https://tupit.s3.amazonaws.com/${name}`;
+};
 
 const FileViewer = (studentData) => {
   const [file, setFile] = useState(null);
   const { csrfToken } = useAuth();
-  const { uploadToS3 } = useS3Upload();
 
   let associated_files =
-    studentData.attributes == undefined ? null : studentData.attributes.associated_files;
+    studentData.attributes == undefined ? [] : studentData.attributes.associated_files;
 
   const handleFileChange = async (event) => {
     let currFile = event.target.files[0];
     setFile(currFile);
+  };
+
+  const deleteFile = (index: number) => {
+    return async (event) => {
+      event.preventDefault();
+      let url = associated_files[index];
+
+      await fetch('/api/s3-upload', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          key: getFileName(url),
+        }),
+      }).catch((err) => {
+        alert('Error deleting file.');
+        console.log(err);
+      });
+
+      associated_files.splice(index, 1);
+      studentData.attributes.associated_files = associated_files;
+
+      let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
+      const res = await fetch(backendUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          data: studentData,
+        }),
+      }).catch((err) => {
+        alert('Error connecting to server.');
+        console.log(err);
+      });
+
+      if (res && res.ok) {
+        alert('Successfully deleted the file.');
+        router.replace(`/student/${studentData.id}`);
+      }
+    };
   };
 
   const handleSubmit = async (event) => {
@@ -22,15 +73,37 @@ const FileViewer = (studentData) => {
 
     if (!file) return alert('Please select a file to upload before submitting');
 
-    let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
-    // let { url } = await uploadToS3(file);
-    let url = file.name;
+    const fileName = `${file.name}.${uuid()}`;
+    let resp = await fetch('/api/s3-upload', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: fileName,
+        type: file.type,
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => {
+        alert('Error uploading file.');
+        console.log(err);
+      });
+    if (resp == undefined) {
+      return;
+    }
 
-    console.log(associated_files);
+    let { url } = resp;
+    await fetch(url, {
+      method: 'PUT',
+      body: file,
+    }).catch((err) => {
+      alert('Error uploading file.');
+      console.log(err);
+    });
+
+    url = getFileUrl(fileName);
     associated_files.push(url);
-    console.log(associated_files);
     studentData.attributes.associated_files = associated_files;
 
+    let backendUrl = `http://127.0.0.1:8000/api/students/${studentData.id}/`;
     const res = await fetch(backendUrl, {
       method: 'PUT',
       headers: {
@@ -62,8 +135,8 @@ const FileViewer = (studentData) => {
 
   return (
     <>
-      <p>Choose a file to upload</p>
       <form className={styles.dropContainer} onSubmit={handleSubmit}>
+        <p>Choose a file to upload</p>
         <input className={styles.upload} type="file" title="" onChange={handleFileChange} />
         <div className={styles.submitContainer}>
           <button className={styles.submit} type="submit" value="Submit">
@@ -73,8 +146,16 @@ const FileViewer = (studentData) => {
       </form>
       {associated_files == undefined || associated_files.length == 0 ? null : (
         <div className={styles.fileDisplay}>
-          {associated_files.map((file) => (
-            <p>{file}</p>
+          {associated_files.map((file: string, index: number) => (
+            <div>
+              <a href={file} target="_blank">
+                {getFileName(file)}
+                <br />
+              </a>
+              <button value="Delete" onClick={deleteFile(index)}>
+                Delete
+              </button>
+            </div>
           ))}
         </div>
       )}

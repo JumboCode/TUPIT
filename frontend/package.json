@@ -13,17 +13,20 @@
     "url": "git+https://github.com/jumbocode/tupit.git"
   },
   "dependencies": {
+    "aws-sdk": "^2.1120.0",
     "classnames": "^2.3.1",
     "next": "^11.1.2",
     "next-s3-upload": "^0.1.9",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.7",
     "@next/bundle-analyzer": "^11.1.2",
     "@types/react": "^17.0.34",
+    "@types/uuid": "^8.3.4",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint": "^7.32.0",
     "eslint-config-next": "^11.1.2",
