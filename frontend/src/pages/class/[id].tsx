@@ -66,13 +66,13 @@ export default function ViewClass() {
         setPrereqs(prereqs);
         
         /* Set existing data */
-        const attributes = data.data.attributes;
-        setValue('course_title', attributes.course_title);
-        setValue('course_num_tufts', attributes.course_number_tufts);
-        setValue('course_num_bhcc', attributes.course_number_bhcc);
-        setValue('credit_tufts', attributes.credit_tufts);
-        setValue('credit_bhcc', attributes.credits_bhcc);
-        setValue('additional_info', attributes.additional_info);
+        const info = data.data.attributes;
+        setValue('course_title', info.course_title ? info.course_title : '');
+        setValue('course_num_tufts', info.course_number_tufts ? info.course_number_tufts : '');
+        setValue('course_num_bhcc', info.course_number_bhcc ? info.course_number_bhcc : '');
+        setValue('credit_tufts', info.credit_tufts ? info.credit_tufts : '');
+        setValue('credit_bhcc', info.credit_bhcc ? info.credit_bhcc : '');
+        setValue('additional_info', info.additional_info ? info.additional_info : '');
 
         fetch(ENDPOINT, {
           method: 'OPTIONS',
@@ -88,13 +88,11 @@ export default function ViewClass() {
               res.data.actions.POST.department.choices.map((x) => [x.display_name, x.value])
             );
             setDepartments(departments);
-            setValue(
-              'department',
-              [...departments].find(([k, v]) => v === attributes.department)[0]
-            );
+            const key = [...departments].find(([k, v]) => v === info.department);
+            setValue('department', key ? key[0] : null);
           })
         } else {
-          alert('Class not foound');
+          alert('Class not found');
           router.push('/');
         }
       }
@@ -148,8 +146,8 @@ export default function ViewClass() {
             course_title: data.course_title,
             course_number_tufts: data.course_num_tufts,
             course_number_bhcc: data.course_num_bhcc,
-            credits_tufts: data.credits_tufts,
-            credits_bhcc: data.credits_bhcc,
+            credits_tufts: data.credits_tufts == '' ? parseInt(data.credit_tufts) : 0,
+            credits_bhcc: data.credits_bhcc == '' ? parseInt(data.credit_tufts) : 0,
             department: departments.get(data.department),
             instructors: instructorsState,
             prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}`),
@@ -209,7 +207,7 @@ export default function ViewClass() {
              maxLength: {
                value: 32,
                message: 'Tufts course number can be at most 32 characters'
-             }
+             },
            })}/>
 
           <label htmlFor='course_num_bhcc'>BHCC Course Number:</label>
@@ -292,10 +290,8 @@ export default function ViewClass() {
               message: 'Additional information can be at most 512 characters'
             }
           })}/>
-
-          <div className={styles.buttonBox}>
-            <input className={styles.button} type='submit' value='Submit'/>
-          </div>
+          <div></div>
+          <input className={styles.button} type='submit' value='Submit'/>
         </div>
       </form>
       <InstructorSelector

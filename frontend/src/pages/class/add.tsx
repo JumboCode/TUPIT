@@ -8,18 +8,6 @@ import { CourseSelector } from '@/components/Selectors/CourseSelector';
 
 const ENDPOINT: string = 'http://127.0.0.1:8000/api/course/';
 
-interface Course {
-  course_title: string;
-  course_number_tufts: string;
-  course_number_bhcc: string;
-  credits_tufts: number;
-  credits_bhcc: number;
-  department: string;
-  instructors: string[];
-  prereqs: string[];
-  additional_info: string;
-}
-
 export default function AddCourse() {
   // departments is a map from display name -> department abbreviation
   const [departments, setDepartments] = useState<Map<string, string> | undefined>(new Map());
@@ -80,7 +68,18 @@ export default function AddCourse() {
       });
   }, []);
 
+  /* Set placeholder */
+  useEffect(() => {
+    setValue('course_title', '');
+    setValue('course_num_tufts', '');
+    setValue('course_num_bhcc', '');
+    setValue('credit_tufts', '');
+    setValue('credits_bhcc', '');
+    setValue('additional_info', '');
+  }, []);
+
   const onSubmitSuccess = async (data, e) => {
+    console.log(data);
     e.preventDefault();
     const res = await fetch(ENDPOINT, {
       method: 'POST',
@@ -96,8 +95,8 @@ export default function AddCourse() {
             course_title: data.course_title,
             course_number_tufts: data.course_num_tufts,
             course_number_bhcc: data.course_num_bhcc,
-            credits_tufts: data.credits_tufts,
-            credits_bhcc: data.credits_bhcc,
+            credits_tufts: data.credits_tufts == '' ? parseInt(data.credit_tufts) : 0,
+            credits_bhcc: data.credits_bhcc == '' ? parseInt(data.credit_bhcc) : 0,
             department: departments.get(data.department),
             instructors: instructorsState,
             prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}/`),
@@ -160,7 +159,9 @@ export default function AddCourse() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>Add Course</div>
+      <div className={styles.header}>
+        <h3>Add Course</h3>
+      </div>
       <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
         <div className={styles.row}>
           <label htmlFor='course_title'>Course Title:</label>
@@ -224,6 +225,7 @@ export default function AddCourse() {
           <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
             <span>Add Prereq</span>
           </div>
+
           <div></div>
           <div>
             {prereqsState.map((course, index) => (
@@ -240,6 +242,7 @@ export default function AddCourse() {
           <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
             <span>Add Instructor</span>
           </div>
+
           <div></div>
           <div>
             {instructorsState.map((instructor, index) => (
@@ -267,9 +270,8 @@ export default function AddCourse() {
             }
           })}/>
 
-          <div className={styles.buttonBox}>
-            <input className={styles.button} type="submit" value="Submit" />
-          </div>
+          <div></div>
+          <input className={styles.button} type="submit" value="Submit"/>
         </div>
       </form>
       <InstructorSelector

@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: 4rem;
   width: 100%;
 
   .header {
@@ -27,6 +27,7 @@
     font-size: 28px;
     align-items: center;
     line-height: 36px;
+    margin-bottom: 4rem;
 
     label {
       text-align: right;
@@ -60,7 +61,7 @@
       border: none;
       background: #4c8fa5;
       border-radius: 3px;
-      color: white;
+      color: $white;
       display: flex;
       justify-content: center;
       align-items: center;
