@@ -9,6 +9,19 @@
   width: 100%;
   padding: 4rem;
 
+  .plusButton {
+    border-radius: 3px;
+    color: $white;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    background-color: $sea-text;
+    cursor: pointer;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+  }
+
   .header {
     color: $black;
     font-size: 36px;

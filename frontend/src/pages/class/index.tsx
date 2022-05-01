@@ -95,6 +95,15 @@ const SearchClass = () => {
 
   return (
     <div className={styles.container}>
+      <button
+        className={styles.plusButton}
+        onClick={() => {
+          router.push('/class/add');
+          console.log('pressed');
+        }}
+      >
+        +
+      </button>
       <div className={styles.header}>
         <h3>Search Class</h3>
       </div>

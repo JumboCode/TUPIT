@@ -73,6 +73,15 @@ const SearchStudents = () => {
 
   return (
     <div className={styles.container}>
+      <button
+        className={styles.plusButton}
+        onClick={() => {
+          router.push('/student/add');
+          console.log('pressed');
+        }}
+      >
+        +
+      </button>
       <div className={styles.header}>
         <h3>Search Student</h3>
       </div>
