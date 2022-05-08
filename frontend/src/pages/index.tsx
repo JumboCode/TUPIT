@@ -5,6 +5,7 @@ import { useAuth } from '@/components/auth';
 // Import styles
 import styles from './index.module.scss';
 import classNames from 'classnames/bind';
+import AuthBox from '@/components/authbox';
 const cx = classNames.bind(styles);
 
 const Home: React.FC = () => {
@@ -16,8 +17,10 @@ const Home: React.FC = () => {
 
   return (
     <div className={cx('base')}>
-      <div className={cx('dashboard')}>
-        <h1>TUPIT Dashboard</h1>
+      <AuthBox>
+        <div className={cx('header')}>
+          <h1>TUPIT Dashboard</h1>
+        </div>
         {isLoggedIn ? null : (
           <input type="button" onClick={() => router.push('/login')} value="Login" />
         )}
@@ -50,15 +53,17 @@ const Home: React.FC = () => {
                 <input className={cx('button')} type="submit" value="Search" />
               </form>
             </div>
-            <input
-              className={cx('button')}
-              type="button"
-              onClick={() => router.push('/ChangePass')}
-              value="Change Password"
-            />
+            <div>
+              <input
+                className={cx('button')}
+                type="button"
+                onClick={() => router.push('/resetpass')}
+                value="Change Password"
+              />
+            </div>
           </div>
         ) : null}
-      </div>
+      </AuthBox>
     </div>
   );
 };

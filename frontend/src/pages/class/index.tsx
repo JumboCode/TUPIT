@@ -1,46 +1,54 @@
 import React, { useEffect, useState, createRef } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../components/auth';
 import styles from './index.module.scss';
 
-export default function SearchClass() {
+const ENDPOINT = 'http://127.0.0.1:8000/api/course/';
+
+const getData = async (url) => {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  }).catch((err) => {
+    alert('Error connecting to server');
+    console.log(err);
+  });
+
+  return res;
+};
+
+const SearchClass = () => {
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const [results, setResults] = useState([]);
-  const [depOpts, setDepOpts] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const { register, handleSubmit, setValue } = useForm();
+  const { course } = router.query;
+  const courseInitVal = Array.isArray(course) ? course[0] : course;
 
-  const { courseTitleInit } = router.query;
-  const courseTitleInitVal = Array.isArray(courseTitleInit) ? courseTitleInit[0] : courseTitleInit;
-
-  const courseTitle = createRef<HTMLInputElement>();
-  const tuftsCourseNum = createRef<HTMLInputElement>();
-  const bunkerCourseNum = createRef<HTMLInputElement>();
-  const department = createRef<HTMLSelectElement>();
-
+  /* Course results */
   useEffect(() => {
-    async function getClasses() {
-      let url = 'http://127.0.0.1:8000/api/course/';
-      const query = `?course_title__icontains=${courseTitleInitVal}`;
-      url = !courseTitleInit ? url : url + query;
-
-      const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }).catch((err) => {
-        alert('Error connecting to server');
-        console.log(err);
-      });
+    setValue('courseTitle', courseInitVal ? courseInitVal : '');
+    (async function () {
+      const query = courseInitVal
+        ? `${ENDPOINT}?course_title__icontains=${courseInitVal}`
+        : ENDPOINT;
+      const res = await getData(query);
       if (res && res.ok) {
         const data = await res.json();
         setResults(data.data);
       }
-    }
+    })();
+  }, [courseInitVal]);
 
-    async function getDepartmentData() {
-      fetch('http://127.0.0.1:8000/api/course/', {
+  /* Available departments */
+  useEffect(() => {
+    (async function () {
+      fetch(ENDPOINT, {
         method: 'OPTIONS',
         headers: {
           'Content-Type': 'application/vnd.api+json',
@@ -50,91 +58,110 @@ export default function SearchClass() {
       })
         .then((res) => res.json())
         .then((res) => {
-          let deps = [];
+          const deps = [];
           res.data.actions.POST.department.choices.map((dep) =>
             deps.push({ name: dep.display_name, value: dep.value })
           );
-          setDepOpts(deps);
+          setDepartments(deps);
         });
-    }
+    })();
+  }, []);
 
-    getClasses();
-    getDepartmentData();
+  const onReset = () => {
+    (async function () {
+      const res = await getData(ENDPOINT);
+      if (res && res.ok) {
+        const data = await res.json();
+        setResults(data.data);
+      }
+    })();
+  };
 
-    courseTitle.current.value = courseTitleInitVal ? courseTitleInitVal : '';
-  }, [courseTitleInitVal]);
-
-  async function onSearch(e) {
+  const onSubmitSuccess = (data, e) => {
     e.preventDefault();
-
-    const query = `?course_title__icontains=${courseTitle.current.value}&course_number_tufts__icontains=${tuftsCourseNum.current.value}&course_number_bhcc__icontains=${bunkerCourseNum.current.value}&department=${department.current.value}`;
-
-    const res = await fetch(`http://127.0.0.1:8000/api/course/${query}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    }).catch((err) => {
-      alert('Error connecting to server');
-      console.log(err);
-    });
-    if (res && res.ok) {
-      const data = await res.json();
-      setResults(data.data);
-    }
-  }
-
-  function classResult(course) {
-    return (
-      <div className={styles.result} onClick={() => router.push(`class/${course.id}`)}>
-        <div className={styles.courseTitle}>{`${course.attributes.course_title}`}</div>
-        <div className={styles.courseInfo}>
-          <span>Tufts: {`${course.attributes.course_number_tufts}`}</span>
-          <span>BHCC: {`${course.attributes.course_number_bhcc}`}</span>
-          <span>Department: {`${course.attributes.department}`}</span>
-        </div>
-      </div>
-    );
-  }
+    (async function () {
+      const query =
+        `?course_title__icontains=${data.courseTitle}` +
+        `&course_number_tufts__icontains=${data.tuftsNumber}` +
+        `&course_number_bhcc__icontains=${data.bhccNumber}` +
+        `&department=${data.department}`;
+      const res = await getData(`${ENDPOINT}${query}`);
+      if (res && res.ok) {
+        const data = await res.json();
+        setResults(data.data);
+      }
+    })();
+  };
 
   return (
-    <div className={styles.windowContainer}>
-      <div className={styles.window}>
-        <form onSubmit={onSearch} className={styles.filterContainer}>
-          <div className={styles.filterFields}>
-            <div className={styles.label}>Course Title</div>
-            <input type="text" ref={courseTitle} />
-            <div className={styles.label}>Tufts Course Number</div>
-            <input type="text" ref={tuftsCourseNum} />
-            <div className={styles.label}>Bunker Course Number</div>
-            <input type="text" ref={bunkerCourseNum} />
-            <div className={styles.label}>Department</div>
-            <select name="department" className={styles.select} ref={department}>
+    <div className={styles.container}>
+      <button
+        className={styles.plusButton}
+        onClick={() => {
+          router.push('/class/add');
+          console.log('pressed');
+        }}
+      >
+        +
+      </button>
+      <div className={styles.header}>
+        <h3>Search Class</h3>
+      </div>
+      <div className={styles.wrapper}>
+        <div className={styles.column}>
+          <form
+            onSubmit={handleSubmit(onSubmitSuccess)}
+            onReset={onReset}
+            className={styles.filterContainer}
+          >
+            <label htmlFor="courseTitle">Course Title:</label>
+            <input id="courseTitle" type="text" {...register('courseTitle')} />
+            <label htmlFor="tuftsNumber">Tufts Course Number:</label>
+            <input id="tuftsNumber" type="text" {...register('tuftsNumber')} />
+            <label htmlFor="bhccNumber">Bunker Course Number:</label>
+            <input id="bhccNumber" type="text" {...register('bhccNumber')} />
+            <label htmlFor="department">Department:</label>
+            <select name="selectDepartment" id="department" {...register('department')}>
               <option></option>
-              {depOpts.map((dep) => (
+              {departments.map((dep) => (
                 <option key={dep.value} value={dep.value}>
                   {dep.name}
                 </option>
               ))}
             </select>
-          </div>
-          <input className={styles.button} type="submit" value="Search" />
-        </form>
-        <div className={styles.resultsContainer}>
-          <div className={styles.results}>
-            {results &&
-              (results.length > 0 ? (
-                results.map(classResult)
-              ) : (
-                <div className={styles.noResults}>No results found</div>
-              ))}
-          </div>
-          <div className={styles.button} onClick={() => router.push('/class/add')}>
-            +
+            <div></div>
+            <div className={styles.buttonBox}>
+              <input className={styles.button} type="submit" value="Submit" />
+              <input className={styles.button} type="reset" value="Reset" />
+            </div>
+          </form>
+        </div>
+        <div className={styles.column}>
+          <div className={styles.resultsWrapper}>
+            {results && results.length > 0 ? (
+              <div className={styles.resultsContainer}>
+                <span className={styles.searchResultsHeader}>Search Results:</span>
+                <div></div>
+                {results.map((course) => (
+                  <React.Fragment key={course.id}>
+                    <button
+                      className={styles.resultsField}
+                      onClick={() => router.push(`class/${course.id}`)}
+                    >
+                      <span>{course.attributes.course_title}</span>
+                      <span>View</span>
+                    </button>
+                  </React.Fragment>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.noResults}>No results found</div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default SearchClass;

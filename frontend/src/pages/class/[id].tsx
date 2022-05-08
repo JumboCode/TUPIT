@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '@/components/auth';
 import { InstructorSelector } from '@/components/Selectors/InstructorSelector';
 import { CourseSelector } from '@/components/Selectors/CourseSelector';
 import styles from './[id].module.scss';
 
+const ENDPOINT: string = 'http://127.0.0.1:8000/api/course/';
+
 async function fetchCourseName(id) {
-  let url = 'http://127.0.0.1:8000/api/course/' + id + '/';
-  const res = await fetch(url, {
+  const res = await fetch(`${ENDPOINT}${id}/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -17,11 +19,8 @@ async function fetchCourseName(id) {
     alert('Error connecting to server');
     console.log(err);
   });
-  if (res) {
-    const course_name = await res.json().then((data) => data.data.attributes.course_title);
-    return course_name;
-  }
-  return null;
+
+  return res;
 }
 
 export default function ViewClass() {
@@ -30,64 +29,76 @@ export default function ViewClass() {
   const [showCourseSelector, setShowCourseSelector] = useState(false);
   const [instructorsState, setInstructors] = useState([]);
   const [prereqsState, setPrereqs] = useState([]);
-  const [depOpts, setDepOpts] = useState([]);
+  const [departments, setDepartments] = useState<Map<string, string> | undefined>(new Map());
   const { isLoggedIn, csrfToken, login, logout } = useAuth();
   const router = useRouter();
   const { id } = router.query;
+  const { register, handleSubmit, setValue } = useForm();
 
+  /* Set placeholder */
+  const [courseTitle, setCourseTitle] = useState(null);
+  const [courseNumTufts, setCourseNumTufts] = useState(null);
+  const [courseNumBHCC, setCourseNumBHCC] = useState(null);
+  const [creditTufts, setCreditTufts] = useState(null); 
+  const [creditBHCC, setCreditBHCC] = useState(null);
+  const [additionalInformation, setAdditionalInformation] = useState(null);
+
+  /*
+   * Fetch data associated with the course id. This also include prerequisites
+   * and instructors
+   */
   useEffect(() => {
-    async function getCourseData() {
-      let url = 'http://127.0.0.1:8000/api/course/' + id + '/';
-      const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }).catch((err) => {
-        alert('Error connecting to server');
-        console.log(err);
-      });
+    const setup = async () => {
+      const res = await fetchCourseName(id);
+      if (res && res.ok) {
+        const data = await res.json();
+        setCourseData(data.data);
+        setInstructors(data.data.attributes.instructors);
+        let prereqs = [];
+        let ids = data.data.relationships.prereqs.data.map((i) => i.id);
+        for (const id of ids) {
+          const prereqRes = await fetchCourseName(id);
+          if (prereqRes && prereqRes.ok) {
+            const prereqData = await prereqRes.json();
+            prereqs.push({title: prereqData.data.attributes.course_title, id: id});
+          }
+        }
+        setPrereqs(prereqs);
+        
+        /* Set existing data */
+        const info = data.data.attributes;
+        setValue('course_title', info.course_title ? info.course_title : '');
+        setValue('course_num_tufts', info.course_number_tufts ? info.course_number_tufts : '');
+        setValue('course_num_bhcc', info.course_number_bhcc ? info.course_number_bhcc : '');
+        setValue('credit_tufts', info.credit_tufts ? info.credit_tufts : '');
+        setValue('credit_bhcc', info.credit_bhcc ? info.credit_bhcc : '');
+        setValue('additional_info', info.additional_info ? info.additional_info : '');
 
-      if (res)
-        if (res.ok)
-          res.json().then(async (data) => {
-            setCourseData(data.data);
-            setInstructors(data.data.attributes.instructors);
-
-            let prereqs = [];
-            let ids = data.data.relationships.prereqs.data.map((i) => i.id);
-            for (const id of ids) prereqs.push({ title: await fetchCourseName(id), id: id });
-            setPrereqs(prereqs);
-          });
-        else {
+        fetch(ENDPOINT, {
+          method: 'OPTIONS',
+          headers: {
+            'Content-Type': 'application/vnd.api+json',
+            'X-CSRFToken': csrfToken
+          },
+          credentials: 'include'
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            const departments = new Map<string, string>(
+              res.data.actions.POST.department.choices.map((x) => [x.display_name, x.value])
+            );
+            setDepartments(departments);
+            const key = [...departments].find(([k, v]) => v === info.department);
+            setValue('department', key ? key[0] : null);
+          })
+        } else {
           alert('Class not found');
           router.push('/');
         }
-    }
-
-    async function getDepartmentData() {
-      fetch('http://127.0.0.1:8000/api/course/', {
-        method: 'OPTIONS',
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-          'X-CSRFToken': csrfToken,
-        },
-        credentials: 'include',
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          let deps = [];
-          res.data.actions.POST.department.choices.map((dep) =>
-            deps.push({ name: dep.display_name, value: dep.value })
-          );
-          setDepOpts(deps);
-        });
-    }
-
+      }
+    
     if (id) {
-      getCourseData();
-      getDepartmentData();
+      setup();
     }
   }, [id]);
 
@@ -118,17 +129,13 @@ export default function ViewClass() {
     setPrereqs(newPrereqs);
   }
 
-  async function putClassInfo(e) {
+  const onSubmitSuccess = async (data, e) => {
     e.preventDefault();
-
-    const url = `http://127.0.0.1:8000/api/course/${id}/`;
-    const t = e.target;
-
-    const res = await fetch(url, {
+    const res = await fetch(`${ENDPOINT}${id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/vnd.api+json',
-        'X-CSRFToken': csrfToken,
+        'X-CSRFToken': csrfToken
       },
       credentials: 'include',
       body: JSON.stringify({
@@ -136,166 +143,165 @@ export default function ViewClass() {
           type: 'Course',
           id: id,
           attributes: {
-            course_title: t.course_title.value,
-            course_number_tufts: t.course_number_tufts.value,
-            course_number_bhcc: t.course_number_bhcc.value,
-            credits_tufts: t.credits_tufts.value ? t.credits_tufts.value : 0,
-            credits_bhcc: t.credits_bhcc.value ? t.credits_bhcc.value : 0,
-            department: t.department.value,
+            course_title: data.course_title,
+            course_number_tufts: data.course_num_tufts,
+            course_number_bhcc: data.course_num_bhcc,
+            credits_tufts: data.credits_tufts == '' ? parseInt(data.credit_tufts) : 0,
+            credits_bhcc: data.credits_bhcc == '' ? parseInt(data.credit_tufts) : 0,
+            department: departments.get(data.department),
             instructors: instructorsState,
-            prereqs: prereqsState.map((prereq) => `http://127.0.0.1:8000/api/course/${prereq.id}/`),
-            additional_info: t.additional_info.value,
-          },
-        },
-      }),
+            prereqs: prereqsState.map((prereq) => `${ENDPOINT}${prereq.id}`),
+            additional_info: data.additional_info
+          }
+        }
+      })
     }).catch((err) => {
       alert('Error connecting to server');
       console.log(err);
     });
 
-    if (res)
-      if (res.ok) {
-        alert('Successfully updated course info');
-        router.push(id.toString());
-      } else {
-        alert('Error updating class info');
-        console.log(res);
-      }
-  }
+    if (res && res.ok) {
+      alert('Successfully updated course information');
+      router.push('/class');
+    } else {
+      alert('Error updating class information');
+      console.log(res);
+    }
+  };
+
+  const onSubmitFail = (e) => {
+    Object.keys(e).forEach((key) => {
+      console.log(e[key].message);
+      setValue(key, '');
+    });
+
+    if (e.course_title) setCourseTitle(e.course_title.message);
+    if (e.course_num_tufts) setCourseNumTufts('Can be at most 32 characters');
+    if (e.course_num_bhcc) setCourseNumBHCC('Can be at most 32 characters');
+    if (e.credit_tufts) setCreditTufts('Must be non-negative');
+    if (e.credit_bhcc) setCreditBHCC('Must be non-negative');
+    if (e.additional_info) setAdditionalInformation('Can be at most 512 characters');
+  };
 
   return (
     <div className={styles.container}>
-      {courseData ? (
-        <form className={styles.courseInfo} onSubmit={putClassInfo}>
-          <input
-            name="course_title"
-            className={styles.courseTitle}
-            defaultValue={courseData.attributes.course_title}
-            size={25}
-            maxLength={32}
-            required
-          />
+      <div className={styles.header}>Edit Course</div>
+      <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitFail)}>
+        <div className={styles.row}>
+          <label htmlFor='course_title'>Course Title:</label>
+          <input type='text' id='course_title' placeholder={courseTitle}
+           {...register('course_title', {
+            required: {
+              value: true,
+              message: 'Course title cannot be empty'
+            },
+            maxLength: {
+              value: 32,
+              message: 'Course title can be at most 32 characters'
+            },
+          })}/>
 
-          <div className={styles.row}>
-            <p>Tufts Course Number</p>
-            <input
-              name="course_number_tufts"
-              type="text"
-              defaultValue={courseData.attributes.course_number_tufts}
-              maxLength={32}
-            ></input>
+          <label htmlFor='course_num_tufts'>Tufts Course Number:</label>
+          <input type='text' id='course_num_tufts' placeholder={courseNumTufts}
+           {...register('course_num_tufts', {
+             maxLength: {
+               value: 32,
+               message: 'Tufts course number can be at most 32 characters'
+             },
+           })}/>
+
+          <label htmlFor='course_num_bhcc'>BHCC Course Number:</label>
+          <input id='course_num_bhcc' type='text' placeholder={courseNumBHCC}
+           {...register('course_num_bhcc', {
+             maxLength: {
+               value: 32,
+               message: 'BHCC course number can be at most 32 characters'
+             }
+           })}/>
+
+          <label htmlFor='credits_tufts'>Tufts Credits:</label>
+          <input id='credits_tufts' type='text' placeholder={creditTufts}
+           {...register('credit_tufts', {
+             pattern: {
+               value: /^\d+$/,
+               message: 'Tufts credit must be a non-negative integer'
+             },
+           })}/>
+
+          <label htmlFor='credits_bhcc'>BHCC Credits:</label>
+          <input id='credits_bhcc' type='text' placeholder={creditBHCC}
+           {...register('credits_bhcc', {
+             pattern: {
+               value: /^\d+$/,
+               message: 'BHCC credit must be a non-negative integer'
+             },
+           })}/>
+
+          <label htmlFor='department'>Department</label>
+          <select name='department' id='department' {...register('department')}>
+            <option></option>
+            {Array.from(departments.keys()).map((key) => (
+              <option key={key}>{key}</option>
+            ))}
+          </select>
+
+          <label htmlFor='pre_req'>Prerequisites:</label>
+          <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
+            <span>Add Prerequisite</span>
           </div>
-
-          <div className={styles.row}>
-            <p>BHCC Course Number</p>
-            <input
-              name="course_number_bhcc"
-              type="text"
-              defaultValue={courseData.attributes.course_number_bhcc}
-              maxLength={32}
-            ></input>
-          </div>
-
-          <div className={styles.row}>
-            <p>Tufts Credits</p>
-            <input
-              name="credits_tufts"
-              type="number"
-              defaultValue={courseData.attributes.credits_tufts}
-              min={0}
-              max={2147483647}
-              onWheel={(e) => e.currentTarget.blur()}
-            ></input>
-          </div>
-
-          <div className={styles.row}>
-            <p>BHCC Credits</p>
-            <input
-              name="credits_bhcc"
-              type="number"
-              defaultValue={courseData.attributes.credits_bhcc}
-              min={0}
-              max={2147483647}
-              onWheel={(e) => e.currentTarget.blur()}
-            ></input>
-          </div>
-
-          <div className={styles.row}>
-            <p>Department</p>
-            <select
-              name="department"
-              className={styles.select}
-              defaultValue={courseData.attributes.department}
-            >
-              {depOpts.map((dep) => (
-                <option key={dep.value} value={dep.value}>
-                  {dep.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className={styles.row}>
-            <p>Instructors</p>
-            <div className={styles.fieldList}>
-              {instructorsState.map((instructor, index) => (
-                <div className={styles.instructorField} key={index}>
-                  <input
-                    onChange={(e) => updateInstructor(e, index)}
-                    type="text"
-                    value={instructor}
-                    maxLength={32}
-                    required
-                  />
-                  <div className={styles.removeButton} onClick={() => removeInstructor(index)}>
-                    &#10005;
-                  </div>
+          <div></div>
+          <div>
+            {prereqsState.map((course, index) => (
+              <div className={styles.prereqField} key={index}>
+                <a href={course.id}>{course.title}</a>
+                <div className={styles.removeButton} onClick={() => removePrereq(index)}>
+                  &#10005;
                 </div>
-              ))}
-              <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
-                <>+</>
               </div>
-            </div>
+            ))}
           </div>
 
-          <div className={styles.row}>
-            <p>Prerequisites</p>
-            <div className={styles.fieldList}>
-              {prereqsState.map((course, index) => (
-                <div className={styles.prereqField} key={index}>
-                  <a href={course.id}>{course.title}</a>
-                  <div className={styles.removeButton} onClick={() => removePrereq(index)}>
-                    &#10005;
-                  </div>
+          <label htmlFor='instructors'>Instructors:</label>
+          <div className={styles.button} onClick={() => setShowInstructorSelector(true)}>
+            <span>Add Instructor</span>
+          </div>
+          <div></div>
+          <div>
+            {instructorsState.map((instructor, index) => (
+              <div className={styles.prereqField} key={index}>
+                <input 
+                 type='text'
+                 value={instructor}
+                 maxLength={32}
+                 onChange={(e) => updateInstructor(e, index)}
+                 required/>
+                <div className={styles.removeButton} onClick={(e) => removeInstructor(index)}>
+                  &#10005;
                 </div>
-              ))}
-              <div className={styles.button} onClick={() => setShowCourseSelector(true)}>
-                +
               </div>
-            </div>
+            ))}
           </div>
 
-          <div className={styles.row}>
-            <p>Additional Information</p>
-            <textarea
-              name="additional_info"
-              className={styles.additionalInfo}
-              defaultValue={courseData.attributes.additional_info}
-              maxLength={512}
-            />
-          </div>
-
-          <input className={styles.button} type="submit" value="Save" />
-        </form>
-      ) : (
-        <h1>Loading...</h1>
-      )}
+          <label htmlFor='additional_info'>Additional Information:</label>
+          <textarea id='additional_info' placeholder={additionalInformation}
+           {...register('additional_info', {
+            maxLength: {
+              value: 512,
+              message: 'Additional information can be at most 512 characters'
+            }
+          })}/>
+          <div></div>
+          <input className={styles.button} type='submit' value='Submit'/>
+        </div>
+      </form>
       <InstructorSelector
+        // style={styles.instructPopUp}
         show={showInstructorSelector}
         writeFunction={addInstructor}
         onClose={() => setShowInstructorSelector(false)}
       />
       <CourseSelector
+        // style={styles.prereqPopUp}
         show={showCourseSelector}
         writeFunction={addPrereq}
         onClose={() => setShowCourseSelector(false)}

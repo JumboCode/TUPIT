@@ -89,6 +89,7 @@ video {
   text-decoration: none;
   font: {
     size: 100%;
+    font-family: 'DM Mono', monospace;
   }
 }
 
@@ -123,6 +124,9 @@ input[type='search'],
 input[type='text'],
 input[type='tel'],
 input[type='url'],
+input[type='date'],
+input[type='time'],
+textarea,
 button {
   font: inherit;
   color: inherit;

@@ -158,6 +158,10 @@ class Degree(Model):
     is_tufts = BooleanField(default=False, blank=False, null=False)
     additional_info = TextField(max_length=512, blank=True)
 
+    def __str__(self):
+        return self.degree_name
+
+
 class CourseProgress(Model):
     def default_true():
         return True
