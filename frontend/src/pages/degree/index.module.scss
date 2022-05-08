@@ -9,6 +9,15 @@
   width: 100%;
   padding: 4rem;
 
+  .gotoButton {
+    border-radius: 3px;
+    color: $white;
+    text-align: center;
+    padding: 4px 20px;
+    background-color: $sea-text;
+    cursor: pointer;
+  }
+
   .plusButton {
     border-radius: 3px;
     color: $white;

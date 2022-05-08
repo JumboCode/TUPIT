@@ -91,6 +91,14 @@ const SearchDegrees = () => {
 
   return (
     <div className={styles.container}>
+      <div
+        className={styles.gotoButton}
+        onClick={() => {
+          router.push('/degree/req');
+        }}
+      >
+        Go to degree requirements
+      </div>
       <div className={styles.header}>
         <h3>Search Degree</h3>
       </div>
