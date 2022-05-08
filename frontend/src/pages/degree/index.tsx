@@ -94,13 +94,7 @@ const SearchDegrees = () => {
       <div className={styles.header}>
         <h3>Search Degree</h3>
       </div>
-      <button
-        className={styles.plusButton}
-        onClick={() => {
-          router.push('/degree/add');
-          console.log('pressed');
-        }}
-      >
+      <button className={styles.plusButton} onClick={newDegree}>
         +
       </button>
       <div className={styles.wrapper}>
