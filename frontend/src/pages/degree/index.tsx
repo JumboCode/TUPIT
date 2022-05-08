@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '@/components/auth';
 import styles from './index.module.scss';
 
 const ENDPOINT: string = 'http://127.0.0.1:8000/api/degree/?sort=is_tufts';
@@ -22,6 +23,7 @@ const getData = async (url) => {
 
 const SearchDegrees = () => {
   const router = useRouter();
+  const { csrfToken } = useAuth();
   const { register, handleSubmit } = useForm();
   /* Keep track of an unchanged record */
   const [master, setMaster] = useState([]);
@@ -55,6 +57,37 @@ const SearchDegrees = () => {
     });
     setResults(filtered);
   };
+
+  async function newDegree() {
+    const url = 'http://127.0.0.1:8000/api/degree/';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        data: {
+          type: 'Degree',
+          attributes: {
+            degree_name: 'New Degree',
+          },
+        },
+      }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
+    });
+
+    if (res && res.ok) {
+      res.json().then((data) => {
+        router.push(`/degree/${data.data.id}`);
+      });
+    } else {
+      alert('Error creating new degree');
+    }
+  }
 
   return (
     <div className={styles.container}>

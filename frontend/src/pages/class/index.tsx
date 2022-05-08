@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/components/auth';
+import { useAuth } from '../../components/auth';
 import styles from './index.module.scss';
 
 const ENDPOINT = 'http://127.0.0.1:8000/api/course/';

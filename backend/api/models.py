@@ -6,7 +6,7 @@ from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db.models.deletion import CASCADE
 from django.utils.translation import gettext_lazy as _
 
-__all__ = ["Student", "Course", "Degree", "CourseProgress"]
+__all__ = ["Student", "Course", "Degree", "CourseProgress", "DegreeRequirement"]
 
 class Student(Model):
 
@@ -140,13 +140,19 @@ class Course(Model):
         '''
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
 
+class DegreeRequirement(Model):
+    title = CharField(max_length=32, blank=False)
+    fulfilled_by = ManyToManyField(Course, related_name='fulfills', blank=True)
+
+    def __str__(self):
+        return self.title
+
 class Degree(Model):
     degree_name = CharField(max_length=32, blank=False, null=False)
     reqs = ManyToManyField(
-        Course,
+        DegreeRequirement,
         blank=True,
         default=None,
-        symmetrical=False,
     )
     active = BooleanField(default=False, blank=False, null=False)
     is_tufts = BooleanField(default=False, blank=False, null=False)
@@ -183,3 +189,4 @@ class CourseProgress(Model):
         {self.student}
         '''
         return re.sub('^\s+', '', model, flags = re.MULTILINE)
+

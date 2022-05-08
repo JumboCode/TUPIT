@@ -30,6 +30,7 @@ const SearchStudents = () => {
   const { register, handleSubmit, setValue } = useForm();
   const { cohortInit } = router.query;
   const cohortInitVal = Array.isArray(cohortInit) ? cohortInit[0] : cohortInit;
+  const { csrfToken } = useAuth();
 
   useEffect(() => {
     setValue('cohort', cohortInitVal ? cohortInitVal : '');
@@ -70,6 +71,37 @@ const SearchStudents = () => {
       }
     })();
   };
+
+  async function newStudent() {
+    const url = 'http://127.0.0.1:8000/api/students/';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        data: {
+          type: 'Student',
+          attributes: {
+            firstname: 'First Name',
+            lastname: 'Last Name',
+          },
+        },
+      }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
+    });
+
+    if (res)
+      if (res.ok) {
+        res.json().then((data) => router.push(`/student/${data.data.id}`));
+      } else {
+        alert('Error creating student');
+      }
+  }
 
   return (
     <div className={styles.container}>
