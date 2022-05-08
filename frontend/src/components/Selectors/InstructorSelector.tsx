@@ -58,6 +58,11 @@ export const InstructorSelector: React.FC<InstructorSelectorProps> = (props) => 
     }
   }
 
+  function selectBlank() {
+    props.writeFunction('');
+    props.onClose();
+  }
+
   return props.show ? (
     <div className={styles.windowContainer}>
       <div className={styles.closeArea} onClick={props.onClose}></div>
@@ -65,6 +70,9 @@ export const InstructorSelector: React.FC<InstructorSelectorProps> = (props) => 
         <div className={styles.title}>Select Instructor</div>
         <input className={styles.searchBox} placeholder="Search by name" onChange={query} />
         <div className={styles.results}>
+          <div className={styles.result} onClick={selectBlank}>
+            New Instructor
+          </div>
           {filteredInstructors &&
             filteredInstructors.map((instructor, key) => (
               <div
