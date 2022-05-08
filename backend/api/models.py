@@ -94,20 +94,8 @@ class Course(Model):
     credits_bhcc = IntegerField(
         validators=[validate_nonnegative], blank=True, null=True)
 
-    # department field of many
-    COMPUTER_SCIENCE = 'COMP'
-    COGNITIVE_STUDIES = 'COGS'
-    MATH = 'MATH'
-    PSYCHOLOGY = 'PSYC'
-    DEPARTMENTS = [
-        (COMPUTER_SCIENCE, 'Computer Science'),
-        (COGNITIVE_STUDIES, 'Cognitive Studies'),
-        (MATH, 'Math'),
-        (PSYCHOLOGY, 'Psychology'),
-    ]
     department = CharField(
-        max_length=4,
-        choices=DEPARTMENTS,
+        max_length=32,
         blank=True,
         null=True,
     )

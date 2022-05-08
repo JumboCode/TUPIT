@@ -22,10 +22,9 @@ const getData = async (url) => {
 };
 
 const SearchClass = () => {
-  const { isLoggedIn, csrfToken, login, logout } = useAuth();
+  const { csrfToken } = useAuth();
   const router = useRouter();
   const [results, setResults] = useState([]);
-  const [departments, setDepartments] = useState([]);
   const { register, handleSubmit, setValue } = useForm();
   const { course } = router.query;
   const courseInitVal = Array.isArray(course) ? course[0] : course;
@@ -45,28 +44,6 @@ const SearchClass = () => {
     })();
   }, [courseInitVal]);
 
-  /* Available departments */
-  useEffect(() => {
-    (async function () {
-      fetch(ENDPOINT, {
-        method: 'OPTIONS',
-        headers: {
-          'Content-Type': 'application/vnd.api+json',
-          'X-CSRFToken': csrfToken,
-        },
-        credentials: 'include',
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          const deps = [];
-          res.data.actions.POST.department.choices.map((dep) =>
-            deps.push({ name: dep.display_name, value: dep.value })
-          );
-          setDepartments(deps);
-        });
-    })();
-  }, []);
-
   const onReset = () => {
     (async function () {
       const res = await getData(ENDPOINT);
@@ -84,7 +61,7 @@ const SearchClass = () => {
         `?course_title__icontains=${data.courseTitle}` +
         `&course_number_tufts__icontains=${data.tuftsNumber}` +
         `&course_number_bhcc__icontains=${data.bhccNumber}` +
-        `&department=${data.department}`;
+        `&department__icontains=${data.department}`;
       const res = await getData(`${ENDPOINT}${query}`);
       if (res && res.ok) {
         const data = await res.json();
@@ -93,15 +70,36 @@ const SearchClass = () => {
     })();
   };
 
+  async function addCourse() {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'X-CSRFToken': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        data: {
+          type: 'Course',
+          attributes: {
+            course_title: 'New Course',
+          },
+        },
+      }),
+    }).catch((err) => {
+      alert('Error connecting to server');
+      console.log(err);
+    });
+
+    if (res && res.ok) {
+      const data = await res.json();
+      router.push(`/class/${data.data.id}`);
+    }
+  }
+
   return (
     <div className={styles.container}>
-      <button
-        className={styles.plusButton}
-        onClick={() => {
-          router.push('/class/add');
-          console.log('pressed');
-        }}
-      >
+      <button className={styles.plusButton} onClick={addCourse}>
         +
       </button>
       <div className={styles.header}>
@@ -121,14 +119,7 @@ const SearchClass = () => {
             <label htmlFor="bhccNumber">Bunker Course Number:</label>
             <input id="bhccNumber" type="text" {...register('bhccNumber')} />
             <label htmlFor="department">Department:</label>
-            <select name="selectDepartment" id="department" {...register('department')}>
-              <option></option>
-              {departments.map((dep) => (
-                <option key={dep.value} value={dep.value}>
-                  {dep.name}
-                </option>
-              ))}
-            </select>
+            <input id="department" type="text" {...register('department')} />
             <div></div>
             <div className={styles.buttonBox}>
               <input className={styles.button} type="submit" value="Submit" />
