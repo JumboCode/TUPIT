@@ -166,6 +166,27 @@ export default function ViewClass() {
     if (e.department) setAdditionalInformation('Can be at most 32 characters');
   };
 
+  async function deleteCourse() {
+    if (window.confirm('Are you sure you want to delete this course?')) {
+      const res = await fetch(`${ENDPOINT}${id}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          'X-CSRFToken': csrfToken,
+        },
+        credentials: 'include',
+      }).catch((err) => {
+        alert('Error connecting to server');
+        console.log(err);
+      });
+
+      if (res && res.ok) {
+        alert('Successfully deleted course');
+        router.push('/class');
+      }
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>Edit Course</div>
@@ -304,16 +325,16 @@ export default function ViewClass() {
           />
           <div></div>
           <input className={styles.button} type="submit" value="Submit" />
+          <div></div>
+          <input className={styles.button} type="button" value="Delete" onClick={deleteCourse} />
         </div>
       </form>
       <InstructorSelector
-        // style={styles.instructPopUp}
         show={showInstructorSelector}
         writeFunction={addInstructor}
         onClose={() => setShowInstructorSelector(false)}
       />
       <CourseSelector
-        // style={styles.prereqPopUp}
         show={showCourseSelector}
         writeFunction={addPrereq}
         onClose={() => setShowCourseSelector(false)}
